@@ -56,16 +56,18 @@ function Cover() {
       errorMessage = "This field is required";
     } else {
       switch (name) {
+                       /* utiliser pattern pour email*/
+
         case "email":
-          // Check if email format is valid
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(value)) {
             isValid = false;
             errorMessage = "Please enter a valid email address";
           }
           break;
         case "age":
-          // Check if age is a number between 1 and 150
+                        /* age number */
+
           const ageValue = parseInt(value);
           if (isNaN(ageValue) || ageValue < 1 || ageValue > 150) {
             isValid = false;
@@ -73,22 +75,21 @@ function Cover() {
           }
           break;
         case "phone":
-          // Check if phone number format is valid
-          const phoneRegex = /^\d{10}$/;
+          const phoneRegex = /^\d{8}$/;
           if (!phoneRegex.test(value)) {
             isValid = false;
             errorMessage = "Please enter a valid 10-digit phone number";
           }
           break;
-        case "firstname":
-        case "lastname":
-          // Check if firstname or lastname contains only letters
-          const onlyLettersRegex = /^[A-Za-z]+$/;
-          if (!onlyLettersRegex.test(value)) {
-            isValid = false;
-            errorMessage = "Only letters are allowed";
-          }
-          break;
+                         /* ajouter acceptation de espace */
+                         case "firstname":
+                          case "lastname":
+                            const anyCharacterRegex = /^[\s\S]*$/;
+                            if (!anyCharacterRegex.test(value)) {
+                              isValid = false;
+                              errorMessage = "Please enter a valid value";
+                            }
+                            break;
         default:
           break;
       }
@@ -195,6 +196,7 @@ function Cover() {
                           variant="outlined"
                           size="small"
                         >
+                          {/* dropdaown */}
                           <MenuItem value="">Select Role</MenuItem>
                           <MenuItem value="admin">Admin</MenuItem>
                           <MenuItem value="subadmin">Subadmin</MenuItem>

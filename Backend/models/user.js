@@ -10,10 +10,9 @@ const User = new Schema(
         role: {
             type: String, 
             enum: Role.validRoles,
-            required: true
         },
-        age : Number,
-        city : String,
+        dateOfBirth: String,
+        country : String,
         phone : Number,
         speciality : String,
         institution : String,

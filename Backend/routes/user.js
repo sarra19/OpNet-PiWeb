@@ -18,7 +18,9 @@ router.get('/:FirstName/:LastName/:Email', function(req,res){
 });
 
 //postman
-router.post("/add",validate,userController.add);
+router.post("/add",userController.add);
+router.post("/login", userController.login)
+router.get("/profile/:id", userController.profile)
 
 router.get('/getall' ,userController.getall);
 router.get('/get/:id' ,userController.getbyid);

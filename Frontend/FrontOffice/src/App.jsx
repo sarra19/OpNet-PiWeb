@@ -74,7 +74,7 @@ export default function App() {
   useMemo(() => {
     const cacheRtl = createCache({
       key: "rtl",
-     //stylisPlugins: [rtlPlugin],
+     // stylisPlugins: [rtlPlugin],
     });
 
     setRtlCache(cacheRtl);

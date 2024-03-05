@@ -51,12 +51,21 @@ import ChatManagement from "layouts/chatManagement";
 import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
+import UserDetails from "layouts/userManagement/UserDetails";
 
 const routes = [
   {
     route: "/authentication/rest-password",
     component: <ResetPassword />,
   },
+  {
+    type: "route",
+    name: "User Details", // Nom de la route affiché dans le sidenav
+    key: "user-details", // Clé unique pour cette route
+    route: "/user/:userId", // Chemin vers la page des détails de l'utilisateur avec un paramètre pour l'ID de l'utilisateur
+    component: <UserDetails />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
+  
   {
     type: "collapse",
     name: "Home",
