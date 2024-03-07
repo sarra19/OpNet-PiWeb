@@ -34,7 +34,7 @@ Coded by www.creative-tim.com
   10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
   10. The `component` key is used to store the component of its route.
 */
-
+/* eslint-disable */
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
@@ -43,9 +43,10 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-
-// @mui icons
 import Icon from "@mui/material/Icon";
+import Company from "layouts/company";
+import Interview from "layouts/interview";
+import Calendrier from "layouts/interview/calendrier";
 
 const routes = [
   {
@@ -82,11 +83,26 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Compagny",
-    key: "",
+    name: "Interview",
+    key: "interview",
+    icon: <Icon fontSize="small">co_present</Icon>,
+    route: "/entretien",
+    component: <Interview />,
+  },
+  {
+    type: "route",
+    name: "calendrier", 
+    key: "calendrier", 
+    route: "/calendrier", 
+    component: <Calendrier />, 
+  },
+  {
+    type: "collapse",
+    name: "Company",
+    key: "company",
     icon: <Icon fontSize="small">business</Icon>,
-    route: "",
-    //component: <Notifications />,
+    route: "/company",
+    component: <Company />,
   },
   {
     type: "collapse",
