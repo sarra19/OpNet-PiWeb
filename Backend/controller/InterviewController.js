@@ -50,12 +50,13 @@ async function update(req ,res){
 
 async function deleteinterview(req,res){
     try{
-        await Interview.findByIdAndDelete(req.params.id);
-        res.status(200).send("deleted");
+        await Interview.findByIdAndUpdate(req.params.id , { statusInterv: "Décliné", archived: true });
+        res.status(200).send("archived");
     }catch(err){
         res.status(400).send(err);
     }
 }
+
 
 async function fixAnotherDate(req, res) {
     try {
