@@ -1,7 +1,7 @@
 const mongo = require ("mongoose");
 const Schema =mongo.Schema 
 const typeIntrvEnum = ["En ligne","En face"];
-const statusIntrvEnum =["En attente","Terminé" ,"En cours" , "A venir" , "Passé","Reporté"]
+const statusIntrvEnum =["En attente","Terminé" ,"En cours" , "A venir" , "Passé" , "Reporté"]
 const Interview = new Schema(
     {
         title: String,

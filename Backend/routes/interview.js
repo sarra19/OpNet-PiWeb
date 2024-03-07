@@ -13,6 +13,6 @@ router.get("/get/:id",intervController.getbyid);
 router.put('/update/:id', intervController.update);
 router.delete('/deleteintrv/:id',intervController.deleteinterview );
 router.get("/getitle/:title", intervController.getbytitle);
-router.post("/fixAnotherDate/:id", intervController.fixAnotherDate);
+router.put("/fixAnotherDate/:id", intervController.fixAnotherDate);
 
 module.exports = router ;

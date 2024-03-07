@@ -15,12 +15,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { Icon } from "@mui/material";
+import { Alert, Icon } from "@mui/material";
 function Interview() {
   const [searchInput, setSearchInput] = useState("");
   const [interviews, setInterviews] = useState([]);
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [canRequestAnotherDate, setCanRequestAnotherDate] = useState(true);
 
   useEffect(() => {
     getInterviews();
@@ -74,18 +75,15 @@ function Interview() {
   };
 
   const deleteInterview = () => {
-    // Utiliser axios pour supprimer l'entretien avec l'ID correspondant
     axios
       .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
-        // Réactualiser la liste des entretiens après la suppression
         getInterviews();
       })
       .catch((error) => {
         console.error("Erreur lors de la suppression de l'entretien:", error);
       })
       .finally(() => {
-        // Réinitialiser l'état interviewToDelete après la suppression
         setInterviewToDelete(null);
       });
   };
@@ -97,35 +95,46 @@ function Interview() {
       setMessage(null);
     }, 10000); 
   };
+
   const requestAnotherDate = (interviewId) => {
     fetch(`http://localhost:5000/interviews/fixAnotherDate/${interviewId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
     })
-      .then(response => {
+    .then(response => {
         if (response.ok) {
-          return response.json();
+            return response.json();
         } else {
-          throw new Error(`Erreur HTTP ${response.status}`);
+            throw new Error(`Erreur HTTP ${response.status}`);
         }
-      })
-      .then(data => {
+    })
+    .then(data => {
         console.log('Réponse du serveur:', data);
         if (data && data.success) {
-          showMessage("Votre demande a été envoyée avec succès!");
+            setInterviews(prevInterviews => {
+                const updatedInterviews = prevInterviews.map(interview => {
+                    if (interview._id === interviewId) {
+                        return { ...interview, statusInterv: "Demande report" };
+                    }
+                    return interview;
+                });
+                return updatedInterviews;
+            });
+            showMessage("Votre demande a été envoyée avec succès!");
         } else {
-          showMessage("Erreur lors de l'envoi de la demande. Voir la console pour plus de détails.");
+            showMessage("Une erreur s'est produite ! Réessayez plus tard");
         }
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         console.error('Erreur lors de la requête:', error);
         showMessage(`Erreur lors de l'envoi de la demande: ${error.message}`);
-      });
-  };
-  
+    })
+};
+
+
 
   
   
@@ -138,6 +147,7 @@ function Interview() {
       <MDBox mt={3} mb={3}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8}>
+            
             <Typography variant="h2" mb={7} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               Vos entretiens
               <Button style={{marginTop:"10px" , color: 'red' }}>
@@ -145,9 +155,9 @@ function Interview() {
               </Button>
             </Typography>
             {message && (
-              <div className="message-container">
-                <h1>{message}</h1>
-              </div>
+              <Alert style={{ textAlign: "center" , marginBottom: "15px"}}>
+                <strong>{message}</strong>
+                </Alert>
             )}
             <Grid container spacing={2} mb={13}>
             {filteredInterviews.map((interview, index) => (
@@ -168,7 +178,7 @@ function Interview() {
                         <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} >
                           Décliner
                         </Button>
-                        <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)}>
+                        <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"} >
                           Autre date ?
                         </Button>
                       </div>

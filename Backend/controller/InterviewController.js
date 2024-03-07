@@ -59,31 +59,14 @@ async function deleteinterview(req,res){
 
 
 async function fixAnotherDate(req, res) {
-    try {
-      const interviewId = req.params.id;
-      const requestMessage = `Demande de l'utilisateur pour fixer une autre date. Proposez une nouvelle date disponible.`;
-      console.log(requestMessage);
-  
-      // Simulez le succès de l'envoi de la demande
-      const successResponse = {
-        success: true,
-        message: "Request sent to the company for fixing another date.",
-      };
-  
-      // Indiquez que la réponse est en JSON
-      res.setHeader('Content-Type', 'application/json');
-  
-      // Ajoutez des logs supplémentaires ici
-      console.log('Réponse du serveur:', successResponse);
-  
-      res.status(200).json(successResponse);
-    } catch (err) {
-      console.error(err);
-      res.setHeader('Content-Type', 'application/json');
-      res.status(500).json({ success: false, message: "Internal Server Error" });
+    try { 
+      await Interview.findByIdAndUpdate(req.params.id, { statusInterv: "Demande report" });
+      res.status(200).json({ success: true, message: "Demande envoyée avec succès." });
+      }catch(err){
+        res.status(500).json({ success: false, message: "Erreur serveur." });
     }
   }
-  
+
 
 module.exports = { add, getall, getbyid, getbytitle, update, deleteinterview, fixAnotherDate };
   
