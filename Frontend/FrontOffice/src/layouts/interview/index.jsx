@@ -29,12 +29,14 @@ function Interview() {
   const getInterviews = async () => {
     try {
       const response = await axios.get("http://localhost:5000/interviews/getall");
-  
-      setInterviews(response.data);
+      const filteredInterviews = response.data.filter(interview => !interview.archived);
+      setInterviews(filteredInterviews);
     } catch (error) {
       console.error("Erreur lors de la récupération des entretiens:", error);
     }
   };
+
+
   const formatInterviewDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
