@@ -1,50 +1,88 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
+/* eslint-disable */
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useSearchParams } from "react-router-dom";
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
-
-// react-router-dom components
-import { Link } from "react-router-dom";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import MuiLink from "@mui/material/Link";
-
-// @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
+import { AiFillGoogleCircle, AiFillCheckCircle } from "react-icons/ai";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-
-// Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-
-// Images
 import bgImage from "assets/images/bg-sign-in-basic.jpg";
+import { useNavigate } from "react-router-dom";
+import API_URLS from "../../../apiUrls";
+import { GoogleLogin } from 'react-google-login';
+import { token } from "stylis";
+import { Button } from "@mui/material";
 
 function Basic() {
+  const [email, setEmail] = useState(""); // Ajout de l'état pour l'e-mail
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
+  const handleEmailChange = (e) => setEmail(e.target.value); // Utilisation de setEmail pour mettre à jour l'e-mail
+  const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const handleSignIn = async () => {
+    try {
+      // Effectuer la requête de connexion et obtenir la réponse
+      const response = await axios.post(API_URLS.login, {
+        email: email,
+        password: password
+      });
+  
+      // Vérifier si la connexion est réussie et si la réponse contient les informations nécessaires
+      if (response.data.redirectUrl && response.data.userId && response.data.userRole) {
+        const userId = response.data.userId;
+        const userRole = response.data.userRole;
+  
+        // Stocker les valeurs dans localStorage
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userRole", userRole);
+  
+        // Naviguer vers la page de redirection
+        navigate(response.data.redirectUrl);
+      } else {
+        console.error("La connexion a échoué.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion:", error);
+    }
+  };
+  
+  let [searchParams] = useSearchParams();
+  const [user, setUser] = useState({});
+  const emailParam = searchParams.get("email"); // Changement du nom de la variable pour éviter la confusion avec l'état 'email'
+  const firstname = searchParams.get("firstname");
+  const secret = searchParams.get("secret");
+
+  useEffect(() => {
+    if (emailParam && firstname && secret) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email: emailParam,
+          firstname,
+          secret,
+        })
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user")));
+  }, []);
 
   return (
     <BasicLayout image={bgImage}>
@@ -82,46 +120,58 @@ function Basic() {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
-            <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
-            </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleSetRememberMe}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Remember me
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
+          <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
+              <MDBox mb={2}>
+                <MDTypography variant="body1" mb={1}>Email address</MDTypography>
+                <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />
+              </MDBox>
+              <MDBox mb={2}>
+                <MDTypography variant="body1" mb={1}>Password</MDTypography>
+                <MDInput type="password" fullWidth onChange={handlePasswordChange} value={password} />
+              </MDBox>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Switch checked={rememberMe} onChange={handleSetRememberMe} />
                 <MDTypography
-                  component={Link}
-                  to="/authentication/sign-up"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
+                  variant="body2"
+                  color="text"
+                  onClick={handleSetRememberMe}
+                  sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
                 >
-                  Sign up
+                  Remember me
                 </MDTypography>
-              </MDTypography>
+              </MDBox>
+              <MDBox mt={4} mb={1}>
+                <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
+                  Sign in
+                </MDButton>
+              </MDBox>
+              <MDBox mb={2} textAlign="center">
+                <MDTypography variant="body2" color="text">
+                  Don't have an account?{" "}
+                  <MDTypography
+                    component={Link}
+                    to="/authentication/sign-up"
+                    variant="body2"
+                    color="info"
+                    fontWeight="medium"
+                    textGradient
+                  >
+                    Sign up
+                  </MDTypography>
+                </MDTypography>
+              </MDBox>
+              <MDBox textAlign="center">
+                <Button
+                  leftIcon={<AiFillGoogleCircle />}
+                  colorScheme="red"
+                  variant="solid"
+                  w={"100%"}
+                  type="submit"
+                >
+                  Connect with Google
+                </Button>
+              </MDBox>
             </MDBox>
-          </MDBox>
         </MDBox>
       </Card>
     </BasicLayout>
@@ -129,3 +179,4 @@ function Basic() {
 }
 
 export default Basic;
+

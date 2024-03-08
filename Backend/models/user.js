@@ -23,7 +23,9 @@ const User = new Schema(
         experience : String,
         formation : String,
         certificates : String,
-        cV : String
+        cV : String,
+        googleId: String,
+        secret :String,
 
 
 

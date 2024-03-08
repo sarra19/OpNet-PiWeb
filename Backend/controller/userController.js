@@ -12,7 +12,40 @@ async function getall (req,res){
         }
 }
 
-async function login(req, res) {
+
+async function googlelogin (req, res) {
+    try {
+      const { access_token } = req.body;
+  
+      // Ici, vous devriez traiter la connexion Google en utilisant l'access_token
+      // Obtenez les informations de l'utilisateur à partir de Google
+      // Vérifiez si l'utilisateur existe déjà dans votre base de données
+      // Si l'utilisateur existe, générez un jeton JWT et redirigez l'utilisateur
+      // Sinon, créez un nouvel utilisateur dans votre base de données et générez un jeton JWT
+  
+      // Par exemple :
+      const googleUser = await fetchUserInfoFromGoogle(access_token);
+      let user = await User.findOne({ email: googleUser.email });
+      if (!user) {
+        user = new User({ email: googleUser.email, password:googleUser.password });
+        await user.save();
+      }
+  
+      // Générer un jeton JWT pour l'utilisateur
+      const token = jwt.sign({ userId: user._id }, "secretKey", { expiresIn: "1h" });
+  
+      // Rediriger l'utilisateur vers l'URI de redirection
+      res.status(200).json({ token, redirectUrl: "http://localhost:3000" });
+    } catch (error) {
+      console.error("Erreur lors de la connexion avec Google:", error);
+      res.status(500).json({ message: "Une erreur s'est produite lors de l'authentification avec Google." });
+    }
+  }
+
+  
+  // Autres routes et fonctions du contrôleur utilisateur...
+  
+  async function login(req, res) {
     const { email, password } = req.body;
 
     try {
@@ -30,26 +63,17 @@ async function login(req, res) {
             return res.status(401).json({ message: "Mot de passe incorrect." });
         }
 
-        // Générer un jeton JWT et rediriger l'utilisateur
-        const token = jwt.sign({ userId: user._id, role: user.role }, "secretKey", { expiresIn: "1h" });
+        // Générer un jeton JWT et inclure le rôle de l'utilisateur dans la payload
+        const token = jwt.sign({ userId: user._id, userRole: user.role }, "secretKey", { expiresIn: "1h" });
 
-        let redirectUrl;
-        switch (user.role) {
-            case "Student":
-                redirectUrl = "/dashboard";
-                break;
-            case "user":
-                redirectUrl = "/user-dashboard";
-                break;
-            default:
-                redirectUrl = "/dashboard";
-        }
+        let redirectUrl = "/dashboard";
 
-        res.status(200).json({ token, redirectUrl });
+        res.status(200).json({ token, redirectUrl, userRole: user.role ,userId: user._id, }); // Inclure le rôle dans la réponse
     } catch (error) {
         res.status(500).json({ message: "Une erreur s'est produite lors de l'authentification." });
     }
 }
+
 
 
 
@@ -110,7 +134,7 @@ async function profile(req, res) {
 async function add(req, res) {
     try {
         // Récupérer l'email et le mot de passe à partir du corps de la requête
-        const { email, password, firstname, lastname, dateOfBirth, country, phone, speciality, institution, languages, profileImage, description, skills, experience, formation, certificates, cV } = req.body;
+        const { email, password, firstname, lastname, dateOfBirth, country, phone, speciality, institution, languages, profileImage, description, skills, experience, formation, certificates, cV,role } = req.body;
 
         // Vérifier si l'e-mail existe déjà
         const existingUser = await User.findOne({ email });
@@ -140,7 +164,8 @@ async function add(req, res) {
             experience, 
             formation, 
             certificates, 
-            cV 
+            cV ,
+            role
         });
         // Sauvegarder l'utilisateur dans la base de données
         await user.save();
@@ -194,4 +219,4 @@ async function deleteUser (req, res) {
         res.status(500).json(err);
     }
 }
-module.exports={getall , getbyid, getbyname,profile, login,add , UpdateUser ,deleteUser}
+module.exports={getall ,googlelogin, getbyid, getbyname,profile, login,add , UpdateUser ,deleteUser}

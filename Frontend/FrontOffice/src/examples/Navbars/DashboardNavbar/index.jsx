@@ -12,8 +12,10 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+/* eslint-disable */
 
 import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
 
 // react-router components
 import { useLocation, Link } from "react-router-dom";
@@ -60,7 +62,25 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
 
+  const [userRole, setUserRole] = useState(""); // Ajouter un état pour stocker le rôle de l'utilisateur
+
+  // Fonction pour vérifier le rôle de l'utilisateur et mettre à jour l'état en conséquence
+  const checkUserRole = () => {
+    const storedUserRole = localStorage.getItem("userRole");
+    if (storedUserRole) {
+      setUserRole(storedUserRole);
+    }
+  };
+  // Fonction pour déconnecter l'utilisateur
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+
+    // Supprimer le rôle de l'utilisateur de localStorage
+  };
+
   useEffect(() => {
+    checkUserRole(); // Vérifier le rôle de l'utilisateur au chargement du composant
+
     // Setting the navbar type
     if (fixedNavbar) {
       setNavbarType("sticky");
@@ -137,6 +157,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
             <MDBox pr={1}>
               <MDInput label="Search here" />
+            </MDBox>
+            <MDBox>
+              {/* Bouton "Admin View" affiché uniquement pour les utilisateurs ayant des rôles spécifiques */}
+              {["Admin", "Subadmin", "Company", "Alumni"].includes(userRole) && (
+<Button variant="outlined" component={Link} to="http://localhost:4000/dashboard" style={{ backgroundColor: '#E82227', color: '#fff' }}>
+                  Admin View
+                </Button>
+              )}
+
+              {/* Autres éléments de la barre de navigation */}
+              <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Logout</Button>
+
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">

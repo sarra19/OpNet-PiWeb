@@ -12,8 +12,7 @@ import { Grid, Paper, Typography } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(4),
-    background: "linear-gradient(45deg, #B3272B, #c1c1c1)",
-    color: "#fff",
+    color: "#0000",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     borderRadius: theme.spacing(2),
     marginBottom: theme.spacing(4), // Ajouter une marge en bas
