@@ -1,17 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 
@@ -49,12 +35,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const route = useLocation().pathname.split("/").slice(1);
 
   const setUserRole = (role) => {
-    localStorage.setItem("userRole", role);
+    sessionStorage.setItem("userRole", role);
   };
 
   useEffect(() => {
     const checkUserRole = () => {
-      const storedUserRole = localStorage.getItem("userRole");
+      const storedUserRole = sessionStorage.getItem("userRole");
       if (storedUserRole) {
         setUserRole(storedUserRole);
       }
@@ -79,7 +65,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleLogout = () => {
-    localStorage.removeItem("userRole");
+    sessionStorage.removeItem("userRole");
   };
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -133,10 +119,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox>
-            {["Admin", "Subadmin", "Company", "Alumni"].includes(localStorage.getItem("userRole")) && (
+              {["Admin", "Subadmin", "Company", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
                 <Link 
-                to={`http://localhost:4000/dashboard?userRole=${localStorage.getItem("userRole")}`} // Corrected URL with query parameter
-                style={{ textDecoration: 'none' }} // Optionnel : pour supprimer la soulignement par défaut
+                  to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}`} // Corrected URL with query parameter
+                  style={{ textDecoration: 'none' }} // Optionnel : pour supprimer la soulignement par défaut
                 >
                   <Button 
                     variant="outlined" 

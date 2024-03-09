@@ -80,16 +80,22 @@ const [capVal,setCapVal] = useState(null)
       });
       if (response.ok) {
         // Handle successful submission
+        window.alert("User added successfully!");
         console.log("User added successfully!");
+        
       } else {
         // Handle error
+        window.alert("Failed to add user!");
+
         console.error("Failed to add user");
       }
     } catch (error) {
+      window.alert("Failed to add user!");
+
       console.error("Failed to add user", error);
     }
   };
-
+  
   return (
     <CoverLayout image={bgImage}>
       <Card>

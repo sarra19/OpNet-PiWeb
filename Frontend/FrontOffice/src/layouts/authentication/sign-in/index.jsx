@@ -10,7 +10,7 @@ import MuiLink from "@mui/material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
-import { AiFillGoogleCircle, AiFillCheckCircle } from "react-icons/ai";
+import { AiFillGoogleCircle } from "react-icons/ai";
 
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -20,38 +20,32 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpg";
 import { useNavigate } from "react-router-dom";
 import API_URLS from "../../../apiUrls";
-import { GoogleLogin } from 'react-google-login';
-import { token } from "stylis";
 import { Button } from "@mui/material";
 
 function Basic() {
-  const [email, setEmail] = useState(""); // Ajout de l'état pour l'e-mail
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => setEmail(e.target.value); // Utilisation de setEmail pour mettre à jour l'e-mail
+  const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const handleSignIn = async () => {
     try {
-      // Effectuer la requête de connexion et obtenir la réponse
       const response = await axios.post(API_URLS.login, {
         email: email,
         password: password
       });
-  
-      // Vérifier si la connexion est réussie et si la réponse contient les informations nécessaires
+
       if (response.data.redirectUrl && response.data.userId && response.data.userRole) {
         const userId = response.data.userId;
         const userRole = response.data.userRole;
-  
-        // Stocker les valeurs dans localStorage
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("userRole", userRole);
-  
-        // Naviguer vers la page de redirection
+
+        sessionStorage.setItem("userId", userId);
+        sessionStorage.setItem("userRole", userRole);
+
         navigate(response.data.redirectUrl);
       } else {
         console.error("La connexion a échoué.");
@@ -60,16 +54,16 @@ function Basic() {
       console.error("Erreur lors de la connexion:", error);
     }
   };
-  
+
   let [searchParams] = useSearchParams();
   const [user, setUser] = useState({});
-  const emailParam = searchParams.get("email"); // Changement du nom de la variable pour éviter la confusion avec l'état 'email'
+  const emailParam = searchParams.get("email");
   const firstname = searchParams.get("firstname");
   const secret = searchParams.get("secret");
 
   useEffect(() => {
     if (emailParam && firstname && secret) {
-      localStorage.setItem(
+      sessionStorage.setItem(
         "user",
         JSON.stringify({
           email: emailParam,
@@ -81,7 +75,7 @@ function Basic() {
   }, []);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(JSON.parse(sessionStorage.getItem("user")));
   }, []);
 
   return (
@@ -121,57 +115,57 @@ function Basic() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
-              <MDBox mb={2}>
-                <MDTypography variant="body1" mb={1}>Email address</MDTypography>
-                <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />
-              </MDBox>
-              <MDBox mb={2}>
-                <MDTypography variant="body1" mb={1}>Password</MDTypography>
-                <MDInput type="password" fullWidth onChange={handlePasswordChange} value={password} />
-              </MDBox>
-              <MDBox display="flex" alignItems="center" mb={2}>
-                <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                <MDTypography
-                  variant="body2"
-                  color="text"
-                  onClick={handleSetRememberMe}
-                  sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
-                >
-                  Remember me
-                </MDTypography>
-              </MDBox>
-              <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
-                  Sign in
-                </MDButton>
-              </MDBox>
-              <MDBox mb={2} textAlign="center">
-                <MDTypography variant="body2" color="text">
-                  Don't have an account?{" "}
-                  <MDTypography
-                    component={Link}
-                    to="/authentication/sign-up"
-                    variant="body2"
-                    color="info"
-                    fontWeight="medium"
-                    textGradient
-                  >
-                    Sign up
-                  </MDTypography>
-                </MDTypography>
-              </MDBox>
-              <MDBox textAlign="center">
-                <Button
-                  leftIcon={<AiFillGoogleCircle />}
-                  colorScheme="red"
-                  variant="solid"
-                  w={"100%"}
-                  type="submit"
-                >
-                  Connect with Google
-                </Button>
-              </MDBox>
+            <MDBox mb={2}>
+              <MDTypography variant="body1" mb={1}>Email address</MDTypography>
+              <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />
             </MDBox>
+            <MDBox mb={2}>
+              <MDTypography variant="body1" mb={1}>Password</MDTypography>
+              <MDInput type="password" fullWidth onChange={handlePasswordChange} value={password} />
+            </MDBox>
+            <MDBox display="flex" alignItems="center" mb={2}>
+              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
+              <MDTypography
+                variant="body2"
+                color="text"
+                onClick={handleSetRememberMe}
+                sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
+              >
+                Remember me
+              </MDTypography>
+            </MDBox>
+            <MDBox mt={4} mb={1}>
+              <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
+                Sign in
+              </MDButton>
+            </MDBox>
+            <MDBox mb={2} textAlign="center">
+              <MDTypography variant="body2" color="text">
+                Don't have an account?{" "}
+                <MDTypography
+                  component={Link}
+                  to="/authentication/sign-up"
+                  variant="body2"
+                  color="info"
+                  fontWeight="medium"
+                  textGradient
+                >
+                  Sign up
+                </MDTypography>
+              </MDTypography>
+            </MDBox>
+            <MDBox textAlign="center">
+              <Button
+                leftIcon={<AiFillGoogleCircle />}
+                colorScheme="red"
+                variant="solid"
+                w={"100%"}
+                type="submit"
+              >
+                Connect with Google
+              </Button>
+            </MDBox>
+          </MDBox>
         </MDBox>
       </Card>
     </BasicLayout>
@@ -179,4 +173,3 @@ function Basic() {
 }
 
 export default Basic;
-
