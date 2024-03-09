@@ -19,6 +19,9 @@ const Interview = new Schema(
             enum: statusIntrvEnum,
             default: "En attente"
         },
+    },
+    {
+        timestamps: true,
     }
 );
 

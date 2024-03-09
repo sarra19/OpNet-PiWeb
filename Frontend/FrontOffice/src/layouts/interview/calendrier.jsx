@@ -27,7 +27,6 @@ function Calendrier() {
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [interviews, setInterviews] = useState([]);
-  const [isRequestingAnotherDate, setIsRequestingAnotherDate] = useState(false);
 
 
   useEffect(() => {
@@ -86,10 +85,8 @@ function Calendrier() {
   const handleConfirmationClose = (confirmed) => {
     setConfirmationOpen(false);
     if (confirmed) {
-      // Supprimer l'entretien seulement si l'utilisateur a confirmé
       deleteInterview();
     } else {
-      // Réinitialiser l'interviewToDelete si l'utilisateur a annulé
       setInterviewToDelete(null);
     }
   };

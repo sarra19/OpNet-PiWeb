@@ -2,9 +2,9 @@ const Interview = require("../models/interview");
 
 async function add(req, res){
     try{
-    const intrv = new Interview(req.body)
-    await intrv.save();
-    res.status(200).send("add good")
+        const intrv = new Interview(req.body)
+        await intrv.save();
+        res.status(200).send("add good")
     }catch(err){
         res.status(400).send(err);
         console.log(err);

@@ -21,7 +21,7 @@ function Interview() {
   const [interviews, setInterviews] = useState([]);
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [canRequestAnotherDate, setCanRequestAnotherDate] = useState(true);
+  const [visibleInterviews, setVisibleInterviews] = useState(5);
 
   useEffect(() => {
     getInterviews();
@@ -29,14 +29,20 @@ function Interview() {
 
   const getInterviews = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/interviews/getall");
-      const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
-      setInterviews(filteredInterviews);
+        const response = await axios.get("http://localhost:5000/interviews/getall");
+        const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
+        const sortedInterviews = filteredInterviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const reversedInterviews = sortedInterviews.reverse();
+        setInterviews(reversedInterviews);
     } catch (error) {
-      console.error("Erreur lors de la récupération des entretiens:", error);
+        console.error("Erreur lors de la récupération des entretiens:", error);
     }
-  };
+};
 
+
+  const handleVoirPlusClick = () => {
+    setVisibleInterviews((prevVisibleInterviews) => prevVisibleInterviews + 5);
+  };
 
   const formatInterviewDate = (dateString) => {
     const date = new Date(dateString);
@@ -160,7 +166,8 @@ function Interview() {
                 </Alert>
             )}
             <Grid container spacing={2} mb={13}>
-            {filteredInterviews.map((interview, index) => (
+
+            {filteredInterviews.slice(0, visibleInterviews).map((interview, index) => (
                 <Grid item key={interview.id || index } xs={12} sm={6} md={4}>
                   <Card  style={{ height: '360px', width: '100%' }}>
                     <CardContent>
@@ -186,6 +193,17 @@ function Interview() {
                   </Card>
                 </Grid>
               ))}
+              {filteredInterviews.length > visibleInterviews && (
+                <Card  style={{ height: '360px', width: '31%', background: 'transparent' , marginTop:"16px" , marginLeft:"17px"}}>
+                    <Button
+                      onClick={handleVoirPlusClick}
+                      style={{color: 'red' ,  margin:"50px",marginTop: "60%"  }}
+                    >
+                      Voir plus
+                      <Icon style={{ marginLeft: "10px" }} fontSize="small">keyboard_double_arrow_down</Icon>
+                    </Button>
+                    </Card>
+                  )}
             </Grid>
           </Grid>
         </Grid>
