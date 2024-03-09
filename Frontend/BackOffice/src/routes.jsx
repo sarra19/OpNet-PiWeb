@@ -52,6 +52,7 @@ import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import UserDetails from "layouts/userManagement/UserDetails";
+const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
   {
@@ -62,7 +63,7 @@ const routes = [
     type: "route",
     name: "User Details", // Nom de la route affiché dans le sidenav
     key: "user-details", // Clé unique pour cette route
-    route: "/user/:userId", // Chemin vers la page des détails de l'utilisateur avec un paramètre pour l'ID de l'utilisateur
+    route:  "/details",
     component: <UserDetails />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
   
@@ -71,8 +72,9 @@ const routes = [
     name: "Home",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
+    route: "/dashboard",   
+      component: <Dashboard />,
+
   },
   {
     type: "collapse",

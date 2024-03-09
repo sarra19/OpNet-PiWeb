@@ -48,6 +48,7 @@ import ResetPassword from "layouts/authentication/reset-password";
 import Icon from "@mui/material/Icon";
 import Interviews from "layouts/Interviews";
 import Chat from "layouts/Chat";
+const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
   {
@@ -59,7 +60,7 @@ const routes = [
     name: "Home",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
+    route: `/dashboard/${getUserRole()}`,
     component: <Dashboard />,
   },
   {

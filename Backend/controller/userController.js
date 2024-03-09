@@ -66,7 +66,7 @@ async function googlelogin (req, res) {
         // Générer un jeton JWT et inclure le rôle de l'utilisateur dans la payload
         const token = jwt.sign({ userId: user._id, userRole: user.role }, "secretKey", { expiresIn: "1h" });
 
-        let redirectUrl = "/dashboard";
+        let redirectUrl = "/dashboard/Admin";
 
         res.status(200).json({ token, redirectUrl, userRole: user.role ,userId: user._id, }); // Inclure le rôle dans la réponse
     } catch (error) {
