@@ -125,7 +125,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox>
-            <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard/${getUserRole()}`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
+            <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
   User View
 </Button>
 

@@ -21,6 +21,7 @@ router.get('/:FirstName/:LastName/:Email', function(req,res){
 router.post("/add",userController.add);
 router.post("/login", userController.login)
 router.post("/googlelogin",userController.googlelogin);
+router.post("/storeUserRole", userController.storeUserRole); // Add this line
 
 router.get("/profile/:id", userController.profile)
 

@@ -75,7 +75,21 @@ async function googlelogin (req, res) {
 }
 
 
-
+async function storeUserRole(req, res) {
+    try {
+      const { userRole } = req.body;
+      // Store userRole wherever appropriate, such as in your database
+      // For example, if you have a User model, you can save it there
+      // const user = new User({ role: userRole });
+      // await user.save();
+  
+      // Respond with success status
+      res.status(200).json({ message: "UserRole stored successfully." });
+    } catch (error) {
+      console.error("Error storing UserRole:", error);
+      res.status(500).json({ message: "An error occurred while storing UserRole." });
+    }
+  }
 
 async function sendConfirmationEmail(email) {
     console.log(email);
@@ -219,4 +233,4 @@ async function deleteUser (req, res) {
         res.status(500).json(err);
     }
 }
-module.exports={getall ,googlelogin, getbyid, getbyname,profile, login,add , UpdateUser ,deleteUser}
+module.exports={getall ,googlelogin,storeUserRole, getbyid, getbyname,profile, login,add , UpdateUser ,deleteUser}

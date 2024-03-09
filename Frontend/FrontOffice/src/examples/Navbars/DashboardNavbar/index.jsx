@@ -47,7 +47,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const userRole = localStorage.getItem("userRole");
 
   const setUserRole = (role) => {
     localStorage.setItem("userRole", role);
@@ -134,10 +133,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox>
-              {["Admin", "Subadmin", "Company", "Alumni"].includes(userRole) && (
+            {["Admin", "Subadmin", "Company", "Alumni"].includes(localStorage.getItem("userRole")) && (
                 <Link 
-                  to={`http://localhost:4000/dashboard`}
-                  style={{ textDecoration: 'none' }} // Optionnel : pour supprimer la soulignement par défaut
+                to={`http://localhost:4000/dashboard?userRole=${localStorage.getItem("userRole")}`} // Corrected URL with query parameter
+                style={{ textDecoration: 'none' }} // Optionnel : pour supprimer la soulignement par défaut
                 >
                   <Button 
                     variant="outlined" 
