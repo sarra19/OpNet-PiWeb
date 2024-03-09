@@ -30,7 +30,7 @@ function Interview() {
   const getInterviews = async () => {
     try {
       const response = await axios.get("http://localhost:5000/interviews/getall");
-      const filteredInterviews = response.data.filter(interview => !interview.archived);
+      const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
       setInterviews(filteredInterviews);
     } catch (error) {
       console.error("Erreur lors de la récupération des entretiens:", error);
@@ -143,7 +143,7 @@ function Interview() {
   
   return (
     <DashboardLayout>
-      <DashboardNavbar searchInput={searchInput} onSearchInputChange={handleSearchInputChange} absolute isMini />
+      <DashboardNavbar searchInput={searchInput} onSearchInputChange={handleSearchInputChange}/>
       <MDBox mt={3} mb={3}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8}>
