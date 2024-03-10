@@ -51,6 +51,7 @@ import ChatManagement from "layouts/chatManagement";
 import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
+import Calendrier from "layouts/interviewManagement/calendrier";
 
 const routes = [
   {
@@ -106,6 +107,13 @@ const routes = [
     route: "/interviewManagement",
     component: <InterviewManagement />,
 
+  },
+  {
+    type: "route",
+    name: "calendrier", 
+    key: "calendrier", 
+    route: "/calendrier", 
+    component: <Calendrier />, 
   },
   {
     type: "collapse",
