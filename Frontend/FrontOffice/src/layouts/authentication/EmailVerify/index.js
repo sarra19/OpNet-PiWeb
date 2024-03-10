@@ -30,16 +30,9 @@ const EmailVerify = () => {
                 <div className={styles.container}>
                     <img src={success} alt="success_img" className={styles.success_img} />
                     <h1>Email verified successfully</h1>
-                    <MDTypography
-                        component={Link}
-                        to="/authentication/sign-in"
-                        variant="body2"
-                        color="info"
-                        fontWeight="medium"
-                        textGradient
-                    >
-                        Sign in
-                    </MDTypography>
+                    <Link to="/login">
+						<button className={styles.green_btn}>Login</button>
+					</Link>
                 </div>
             ) : (
                 <h1>404 Not Found</h1>

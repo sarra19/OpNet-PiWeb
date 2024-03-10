@@ -48,6 +48,7 @@ import ForgotPassword from "layouts/authentication/ForgotPassword";
 import Icon from "@mui/material/Icon";
 import Interviews from "layouts/Interviews";
 import Chat from "layouts/Chat";
+import Basic from "layouts/authentication/sign-in";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -55,6 +56,7 @@ const routes = [
     route: "/authentication/ForgotPassword",
     component: <ForgotPassword />,
   },
+ 
   {
     type: "collapse",
     name: "Home",

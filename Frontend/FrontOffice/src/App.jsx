@@ -56,6 +56,7 @@ import brandDark from "assets/images/ESPRIT2.jpg";
 import ForgotPassword from "./layouts/authentication/ForgotPassword";
 import PasswordReset from "./layouts/authentication/PasswordReset";
 import EmailVerify from "layouts/authentication/EmailVerify";
+import Basic from "layouts/authentication/sign-in";
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -170,8 +171,9 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
           <Route path="/user/:id/verify/:token" element={<EmailVerify />} />
+
           <Route path="/forgot-password" element={<ForgotPassword />} />
 			<Route path="/password-reset/:id/:token" element={<PasswordReset />} />
         </Routes>
@@ -197,7 +199,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
