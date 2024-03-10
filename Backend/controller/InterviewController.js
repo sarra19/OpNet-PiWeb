@@ -57,6 +57,14 @@ async function deleteinterview(req,res){
     }
 }
 
+async function deleteinterviewB(req,res){
+    try{
+        await Interview.findByIdAndDelete(req.params.id);
+        res.status(200).send("deleted");
+    }catch(err){
+        res.status(400).send(err);
+    }
+}
 
 async function fixAnotherDate(req, res) {
     try { 
@@ -68,5 +76,5 @@ async function fixAnotherDate(req, res) {
   }
 
 
-module.exports = { add, getall, getbyid, getbytitle, update, deleteinterview, fixAnotherDate };
+module.exports = { add, getall, getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate };
   

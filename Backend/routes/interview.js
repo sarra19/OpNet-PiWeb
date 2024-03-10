@@ -14,5 +14,6 @@ router.put('/update/:id', intervController.update);
 router.delete('/deleteintrv/:id',intervController.deleteinterview );
 router.get("/getitle/:title", intervController.getbytitle);
 router.put("/fixAnotherDate/:id", intervController.fixAnotherDate);
+router.delete("/deleteintrvB/:id" , intervController.deleteinterviewB)
 
 module.exports = router ;
