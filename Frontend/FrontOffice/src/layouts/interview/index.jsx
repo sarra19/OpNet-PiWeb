@@ -16,6 +16,7 @@ import DialogActions from "@mui/material/DialogActions";
 import { Link } from "react-router-dom";
 import "./index.css";
 import { Alert, Icon } from "@mui/material";
+import clsx from "clsx"; //pour le blur
 function Interview() {
   const [searchInput, setSearchInput] = useState("");
   const [interviews, setInterviews] = useState([]);
@@ -140,12 +141,11 @@ function Interview() {
     })
 };
 
-
-
-  
-  
-
- 
+const isInterviewExpired = (dateString) => {
+  const interviewDate = new Date(dateString);
+  const currentDate = new Date();
+  return interviewDate < currentDate;
+}; 
   
   return (
     <DashboardLayout>
@@ -169,7 +169,7 @@ function Interview() {
 
             {filteredInterviews.slice(0, visibleInterviews).map((interview, index) => (
                 <Grid item key={interview.id || index } xs={12} sm={6} md={4}>
-                  <Card  style={{ height: '360px', width: '100%' }}>
+                  <Card className={clsx({expiredInterview: isInterviewExpired(interview.dateInterv)})} style={{ height: '360px', width: '100%' }}>
                     <CardContent>
                     <Typography variant="h5">{interview.title}</Typography>
                       <Typography variant="h6" mt={2}>
