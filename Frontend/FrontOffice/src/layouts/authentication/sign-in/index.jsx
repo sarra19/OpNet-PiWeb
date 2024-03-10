@@ -32,8 +32,14 @@ function Basic() {
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     try {
+      
+			const url = "http://localhost:5000/auth";
+			const { data: res } = await axios.post(url, data);
+			localStorage.setItem("token", res.data);
+			window.location = "/";
       const response = await axios.post(API_URLS.login, {
         email: email,
         password: password

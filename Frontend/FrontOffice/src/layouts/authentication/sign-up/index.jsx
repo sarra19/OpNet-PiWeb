@@ -10,11 +10,13 @@ import bgImage from "assets/images/bg-sign-up-cover.jpg";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import API_URLS from "../../../apiUrls";
 import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios"; // Import axios for making HTTP requests
+import API_URLS from "../../../apiUrls";
+
 function Cover() {
   const roles = ["Student", "Teacher", "Alumni", "Admin", "Subadmin", "Company"]; // List of roles
-const [capVal,setCapVal] = useState(null)
+  const [capVal, setCapVal] = useState(null);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -26,14 +28,18 @@ const [capVal,setCapVal] = useState(null)
     emailError: "",
     passwordError: "",
     confirmPasswordError: "",
-    role: "" // Initialize role as an empty string
+    role: "",
   });
+
+  
+
+	
+  const [error, setError] = useState("");
+  const [msg, setMsg] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
-
-    // Validation logic
     if (name === "firstname" || name === "lastname") {
       if (/\d/.test(value)) {
         errorMessage = "Name should not contain numbers";
@@ -53,46 +59,39 @@ const [capVal,setCapVal] = useState(null)
         errorMessage = "Passwords do not match";
       }
     }
-
     setFormData({
       ...formData,
       [name]: value,
-      [`${name}Error`]: errorMessage // Store error message in state
+      [`${name}Error`]: errorMessage,
     });
   };
 
   const handleRoleChange = (event, newValue) => {
     setFormData({
       ...formData,
-      role: newValue // Update role value
+      role: newValue || "",
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(API_URLS.addUser, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
-      if (response.ok) {
-        // Handle successful submission
-        window.alert("User added successfully!");
-        console.log("User added successfully!");
-        
-      } else {
-        // Handle error
-        window.alert("Failed to add user!");
-
-        console.error("Failed to add user");
-      }
+      const res = await axios.post(API_URLS.signup, formData);
+      setMsg(res.data.message); // Access the 'data' property of the response directly
     } catch (error) {
-      window.alert("Failed to add user!");
-
-      console.error("Failed to add user", error);
+      if (error.response && error.response.status >= 400 && error.response.status < 500) {
+        setError(error.response.data.message);
+      } else if (error.response && error.response.status === 401) {
+        setError("Unauthorized: Please log in again.");
+      } else if (error.response && error.response.status === 404) {
+        setError("Resource not found.");
+      } else if (error.response && error.response.status === 503) {
+        setError("Service unavailable. Please try again later.");
+      } else if (error.request) {
+        setError("Network error. Please check your internet connection.");
+      } else {
+        setError("An error occurred while processing your request. Please try again later.");
+      }
     }
   };
   
@@ -118,7 +117,7 @@ const [capVal,setCapVal] = useState(null)
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <MDBox mb={2}>
               <MDInput
                 type="text"
@@ -212,15 +211,15 @@ const [capVal,setCapVal] = useState(null)
               </Grid>
             </MDBox>
             <MDBox mt={4} mb={1}>
-            <ReCAPTCHA
-            sitekey="6LdXhYspAAAAABmF7uoESPX5wt57MZEsNAdWbC4h"
-            onChange={(val) => setCapVal(val)}
-            />
+              <ReCAPTCHA
+                sitekey="6LdXhYspAAAAABmF7uoESPX5wt57MZEsNAdWbC4h"
+                onChange={(val) => setCapVal(val)}
+              />
               <MDButton disabled={!capVal} type="submit" variant="gradient" color="info" fullWidth>
                 Sign up
               </MDButton>
             </MDBox>
-          </MDBox>
+          </form>
         </MDBox>
       </Card>
     </CoverLayout>

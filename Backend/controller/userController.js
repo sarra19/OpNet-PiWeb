@@ -145,53 +145,64 @@ async function profile(req, res) {
 }
 
 
-async function add(req, res) {
-    try {
-        // Récupérer l'email et le mot de passe à partir du corps de la requête
-        const { email, password, firstname, lastname, dateOfBirth, country, phone, speciality, institution, languages, profileImage, description, skills, experience, formation, certificates, cV,role } = req.body;
+// async function add(req, res) {
+//     try {
+//         const { email, password, firstname, lastname, dateOfBirth, country, phone, speciality, institution, languages, profileImage, description, skills, experience, formation, certificates, cV, role } = req.body;
 
-        // Vérifier si l'e-mail existe déjà
-        const existingUser = await User.findOne({ email });
+//         // Vérifier si l'utilisateur existe déjà avec cet e-mail
+//         const existingUser = await User.findOne({ email });
 
-        if (existingUser) {
-            return res.status(400).send({ error: "This email is already registered" });
-        }
+//         if (existingUser) {
+//             return res.status(409).send({ error: "User with given email already exists" });
+//         }
 
-        // Hacher le mot de passe
-        const hashedPassword = await bcrypt.hash(password, 10); // 10 est le coût de hachage
+//         // Générer un sel et hacher le mot de passe
+//         const salt = await bcrypt.genSalt(Number(process.env.SALT));
+//         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Créer un nouvel utilisateur avec le mot de passe haché
-        const user = new User({ 
-            email, 
-            password: hashedPassword, 
-            firstname, 
-            lastname, 
-            dateOfBirth, 
-            country, 
-            phone, 
-            speciality, 
-            institution, 
-            languages, 
-            profileImage, 
-            description, 
-            skills, 
-            experience, 
-            formation, 
-            certificates, 
-            cV ,
-            role
-        });
-        // Sauvegarder l'utilisateur dans la base de données
-        await user.save();
-        await sendConfirmationEmail(email);
+//         // Créer un nouvel utilisateur avec le mot de passe haché
+//         const user = new User({
+//             email,
+//             password: hashedPassword,
+//             firstname,
+//             lastname,
+//             dateOfBirth,
+//             country,
+//             phone,
+//             speciality,
+//             institution,
+//             languages,
+//             profileImage,
+//             description,
+//             skills,
+//             experience,
+//             formation,
+//             certificates,
+//             cV,
+//             role
+//         });
 
-        // Envoyer une réponse de réussite à l'utilisateur
-        res.status(200).send("Inscription réussie.");
-    } catch (err) {
-        // Gérer les erreurs et renvoyer une réponse d'erreur au client
-        res.status(400).send({ error: err });
-    }
-}
+//         // Sauvegarder l'utilisateur dans la base de données
+//         await user.save();
+
+//         // Générer un jeton de vérification
+//         const token = await new Token({
+//             userId: user._id,
+//             token: crypto.randomBytes(32).toString("hex"),
+//         }).save();
+
+//         // Construire l'URL de vérification et envoyer l'e-mail de confirmation
+//         const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+//         await sendConfirmationEmail(email);
+
+//         // Envoyer une réponse de réussite à l'utilisateur
+//         res.status(200).send("Inscription réussie. Un e-mail de vérification a été envoyé.");
+//     } catch (err) {
+//         // Gérer les erreurs et renvoyer une réponse d'erreur au client
+//         console.error(err);
+//         res.status(500).send({ error: "Internal Server Error" });
+//     }
+// }
 
 
 async function getbyid (req,res){
@@ -233,4 +244,4 @@ async function deleteUser (req, res) {
         res.status(500).json(err);
     }
 }
-module.exports={getall ,googlelogin,storeUserRole, getbyid, getbyname,profile, login,add , UpdateUser ,deleteUser}
+module.exports={getall ,googlelogin,storeUserRole, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}

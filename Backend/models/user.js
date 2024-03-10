@@ -1,6 +1,8 @@
 const mongo = require ("mongoose");
 const Schema =mongo.Schema 
 const Role = require('./role'); 
+const jwt = require("jsonwebtoken");
+
 const User = new Schema(
     {
         firstname: String ,
@@ -26,10 +28,23 @@ const User = new Schema(
         cV : String,
         googleId: String,
         secret :String,
+        verified: { type: Boolean, default: false },
 
 
+        // isEmailVerified: {
+        //     type: Boolean,
+        //     default: false,
+        // },
+        // verificationCode: String,
 
     }
-)
+);
+User.methods.generateAuthToken = function () {
+	const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
+		expiresIn: "7d",
+	});
+	return token;
+};
+
 
 module.exports = mongo.model("user", User) ;

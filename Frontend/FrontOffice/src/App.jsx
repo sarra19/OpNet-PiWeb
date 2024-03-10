@@ -53,7 +53,9 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/ESPRIT2.jpg";
 import brandDark from "assets/images/ESPRIT2.jpg";
-
+import ForgotPassword from "./layouts/authentication/ForgotPassword";
+import PasswordReset from "./layouts/authentication/PasswordReset";
+import EmailVerify from "layouts/authentication/EmailVerify";
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -169,6 +171,9 @@ export default function App() {
         <Routes>
           {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/user/:id/verify/:token" element={<EmailVerify />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+			<Route path="/password-reset/:id/:token" element={<PasswordReset />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>

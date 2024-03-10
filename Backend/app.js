@@ -13,6 +13,8 @@ const http = require("http");
 
 const config = require("./config/connect.js");
 const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
+
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const googleAuth = require("./routes/index");
@@ -48,6 +50,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 app.use('/user', userRouter);
+app.use('/auth', authRouter);
+
 app.use('/chat', chatRoomRouter);
 app.use('/messages', messageRouter);
 

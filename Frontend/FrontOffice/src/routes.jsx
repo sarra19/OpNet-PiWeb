@@ -42,7 +42,7 @@ import Condidacy from "layouts/Condidacy";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import ResetPassword from "layouts/authentication/reset-password";
+import ForgotPassword from "layouts/authentication/ForgotPassword";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -52,8 +52,8 @@ const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
   {
-    route: "/authentication/rest-password",
-    component: <ResetPassword />,
+    route: "/authentication/ForgotPassword",
+    component: <ForgotPassword />,
   },
   {
     type: "collapse",

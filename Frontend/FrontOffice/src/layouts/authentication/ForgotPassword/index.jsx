@@ -14,7 +14,10 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
+/* eslint-disable */
+
 import Card from "@mui/material/Card";
+import { useState } from "react";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -28,7 +31,31 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgImage from "assets/images/bg-reset-cover.jpg";
 
+import styles from "./styles.module.css";
+
 function Cover() {
+  const [email , setEmail]=useState("");
+const [msg, setMsg] = useState("");
+	const [error, setError] = useState("");
+  const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const url = `http://localhost:5000/api/password-reset`;
+			const { data } = await axios.post(url, { email });
+			setMsg(data.message);
+			setError("");
+		} catch (error) {
+			if (
+				error.response &&
+				error.response.status >= 400 &&
+				error.response.status <= 500
+			) {
+				setError(error.response.data.message);
+				setMsg("");
+			}
+		}
+	};
+
   return (
     <CoverLayout coverHeight="50vh" image={bgImage}>
       <Card>
@@ -53,8 +80,13 @@ function Cover() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={4}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput type="email" label="Email" variant="standard" onChange={(e) => setEmail(e.target.value)}
+					value={email}
+					required
+				/>
             </MDBox>
+            {error && <div className={styles.error_msg}>{error}</div>}
+				{msg && <div className={styles.success_msg}>{msg}</div>}
             <MDBox mt={6} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth>
                 reset

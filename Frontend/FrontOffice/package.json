@@ -27,6 +27,7 @@
     "chroma-js": "2.4.2",
     "framer-motion": "^11.0.8",
     "jwt-decode": "^4.0.0",
+    "nodemailer": "^6.9.12",
     "primeicons": "^6.0.1",
     "primereact": "^10.5.1",
     "prop-types": "15.8.1",

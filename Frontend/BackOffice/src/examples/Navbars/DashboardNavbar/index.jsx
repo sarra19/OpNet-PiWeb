@@ -1,17 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -46,11 +32,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const getUserRole = () => localStorage.getItem("userRole");
+  const getUserRole = () => sessionStorage.getItem("userRole"); // Use sessionStorage instead of localStorage
 
   useEffect(() => {
-    // Clear userRole from localStorage when component mounts
-    localStorage.removeItem("userRole");
+    // Clear userRole from sessionStorage when component mounts
+    sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
   
     // Handle navbar type and transparency
     if (fixedNavbar) {
@@ -75,9 +61,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
   const handleLogout = () => {
-    localStorage.removeItem("userRole");
+    sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
 
-    // Supprimer le rôle de l'utilisateur de localStorage
+    // Remove the user role from sessionStorage
   };
   const renderMenu = () => (
     <Menu
@@ -125,9 +111,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox>
-            <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
-  User View
-</Button>
+              <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
+                User View
+              </Button>
 
             </MDBox>
             <Button onClick={handleLogout} component={Link} to="http://localhost:3000/authentication/sign-in">Logout</Button>
