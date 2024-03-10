@@ -156,12 +156,6 @@ function Calendrier() {
     noEventsInRange: 'Aucun événement',
     showMore: total => `+ ${total} de plus`
   };
-
-  const redTextStyle = {
-    color: 'white',
-    backgroundColor: 'rgba(500, 10, 20, 0.7)',
-  };
-
   const formatInterviewDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
@@ -204,10 +198,10 @@ function Calendrier() {
                     color= "rgba(102, 138, 186, 0.962) ";
                     break;
                   case "Terminé":
-                    color =  "#76c893";
+                    color =  "#0c80a99";
                     break;
                   default:
-                    color = 'blue';
+                    color = 'gray';
                     break;
                 }
                 return {

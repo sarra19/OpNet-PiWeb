@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";  
 import "./index.css";
 import { DateTime } from "luxon";
-import { Button, Icon } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Icon, MenuItem, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 /* eslint-disable */
 
@@ -102,6 +102,52 @@ function InterviewManagement() {
     }, 10000); 
   };
 
+  const [addFormOpen, setAddFormOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    descrInter: "",
+    candidateName: "",
+    dateInterv: "",
+    address: "",
+    typeIntrv: "En ligne", 
+    statusInterv: "A venir",
+  });
+
+  const handleInputChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  
+
+  const handleOpenAddForm = () => {
+    setAddFormOpen(true);
+  };
+
+  const handleCloseAddForm = () => {
+    setAddFormOpen(false);
+  };
+
+  const handleAddInterview = async () => {
+    try {
+      // Enregistrez les nouvelles données directement dans la liste des entretiens
+      setInterviews([...interviews, formData]);
+  
+      // Envoyez la requête au serveur pour sauvegarder les données
+      const response = await axios.post("http://localhost:5000/interviews/add", formData);
+      if (response.status === 200) {
+        // Fermez le formulaire après l'ajout réussi
+        handleCloseAddForm();
+      } else {
+        console.error("Erreur lors de l'ajout de l'entretien");
+      }
+    } catch (error) {
+      // Gérez les erreurs ici
+      console.error("Erreur lors de l'ajout de l'entretien:", error);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -115,7 +161,7 @@ function InterviewManagement() {
                   <Icon style={{ marginRight: "10px" }} fontSize="small">event_note</Icon><Link  style={{ color: 'inherit' }} to={`/calendrier`}>Voir calendrier</Link>
                 </Button>
               </div>
-              <Button style={{marginTop:"10px" , color: 'red' }} >
+              <Button style={{marginTop:"10px" , color: 'red' }} onClick={handleOpenAddForm} >
                 <Icon style={{ marginRight: "10px" }} fontSize="small">add_to_photos</Icon>Ajouter entretien
               </Button>
             </Typography>
@@ -147,6 +193,27 @@ function InterviewManagement() {
           </Grid>
         </Grid>
       </MDBox >
+      <Dialog open={addFormOpen} onClose={handleCloseAddForm}>
+        <DialogTitle>Ajouter un entretien</DialogTitle>
+        <DialogContent>
+          <form>
+            <TextField style={{marginBlock:"10px"}}  label="Title" name="title" value={formData.title} onChange={handleInputChange} fullWidth />
+            <TextField style={{marginBlock:"10px"}}  label="Description d'entretien" name="descrInter" value={formData.descrInter} onChange={handleInputChange} fullWidth multiline />
+            <TextField style={{ marginBlock: "10px" }} label="Nom du candidat" name="candidateName" value={formData.candidateName} onChange={handleInputChange} fullWidth/>
+            <TextField style={{ marginBlock: "10px" }}  type="datetime-local" name="dateInterv" value={formData.dateInterv} onChange={handleInputChange} fullWidth />
+
+            <TextField style={{marginBlock:"10px"}}  label="Adresse" name="address" value={formData.address} onChange={handleInputChange} fullWidth />
+            <TextField style={{marginBlock:"10px"}}  label="Etat d'entretien" name="statusInterv" value={formData.statusInterv} onChange={handleInputChange} fullWidth />
+            <TextField style={{ marginBlock: "10px" }} label="Type d'entretien" name="typeIntrv" value={formData.typeIntrv} onChange={handleInputChange} fullWidth select  >
+              <MenuItem value="En ligne" >En ligne</MenuItem>
+              <MenuItem value="En face">En face</MenuItem>
+            </TextField>
+            <Button variant="contained" style={{backgroundColor:"red" , color: 'white' , marginTop:"23px"}} onClick={handleAddInterview}>
+              Ajouter 
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
       <Footer />
     </DashboardLayout>
   );
