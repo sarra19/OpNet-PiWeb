@@ -174,8 +174,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
           <Route path="/user/:id/verify/:token" element={<EmailVerify />} />
 
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-			<Route path="/password-reset/:id/:token" element={<PasswordReset />} />
+         
         </Routes>
       </ThemeProvider>
     </CacheProvider>

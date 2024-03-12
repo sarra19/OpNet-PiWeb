@@ -14,10 +14,12 @@ const http = require("http");
 const config = require("./config/connect.js");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
+const passwordResetRoutes = require("./routes/passwordReset");
 
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const googleAuth = require("./routes/index");
+
 const passport = require("passport");
 const app = express();
 
@@ -54,6 +56,7 @@ app.use('/auth', authRouter);
 
 app.use('/chat', chatRoomRouter);
 app.use('/messages', messageRouter);
+app.use("/password-reset", passwordResetRoutes);
 
 
 app.use(

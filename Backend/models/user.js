@@ -47,4 +47,4 @@ User.methods.generateAuthToken = function () {
 };
 
 
-module.exports = mongo.model("user", User) ;
+module.exports = mongo.model("User", User) ;

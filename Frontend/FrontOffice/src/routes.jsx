@@ -49,12 +49,17 @@ import Icon from "@mui/material/Icon";
 import Interviews from "layouts/Interviews";
 import Chat from "layouts/Chat";
 import Basic from "layouts/authentication/sign-in";
+import PasswordReset from "layouts/authentication/PasswordReset";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
   {
-    route: "/authentication/ForgotPassword",
+    route: "/forgot-password",
     component: <ForgotPassword />,
+  },
+  {
+    route: "/password-reset/:id/:token",
+    component: <PasswordReset />,
   },
  
   {

@@ -35,23 +35,24 @@ function Basic() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      
-			const url = "http://localhost:5000/auth";
-			const { data: res } = await axios.post(url, data);
-			localStorage.setItem("token", res.data);
-			window.location = "/";
+      const url = "http://localhost:5000/auth";
+      const formData = { email, password }; // Constructing the data object
+      const { data: res } = await axios.post(url, formData); // Sending the formData as the second argument
+  
+      localStorage.setItem("token", res.data);
+  
       const response = await axios.post(API_URLS.login, {
         email: email,
         password: password
       });
-
+  
       if (response.data.redirectUrl && response.data.userId && response.data.userRole) {
         const userId = response.data.userId;
         const userRole = response.data.userRole;
-
+  
         sessionStorage.setItem("userId", userId);
         sessionStorage.setItem("userRole", userRole);
-
+  
         navigate(response.data.redirectUrl);
       } else {
         console.error("La connexion a échoué.");
@@ -60,6 +61,7 @@ function Basic() {
       console.error("Erreur lors de la connexion:", error);
     }
   };
+  
 
   let [searchParams] = useSearchParams();
   const [user, setUser] = useState({});
@@ -150,7 +152,7 @@ function Basic() {
                 Don't have an account?{" "}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-up"
+                  to="/dashboard"
                   variant="body2"
                   color="info"
                   fontWeight="medium"
@@ -160,6 +162,9 @@ function Basic() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
+            <Link to="/forgot-password" style={{ alignSelf: "flex-start" }}>
+							<p style={{ padding: "0 15px" }}>Forgot Password ?</p>
+						</Link>
             <MDBox textAlign="center">
               <Button
                 leftIcon={<AiFillGoogleCircle />}

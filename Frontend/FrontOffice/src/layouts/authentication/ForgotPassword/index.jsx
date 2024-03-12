@@ -15,46 +15,40 @@ Coded by www.creative-tim.com
 
 // @mui material components
 /* eslint-disable */
-
-import Card from "@mui/material/Card";
 import { useState } from "react";
-
-// Material Dashboard 2 React components
+import axios from "axios";
+import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-
-// Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
-
-// Images
 import bgImage from "assets/images/bg-reset-cover.jpg";
-
 import styles from "./styles.module.css";
 
 function Cover() {
-  const [email , setEmail]=useState("");
-const [msg, setMsg] = useState("");
-	const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			const url = `http://localhost:5000/api/password-reset`;
-			const { data } = await axios.post(url, { email });
-			setMsg(data.message);
-			setError("");
-		} catch (error) {
-			if (
-				error.response &&
-				error.response.status >= 400 &&
-				error.response.status <= 500
-			) {
-				setError(error.response.data.message);
-				setMsg("");
-			}
-		}
-	};
+    e.preventDefault();
+    try {
+      const url = `http://localhost:5000/password-reset`;
+      const { data } = await axios.post(url, { email });
+      setMsg(data.message);
+      setError("");
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+        setMsg("");
+      }
+    }
+  };
 
   return (
     <CoverLayout coverHeight="50vh" image={bgImage}>
@@ -71,28 +65,33 @@ const [msg, setMsg] = useState("");
           textAlign="center"
         >
           <MDTypography variant="h3" fontWeight="medium" color="white" mt={1}>
-            Reset Password
+            Forgot Password
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            You will receive an e-mail in maximum 60 seconds
+            Please Enter Your Email
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <form onSubmit={handleSubmit}>
             <MDBox mb={4}>
-              <MDInput type="email" label="Email" variant="standard" onChange={(e) => setEmail(e.target.value)}
-					value={email}
-					required
-				/>
+              <MDInput
+                type="email"
+                label="Email"
+                variant="standard"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </MDBox>
-            {error && <div className={styles.error_msg}>{error}</div>}
-				{msg && <div className={styles.success_msg}>{msg}</div>}
             <MDBox mt={6} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                reset
+              {error && <div className={styles.error_msg}>{error}</div>}
+              {msg && <div className={styles.success_msg}>{msg}</div>}
+
+              <MDButton variant="gradient" color="info" fullWidth type="submit">
+                Submit
               </MDButton>
             </MDBox>
-          </MDBox>
+          </form>
         </MDBox>
       </Card>
     </CoverLayout>
