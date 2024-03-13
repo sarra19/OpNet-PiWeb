@@ -2,38 +2,24 @@ const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
 const logger = require("morgan");
-const dotenv = require ("dotenv");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const http = require("http");
+const passport = require("passport");
+const app = express();
+const router = express.Router();
 
 dotenv.config();
-const {Connect}= require("./config/connect.js");
-
-const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
-const http = require("http");
-
-const config = require("./config/connect.js");
+const { Connect } = require("./config/connect.js");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const passwordResetRoutes = require("./routes/passwordReset");
-
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const googleAuth = require("./routes/index");
 
-const passport = require("passport");
-const app = express();
-
-
 // Connect to MongoDB
-// mongoose.connect(config.Connect, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log("Database connected"))
-//   .catch((err) => console.error("Database connection error:", err));
-
-// // Middleware
-// app.use(cors({
-//     origin: 'http://localhost:3000' // Replace with your frontend URL
-//   }))
-
 Connect()
   .then(() => {
     console.log("Database connected");
@@ -43,9 +29,8 @@ Connect()
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000' // Remplacez par l'URL de votre frontend
+  origin: ['http://localhost:3000', 'http://localhost:4000'] // Autoriser les deux front-ends
 }));
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,11 +38,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
-
 app.use('/chat', chatRoomRouter);
 app.use('/messages', messageRouter);
 app.use("/password-reset", passwordResetRoutes);
-
 
 app.use(
   session({
@@ -66,20 +49,21 @@ app.use(
     saveUninitialized: false,
   })
 );
+router.use(cors());
 
-///auth
+// Middleware de journalisation
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Middleware pour initialiser Passport
 app.use(passport.initialize());
 require("./auth/google-auth.js")(passport);
-//app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/",googleAuth);
+// Routes
+app.use("/", googleAuth);
 
-// Server setup
+// Configuration du serveur
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));  //.env
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;

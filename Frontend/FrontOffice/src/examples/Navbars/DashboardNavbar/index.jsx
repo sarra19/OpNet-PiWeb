@@ -121,16 +121,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
             <MDBox>
               {["Admin", "Subadmin", "Company", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
                 <Link 
-                  to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}`} // Corrected URL with query parameter
-                  style={{ textDecoration: 'none' }} // Optionnel : pour supprimer la soulignement par défaut
+                to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}`} 
+                style={{ textDecoration: 'none' }} // Pour supprimer la soulignement par défaut
+              >
+                <Button 
+                  variant="outlined" 
+                  style={{ backgroundColor: '#E82227', color: '#fff' }}
                 >
-                  <Button 
-                    variant="outlined" 
-                    style={{ backgroundColor: '#E82227', color: '#fff' }}
-                  >
-                    Admin View
-                  </Button>
-                </Link>
+                  Admin View
+                </Button>
+              </Link>
+              
               )}
 
               <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Logout</Button>

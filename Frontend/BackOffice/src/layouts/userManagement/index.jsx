@@ -45,6 +45,7 @@ const buttonStyles = {
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null); // State for error handling
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -53,26 +54,36 @@ function UserManagement() {
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
+        setError("Error fetching users. Please try again later."); // Set error state
       }
     };
 
     fetchUsers();
   }, []);
-
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:5000/user/deleteUser/${userId}`);
+      // Filter out the deleted user from the users array
+      setUsers(users.filter(user => user._id !== userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
-        <tr>
-                <td colSpan="8" style={cellStyles}>
-                  <Button variant="contained" color="primary">
-                    <Link to="/add-user" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
-                  </Button>
-                </td>
-              </tr>
+          <tr>
+            <td colSpan="8" style={cellStyles}>
+              <Button variant="contained" color="primary">
+                <Link to="/AddUser" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
+              </Button>
+            </td>
+          </tr>
+          {error && <div>Error: {error}</div>} {/* Display error message if error state is set */}
           <table style={tableStyles}>
-            
             <thead>
               <tr>
                 <th style={headerStyles}>First Name</th>
@@ -86,7 +97,6 @@ function UserManagement() {
               </tr>
             </thead>
             <tbody>
-              
               {users.map((user, index) => (
                 <tr key={index} style={index % 2 === 0 ? evenRowStyles : {}}>
                   <td style={cellStyles}>{user.firstname}</td>
@@ -100,10 +110,14 @@ function UserManagement() {
                     <Button size="small" variant="contained" color="primary" style={buttonStyles}>
                       <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Details</Link>
                     </Button>
+                    <Button size="small" variant="contained" color="secondary" style={buttonStyles} onClick={() => handleDeleteUser(user._id)}>Delete</Button>
+                    <Button size="small" variant="contained" color="default" style={buttonStyles}>
+                    <Link to={`/update/${user._id}`} >Modify </Link>
+
+                      </Button>
                   </td>
                 </tr>
               ))}
-             
             </tbody>
           </table>
         </MDBox>

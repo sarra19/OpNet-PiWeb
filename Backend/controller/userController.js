@@ -25,6 +25,7 @@ async function googlelogin (req, res) {
   
       // Par exemple :
       const googleUser = await fetchUserInfoFromGoogle(access_token);
+      
       let user = await User.findOne({ email: googleUser.email });
       if (!user) {
         user = new User({ email: googleUser.email, password:googleUser.password });
@@ -46,6 +47,7 @@ async function googlelogin (req, res) {
   // Autres routes et fonctions du contrôleur utilisateur...
   
   async function login(req, res) {
+    console.log(req.sessionID);
     const { email, password } = req.body;
 
     try {

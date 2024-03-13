@@ -52,6 +52,8 @@ import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import UserDetails from "layouts/userManagement/UserDetails";
+import Ajout from "layouts/userManagement/ajout";
+import Modifier from "layouts/userManagement/modify";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -63,9 +65,25 @@ const routes = [
     type: "route",
     name: "User Details", // Nom de la route affiché dans le sidenav
     key: "user-details", // Clé unique pour cette route
-    route:  "/details",
+    route: "/user/:userId", // Make sure it matches the backend route
     component: <UserDetails />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
+  {
+    type: "route",
+    name: "Modify User", // Nom de la route affiché dans le sidenav
+    key: "Modify User", // Clé unique pour cette route
+    route: "/update/:userId", // Make sure it matches the backend route
+    component: <Modifier />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
+  {
+    type: "route",
+    name: "Add User",
+    key: "Add User", // Clé unique pour cette route
+    route:  "/AddUser",
+    component: <Ajout />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
+  
+  
   
   {
     type: "collapse",

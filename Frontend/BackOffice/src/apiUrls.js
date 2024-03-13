@@ -3,8 +3,9 @@
 const BASE_URL = "http://localhost:5000";
 
 const API_URLS = {
-  login: `${BASE_URL}/user/login`,
   addUser: `${BASE_URL}/user/add`,   // Ajoutez d'autres URL ici
+  getUsers:`${BASE_URL}/user/getall`,
+  signup: `${BASE_URL}/user`,
 };
 
 export default API_URLS;

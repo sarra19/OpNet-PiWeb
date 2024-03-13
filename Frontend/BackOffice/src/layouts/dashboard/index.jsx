@@ -5,8 +5,12 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import MDBox from "components/MDBox";
 /* eslint-disable */
+import { useLocation } from "react-router-dom";
 
 function Homepage() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userRole = searchParams.get('userRole');
   return (
     <DashboardLayout>
       <DashboardNavbar />

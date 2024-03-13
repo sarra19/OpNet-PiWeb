@@ -34,11 +34,12 @@ const useStyles = makeStyles((theme) => ({
 function UserDetails() {
   const classes = useStyles();
   const [user, setUser] = useState(null);
-  const { userId } = useParams();
+  const { userId } = useParams(); // Récupérer l'ID de l'utilisateur depuis les paramètres de l'URL
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        // Utilisez l'ID récupéré dans la requête pour récupérer les détails de l'utilisateur
         const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
         setUser(response.data);
       } catch (error) {
@@ -47,7 +48,7 @@ function UserDetails() {
     };
 
     fetchUserDetails();
-  }, [userId]);
+  }, [userId]); // Assurez-vous d'inclure userId dans la liste des dépendances du useEffect
 
   return (
     <DashboardLayout>
@@ -71,6 +72,10 @@ function UserDetails() {
                     <span className={classes.redText}>{`${user.firstname} ${user.lastname}`}</span>
                   </Typography>
                   <Typography variant="subtitle1" gutterBottom>Email: {user.email}</Typography>
+                  <Typography variant="subtitle1" gutterBottom>Date of Birth: {user.dateOfBirth}</Typography>
+                  <Typography variant="subtitle1" gutterBottom>Country: {user.country}</Typography>
+                  <Typography variant="subtitle1" gutterBottom>Phone: {user.phone}</Typography>
+                  <Typography variant="subtitle1" gutterBottom>Speciality: {user.speciality}</Typography>
                   <Typography variant="subtitle1" gutterBottom>Institution: {user.institution}</Typography>
                   <Typography variant="subtitle1" gutterBottom>Languages: {user.languages}</Typography>
                   <Typography variant="subtitle1" gutterBottom>Description: {user.description}</Typography>
@@ -79,6 +84,8 @@ function UserDetails() {
                   <Typography variant="subtitle1" gutterBottom>Formation: {user.formation}</Typography>
                   <Typography variant="subtitle1" gutterBottom>Certificates: {user.certificates}</Typography>
                   {/* Affichez d'autres détails de l'utilisateur ici */}
+
+              
                 </div>
               )}
             </Paper>
@@ -94,3 +101,4 @@ function UserDetails() {
 }
 
 export default UserDetails;
+
