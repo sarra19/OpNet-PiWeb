@@ -8,6 +8,8 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
 import { makeStyles } from "@mui/styles";
 import { Grid, Paper, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import MDButton from "components/MDButton";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -94,6 +96,11 @@ function UserDetails() {
       </MDBox>
       <MDBox mt={4}>
         {/* Ajouter une marge en haut pour le footer */}
+        <Link to="/userManagement">
+          <MDButton variant="contained" color="error" size="small">
+            Back
+          </MDButton>
+        </Link>
         <Footer />
       </MDBox>
     </DashboardLayout>

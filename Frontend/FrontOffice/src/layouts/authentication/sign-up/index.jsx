@@ -78,6 +78,8 @@ function Cover() {
     try {
       const res = await axios.post(API_URLS.signup, formData);
       setMsg(res.data.message); // Access the 'data' property of the response directly
+      window.alert('sign up successful!');
+
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         setError(error.response.data.message);
@@ -92,6 +94,8 @@ function Cover() {
       } else {
         setError("An error occurred while processing your request. Please try again later.");
       }
+      window.alert('sign up failed. Please try again.');
+
     }
   };
   

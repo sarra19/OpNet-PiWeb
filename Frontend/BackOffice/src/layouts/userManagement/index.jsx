@@ -77,7 +77,7 @@ function UserManagement() {
         <MDBox mb={3}>
           <tr>
             <td colSpan="8" style={cellStyles}>
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="secondary">
                 <Link to="/AddUser" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
               </Button>
             </td>

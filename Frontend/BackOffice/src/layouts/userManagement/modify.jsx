@@ -15,6 +15,7 @@ import Footer from "examples/Footer";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import API_URLS from "apiUrls";
+import { Link } from "react-router-dom";
 
 function Modifier() {
   const roles = ["Student", "Teacher", "Alumni", "Admin", "Subadmin", "Company"];
@@ -58,7 +59,25 @@ function Modifier() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
-    // Validation logic for each field
+    if (name === "firstname" || name === "lastname") {
+      if (/\d/.test(value)) {
+        errorMessage = "Name should not contain numbers";
+      } else if (value.length <= 3) {
+        errorMessage = "Name should be more than 3 characters";
+      }
+    } else if (name === "email") {
+      if (!/\S+@\S+\.\S{2,}/.test(value)) {
+        errorMessage = "Invalid email format";
+      }
+    } else if (name === "password") {
+      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(value)) {
+        errorMessage = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character";
+      }
+    } else if (name === "confirmPassword") {
+      if (value !== formData.password) {
+        errorMessage = "Passwords do not match";
+      }
+    }
     setFormData({
       ...formData,
       [name]: value,
@@ -78,9 +97,29 @@ function Modifier() {
     try {
       const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
       setMsg(response.data.message);
+      window.alert('Update successful!');
     } catch (error) {
       setError(error.response.data.message);
+      window.alert('Update failed. Please try again.');
     }
+  };
+
+  // Function to check if all fields are valid
+  const isFormValid = () => {
+    return (
+      formData.firstname &&
+      formData.lastname &&
+      formData.email &&
+      formData.password &&
+      formData.confirmPassword &&
+      formData.role &&
+      !formData.firstnameError &&
+      !formData.lastnameError &&
+      !formData.emailError &&
+      !formData.passwordError &&
+      !formData.confirmPasswordError &&
+      capVal
+    );
   };
 
   return (
@@ -104,111 +143,115 @@ function Modifier() {
       </MDBox>
       <MDBox pt={4} pb={3} px={3}>
         <form onSubmit={handleSubmit}>
-        <MDBox mb={2}>
-              <MDInput
-                type="text"
-                name="firstname"
-                label="First Name"
-                variant="standard"
-                fullWidth
-                value={formData.firstname}
-                onChange={handleChange}
-              />
-              {formData.firstnameError && (
-                <MDTypography variant="body2" color="error">
-                  {formData.firstnameError}
-                </MDTypography>
-              )}
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                type="text"
-                name="lastname"
-                label="Last Name"
-                variant="standard"
-                fullWidth
-                value={formData.lastname}
-                onChange={handleChange}
-              />
-              {formData.lastnameError && (
-                <MDTypography variant="body2" color="error">
-                  {formData.lastnameError}
-                </MDTypography>
-              )}
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                type="email"
-                name="email"
-                label="Email"
-                variant="standard"
-                fullWidth
-                value={formData.email}
-                onChange={handleChange}
-              />
-              {formData.emailError && (
-                <MDTypography variant="body2" color="error">
-                  {formData.emailError}
-                </MDTypography>
-              )}
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                type="password"
-                name="password"
-                label="Password"
-                variant="standard"
-                fullWidth
-                value={formData.password}
-                onChange={handleChange}
-              />
-              {formData.passwordError && (
-                <MDTypography variant="body2" color="error">
-                  {formData.passwordError}
-                </MDTypography>
-              )}
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                type="password"
-                name="confirmPassword"
-                label="Confirm Password"
-                variant="standard"
-                fullWidth
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-              {formData.confirmPasswordError && (
-                <MDTypography variant="body2" color="error">
-                  {formData.confirmPasswordError}
-                </MDTypography>
-              )}
-            </MDBox>
-            <MDBox mb={2}>
-              <Grid>
-                <Grid item xs={12}>
-                  <Autocomplete
-                    options={roles}
-                    value={formData.role}
-                    onChange={handleRoleChange}
-                    renderInput={(params) => <TextField {...params} label="Role" />}
-                  />
-                </Grid>
+          <MDBox mb={2}>
+            <MDInput
+              type="text"
+              name="firstname"
+              label="First Name"
+              variant="standard"
+              fullWidth
+              value={formData.firstname}
+              onChange={handleChange}
+            />
+            {formData.firstnameError && (
+              <MDTypography variant="body2" color="error">
+                {formData.firstnameError}
+              </MDTypography>
+            )}
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              type="text"
+              name="lastname"
+              label="Last Name"
+              variant="standard"
+              fullWidth
+              value={formData.lastname}
+              onChange={handleChange}
+            />
+            {formData.lastnameError && (
+              <MDTypography variant="body2" color="error">
+                {formData.lastnameError}
+              </MDTypography>
+            )}
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              type="email"
+              name="email"
+              label="Email"
+              variant="standard"
+              fullWidth
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {formData.emailError && (
+              <MDTypography variant="body2" color="error">
+                {formData.emailError}
+              </MDTypography>
+            )}
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              type="password"
+              name="password"
+              label="Password"
+              variant="standard"
+              fullWidth
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {formData.passwordError && (
+              <MDTypography variant="body2" color="error">
+                {formData.passwordError}
+              </MDTypography>
+            )}
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              type="password"
+              name="confirmPassword"
+              label="Confirm Password"
+              variant="standard"
+              fullWidth
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            {formData.confirmPasswordError && (
+              <MDTypography variant="body2" color="error">
+                {formData.confirmPasswordError}
+              </MDTypography>
+            )}
+          </MDBox>
+          <MDBox mb={2}>
+            <Grid>
+              <Grid item xs={12}>
+                <Autocomplete
+                  options={roles}
+                  value={formData.role}
+                  onChange={handleRoleChange}
+                  renderInput={(params) => <TextField {...params} label="Role" />}
+                />
               </Grid>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <ReCAPTCHA
-                sitekey="6LdXhYspAAAAABmF7uoESPX5wt57MZEsNAdWbC4h"
-                onChange={(val) => setCapVal(val)}
-              />
-              
-            
-          <MDButton disabled={!capVal} type="submit" variant="gradient" color="info" fullWidth>
-            Update
-          </MDButton>
+            </Grid>
+          </MDBox>
+          <MDBox mt={4} mb={1}>
+            <ReCAPTCHA
+              sitekey="6LdXhYspAAAAABmF7uoESPX5wt57MZEsNAdWbC4h"
+              onChange={(val) => setCapVal(val)}
+            />
+            <MDButton disabled={!isFormValid()} type="submit" variant="gradient" color="info" fullWidth>
+              Update
+            </MDButton>
           </MDBox>
         </form>
+        <Link to="/userManagement">
+          <MDButton variant="contained" color="error" size="small">
+            Back
+          </MDButton>
+        </Link>
       </MDBox>
+      
       <Footer />
     </DashboardLayout>
   );

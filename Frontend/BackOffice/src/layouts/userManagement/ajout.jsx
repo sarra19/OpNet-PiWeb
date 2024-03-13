@@ -20,6 +20,7 @@ import Footer from "examples/Footer";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import API_URLS from "apiUrls";
+import { Link } from "react-router-dom";
 
 function Ajout() {
   const roles = ["Student", "Teacher", "Alumni", "Admin", "Subadmin", "Company"]; // List of roles
@@ -86,6 +87,8 @@ function Ajout() {
     try {
       const res = await axios.post(API_URLS.signup, formData);
       setMsg(res.data.message);
+      window.alert('Add successful!');
+
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         setError(error.response.data.message);
@@ -100,6 +103,8 @@ function Ajout() {
       } else {
         setError("An error occurred while processing your request. Please try again later.");
       }
+      window.alert('Add failed. Please try again.');
+
     }
   };
   
@@ -232,6 +237,11 @@ function Ajout() {
               </MDButton>
             </MDBox>
           </form>
+          <Link to="/userManagement">
+          <MDButton variant="contained" color="error" size="small">
+            Back
+          </MDButton>
+        </Link>
         </MDBox>
       <Footer />
     </DashboardLayout>
