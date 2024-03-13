@@ -23,7 +23,7 @@ function Interview() {
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [visibleInterviews, setVisibleInterviews] = useState(5);
-
+  
   useEffect(() => {
     getInterviews();
   }, []);
@@ -59,10 +59,11 @@ function Interview() {
     setSearchInput(event.target.value);
   };
   const filteredInterviews = interviews.filter((interview) => {
-    const titleMatch = interview.title.toLowerCase().includes(searchInput.toLowerCase());
+    const titleMatch = interview.title && interview.title.toLowerCase().includes(searchInput.toLowerCase());
     const descrInterMatch = interview.descrInter && interview.descrInter.toLowerCase().includes(searchInput.toLowerCase());
     return titleMatch || descrInterMatch;
   });
+  
 
   //confirmation supp
   const handleDeclineClick = (interviewId) => {
