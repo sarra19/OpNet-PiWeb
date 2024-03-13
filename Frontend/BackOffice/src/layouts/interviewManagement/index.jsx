@@ -31,10 +31,17 @@ import "./index.css";
 import { DateTime } from "luxon";
 import { Button, Dialog, DialogContent, DialogTitle, Icon, MenuItem, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
+import { DateTime as LuxonDateTime } from "luxon";
+
+
 /* eslint-disable */
 
 function InterviewManagement() {
+ 
   const [interviews, setInterviews] = useState([]);
+  const [editInterviewId, setEditInterviewId] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [dateError, setDateError] = useState("");
 
   const getInterviews = async () => {
     try {
@@ -80,7 +87,7 @@ function InterviewManagement() {
 
   const formatDateTime = (dateString) => {
     const date = DateTime.fromISO(dateString, { zone: "Africa/Tunis" });
-    return date.toFormat("yyyy-MM-dd   HH:mm");
+    return date.toFormat("yyyy-MM-dd'T'HH:mm");
   };
 
   const deleteInterview = async (interviewId) => {
@@ -113,12 +120,31 @@ function InterviewManagement() {
     statusInterv: "A venir",
   });
 
-  const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+  
+    // Ajoutez la validation de la date ici
+    if (name === "dateInterv") {
+      const currentDate = new Date();
+      const selectedDate = new Date(value);
+  
+      if (selectedDate < currentDate) {
+        setDateError("La date d'entretien ne peut pas être antérieure à la date actuelle.");
+      } else {
+        setDateError("");
+      }
+    }
+  
+    // Mettez à jour les autres champs du formulaire
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+
+    
   };
+  
+  
   
 
   const handleOpenAddForm = () => {
@@ -127,27 +153,90 @@ function InterviewManagement() {
 
   const handleCloseAddForm = () => {
     setAddFormOpen(false);
+    setEditInterviewId(null); // Réinitialiser l'ID d'édition
+    setIsEditMode(false); // Réinitialiser le mode d'édition
   };
+  
 
   const handleAddInterview = async () => {
     try {
-      // Enregistrez les nouvelles données directement dans la liste des entretiens
-      setInterviews([...interviews, formData]);
+      console.log("Adding/Editing interview...", formData);
+      console.log("Editing interview with ID:", editInterviewId);
   
-      // Envoyez la requête au serveur pour sauvegarder les données
-      const response = await axios.post("http://localhost:5000/interviews/add", formData);
-      if (response.status === 200) {
-        // Fermez le formulaire après l'ajout réussi
-        handleCloseAddForm();
+      if (isEditMode) {
+        // Logique de modification d'entretien
+        await axios.put(`http://localhost:5000/interviews/update/${editInterviewId}`, formData);
       } else {
-        console.error("Erreur lors de l'ajout de l'entretien");
+        // Logique d'ajout d'entretien
+        const response = await axios.post("http://localhost:5000/interviews/add", formData);
+        console.log("Response from server:", response);
+  
+        if (response.status !== 200) {
+          console.error("Erreur lors de l'ajout de l'entretien. Statut:", response.status);
+          console.error("Message d'erreur détaillé:", response.data); // Ajoutez cette ligne
+          return;
+        }
       }
+    
+      // Actualisez l'état des entretiens après l'ajout ou la modification réussi
+      const updatedInterviews = [...interviews];
+      const index = updatedInterviews.findIndex((interview) => interview._id === editInterviewId);
+      if (index !== -1) {
+        updatedInterviews[index] = formData;
+      } else {
+        updatedInterviews.push(formData);
+      }
+      setInterviews(updatedInterviews);
+      // Réinitialisez les états
+      setFormData({
+        title: "",
+        descrInter: "",
+        candidateName: "",
+        dateInterv: "",
+        address: "",
+        typeIntrv: "En ligne",
+        statusInterv: "A venir",
+      });
+      setEditInterviewId(null);
+      handleCloseAddForm();
+      // Ne réinitialisez isEditMode que lorsque vous fermez le formulaire
+      // setIsEditMode(false);
     } catch (error) {
-      // Gérez les erreurs ici
-      console.error("Erreur lors de l'ajout de l'entretien:", error);
+      console.error("Erreur lors de l'ajout ou de la modification de l'entretien:", error);
     }
   };
+  
+  
 
+  const handleEditInterview = (interviewId) => {
+    console.log("Editing interview with ID:", interviewId);
+    const interviewToEdit = interviews.find((interview) => interview._id === interviewId);
+    
+    if (interviewToEdit) {
+      console.log("Interview to edit:", interviewToEdit);
+      setFormData({
+        title: interviewToEdit.title || "",
+        descrInter: interviewToEdit.descrInter || "",
+        candidateName: interviewToEdit.candidateName || "",
+        dateInterv: interviewToEdit.dateInterv
+          ? LuxonDateTime.fromISO(interviewToEdit.dateInterv).toFormat("yyyy-MM-dd'T'HH:mm")
+          : "",
+        address: interviewToEdit.address || "",
+        typeIntrv: interviewToEdit.typeIntrv || "En ligne",
+        statusInterv: interviewToEdit.statusInterv || "A venir",
+      });
+      setEditInterviewId(interviewId); 
+    setAddFormOpen(true);
+    setIsEditMode(true); 
+    console.log("isEditMode set to true");
+  } else {
+    console.error("Erreur lors de la récupération de l'entretien à éditer");
+  }
+};
+  
+  
+  
+  
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -183,7 +272,7 @@ function InterviewManagement() {
                     <Typography style={{ marginRight: 20 }}> {formatDateTime(interview.dateInterv)}</Typography>
                     <Typography >{interview.typeIntrv}</Typography>
                     <div style={{ marginLeft: "auto", marginRight: "10px" }} >
-                      <Icon style={{ marginRight: "30px" , color: "#013a63" }} fontSize="medium" onClick={() => handleDelete(interview._id)}>edit_calendar</Icon>
+                      <Icon style={{ marginRight: "30px" , color: "#013a63" }} fontSize="medium" onClick={() => handleEditInterview(interview._id)}>edit_calendar</Icon>
                       <Icon style={{ marginRight: "20px" , color: "#013a63"}} fontSize="medium" onClick={() => deleteInterview(interview._id)}>delete_forever</Icon>
                     </div>
                   </Paper>
@@ -197,19 +286,19 @@ function InterviewManagement() {
         <DialogTitle>Ajouter un entretien</DialogTitle>
         <DialogContent>
           <form>
-            <TextField style={{marginBlock:"10px"}}  label="Title" name="title" value={formData.title} onChange={handleInputChange} fullWidth />
-            <TextField style={{marginBlock:"10px"}}  label="Description d'entretien" name="descrInter" value={formData.descrInter} onChange={handleInputChange} fullWidth multiline />
-            <TextField style={{ marginBlock: "10px" }} label="Nom du candidat" name="candidateName" value={formData.candidateName} onChange={handleInputChange} fullWidth/>
-            <TextField style={{ marginBlock: "10px" }}  type="datetime-local" name="dateInterv" value={formData.dateInterv} onChange={handleInputChange} fullWidth />
+            <TextField style={{marginBlock:"10px"}}  label="Title" name="title" value={formData.title} onChange={handleInputChange} fullWidth  required/>
+            <TextField style={{marginBlock:"10px"}}  label="Description d'entretien" name="descrInter" value={formData.descrInter} onChange={handleInputChange} fullWidth multiline  />
+            <TextField style={{ marginBlock: "10px" }} label="Nom du candidat" name="assignedStudentId" value={formData.assignedStudentId} onChange={handleInputChange} fullWidth required/>
+            <TextField style={{ marginBlock: "10px" }}  type="datetime-local" name="dateInterv" value={formData.dateInterv} onChange={handleInputChange} fullWidth error={Boolean(dateError)} helperText={dateError} required />
 
-            <TextField style={{marginBlock:"10px"}}  label="Adresse" name="address" value={formData.address} onChange={handleInputChange} fullWidth />
-            <TextField style={{marginBlock:"10px"}}  label="Etat d'entretien" name="statusInterv" value={formData.statusInterv} onChange={handleInputChange} fullWidth />
-            <TextField style={{ marginBlock: "10px" }} label="Type d'entretien" name="typeIntrv" value={formData.typeIntrv} onChange={handleInputChange} fullWidth select  >
+            <TextField style={{marginBlock:"10px"}}  label="Adresse" name="address" value={formData.address} onChange={handleInputChange} fullWidth required/>
+            <TextField style={{marginBlock:"10px"}}  label="Etat d'entretien" name="statusInterv" value={formData.statusInterv} onChange={handleInputChange} fullWidth required/>
+            <TextField style={{ marginBlock: "10px" }} label="Type d'entretien" name="typeIntrv" value={formData.typeIntrv} onChange={handleInputChange} fullWidth select required >
               <MenuItem value="En ligne" >En ligne</MenuItem>
               <MenuItem value="En face">En face</MenuItem>
             </TextField>
             <Button variant="contained" style={{backgroundColor:"red" , color: 'white' , marginTop:"23px"}} onClick={handleAddInterview}>
-              Ajouter 
+              {isEditMode ? "Modifier" : "Ajouter"}
             </Button>
           </form>
         </DialogContent>
