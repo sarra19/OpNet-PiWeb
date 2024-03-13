@@ -54,6 +54,9 @@ import CondidacyManagement from "layouts/condidacyManagement";
 import UserDetails from "layouts/userManagement/UserDetails";
 import Ajout from "layouts/userManagement/ajout";
 import Modifier from "layouts/userManagement/modify";
+import AjoutChat from "layouts/chatManagement/ajout";
+import ModifierChat from "layouts/chatManagement/modify";
+import MessageManagement from "layouts/MessageManagement";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -77,13 +80,34 @@ const routes = [
   },
   {
     type: "route",
+    name: "Modify Chat", // Nom de la route affiché dans le sidenav
+    key: "Modify Chat", // Clé unique pour cette route
+    route: "/updateChat/:chatId", // Make sure it matches the backend route
+    component: <ModifierChat />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
+  {
+    type: "route",
     name: "Add User",
     key: "Add User", // Clé unique pour cette route
     route:  "/AddUser",
     component: <Ajout />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
   
+  {
+    type: "route",
+    name: "Add Chat",
+    key: "Add Chat", // Clé unique pour cette route
+    route:  "/AddChat",
+    component: <AjoutChat />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
   
+  {
+    type: "route",
+    name: "View messages",
+    key: "View messages", // Clé unique pour cette route
+    route:  "/messages/:chatId",
+    component: <MessageManagement/>, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
   
   {
     type: "collapse",
@@ -116,7 +140,7 @@ const routes = [
     name: "Chat Management",
     key: "Chat-Management",
     icon: <Icon fontSize="small">chat_bubble_outline</Icon>,
-    route: "/chaManagementt",
+    route: "/chaManagement",
     component: <ChatManagement />,
   },
   {

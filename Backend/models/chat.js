@@ -8,6 +8,7 @@ const Chat=new Schema(
             default: Date.now 
         },
         NbParticipantsChat: Number,
+        TypeChat:String,
 
     }
 )
