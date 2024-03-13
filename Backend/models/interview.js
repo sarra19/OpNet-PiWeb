@@ -8,6 +8,10 @@ const Interview = new Schema(
         descrInter: String,
         dateInterv: Date,
         company: String,
+        assignedStudentId: {
+            type: Schema.Types.ObjectId,
+            ref: "user", // Make sure this matches the model name for User
+        },
         address: String,
         typeIntrv: {
             type: String,

@@ -1,11 +1,26 @@
 const Interview = require("../models/interview");
+const User = require("../models/user");
 
-async function add(req, res){
-    try{
-        const intrv = new Interview(req.body)
+async function add(req, res) {
+    try {
+        const { assignedStudentId, ...otherFields } = req.body;
+
+        // Check if the assigned student ID is valid
+        const student = await User.findOne({ firstname: assignedStudentId });
+
+        if (!student) {
+            return res.status(404).send("Student not found");
+        }
+
+        // Create the interview with the assigned student ID
+        const intrv = new Interview({
+            ...otherFields,
+            assignedStudentId: student._id,
+        });
+
         await intrv.save();
-        res.status(200).send("add good")
-    }catch(err){
+        res.status(200).send("add good");
+    } catch (err) {
         res.status(400).send(err);
         console.log(err);
     }
@@ -18,6 +33,26 @@ async function getall(req,res){
         res.status(400).send(err);
     }
 }
+
+async function getallAsso(req, res) {
+    try {
+        const studentId = req.params.id;
+
+        const student = await User.findById(studentId);
+        if (!student) {
+            return res.status(404).send("Student not found");
+        }
+
+        const data = await Interview.find({ assignedStudentId: studentId }).populate('assignedStudentId', 'firstname');
+
+        res.status(200).send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+
+
 
 async function getbyid (req , res){
     try{
@@ -76,5 +111,5 @@ async function fixAnotherDate(req, res) {
   }
 
 
-module.exports = { add, getall, getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate };
+module.exports = { add, getall,getallAsso ,  getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate };
   

@@ -13,4 +13,16 @@ next();  //midll
     }
 
 };
-module.exports =validate;
+// const validateInterv =async (req,res,next)=>{
+//     try{
+// const InterviewSchema =yup.object().shape({
+//     dateInterv: yup.date().required('La date de l\'entretien est obligatoire').min(new Date(), 'La date de l\'entretien doit être postérieure à la date actuelle.'),
+// })
+// await InterviewSchema.validate(req.body)
+// next();  //midll
+//     }catch(error){  
+//         res.status(400).json({error: error.errors});
+//     }
+
+// };
+module.exports =validate ;
