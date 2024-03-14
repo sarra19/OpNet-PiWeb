@@ -35,10 +35,10 @@ function Basic() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5000/auth";
+    //  const url = "http://localhost:5000/auth";
       const formData = { email, password }; // Constructing the data object
-      const { data: res } = await axios.post(url, formData); // Sending the formData as the second argument
-  
+      const { data: res } = await axios.post(API_URLS.auth,  formData); // Sending the formData as the second argument
+
       localStorage.setItem("token", res.data);
   
       const response = await axios.post(API_URLS.login, {
@@ -122,7 +122,9 @@ function Basic() {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
+         {/* <MDBox component="form" role="form" action="http://localhost:5000/auth/google"> */}
+         <MDBox component="form" role="form" action={`${API_URLS}/auth/google`} method="post">
+
             <MDBox mb={2}>
               <MDTypography variant="body1" mb={1}>Email address</MDTypography>
               <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />

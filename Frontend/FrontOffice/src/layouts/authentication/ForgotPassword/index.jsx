@@ -25,6 +25,7 @@ import MDButton from "components/MDButton";
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 import bgImage from "assets/images/bg-reset-cover.jpg";
 import styles from "./styles.module.css";
+import API_URLS from "../../../apiUrls";
 
 function Cover() {
   const [email, setEmail] = useState("");
@@ -34,8 +35,9 @@ function Cover() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = `http://localhost:5000/password-reset`;
-      const { data } = await axios.post(url, { email });
+      //const url = `http://localhost:5000/password-reset`;
+
+      const { data } = await axios.post(API_URLS.reset, { email });
       setMsg(data.message);
       setError("");
     } catch (error) {

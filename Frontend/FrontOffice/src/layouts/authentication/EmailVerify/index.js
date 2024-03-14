@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import success from "../../../assets/images/succes.png";
 import styles from "./styles.module.css";
+import API_URLS from "../../../apiUrls";
 
 const EmailVerify = () => {
     const [validUrl, setValidUrl] = useState(false);

@@ -26,6 +26,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import bgImage from "assets/images/bg-reset-cover.jpg";
 import styles from "./styles.module.css";
 import { useParams } from "react-router-dom";
+import API_URLS from "../../../apiUrls";
 
 function PasswordReset() {
   const [validUrl, setValidUrl] = useState(false);

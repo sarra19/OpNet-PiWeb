@@ -37,7 +37,6 @@ Coded by www.creative-tim.com
 /* eslint-disable */
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
 import Condidacy from "layouts/Condidacy";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -50,6 +49,7 @@ import Interviews from "layouts/Interviews";
 import Chat from "layouts/Chat";
 import Basic from "layouts/authentication/sign-in";
 import PasswordReset from "layouts/authentication/PasswordReset";
+import Network from "layouts/network";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -73,10 +73,10 @@ const routes = [
   {
     type: "collapse",
     name: "Network",
-    key: "tables",
+    key: "Network",
     icon: <Icon fontSize="small">people</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    route: "/Network",
+    component: <Network />,
   },
   {
     type: "collapse",

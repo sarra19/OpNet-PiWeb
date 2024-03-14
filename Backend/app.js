@@ -18,6 +18,7 @@ const passwordResetRoutes = require("./routes/passwordReset");
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const googleAuth = require("./routes/index");
+const path = require("path");
 
 // Connect to MongoDB
 Connect()
@@ -28,6 +29,7 @@ Connect()
   .catch((err) => console.error("Database connection error:", err));
 
 // Middleware
+
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:4000'] // Autoriser les deux front-ends
 }));
