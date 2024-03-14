@@ -4,17 +4,16 @@ const User = require("../models/user");
 async function add(req, res) {
     try {
         const { assignedStudentId, ...otherFields } = req.body;
+        const assignedCompanyId = "65f21bb50d416e7f42cf7406";
 
-        // Check if the assigned student ID is valid
         const student = await User.findOne({ firstname: assignedStudentId });
-
         if (!student) {
             return res.status(404).send("Student not found");
         }
 
-        // Create the interview with the assigned student ID
         const intrv = new Interview({
             ...otherFields,
+            assignedCompanyId,
             assignedStudentId: student._id,
         });
 
@@ -36,20 +35,24 @@ async function getall(req,res){
 
 async function getallAsso(req, res) {
     try {
-        const studentId = req.params.id;
+        const userId = req.params.id;
+        // Recherche des entretiens associés à l'entreprise
+        const companyInterviews = await Interview.find({ assignedCompanyId: userId })
+            .populate('assignedStudentId', 'firstname')
+            .populate('assignedCompanyId');
+        // Recherche des entretiens associés à l'étudiant
+        const studentInterviews = await Interview.find({ assignedStudentId: userId })
+            .populate('assignedStudentId', 'firstname')
+            .populate('assignedCompanyId'); 
 
-        const student = await User.findById(studentId);
-        if (!student) {
-            return res.status(404).send("Student not found");
-        }
-
-        const data = await Interview.find({ assignedStudentId: studentId }).populate('assignedStudentId', 'firstname');
-
-        res.status(200).send(data);
+        const allInterviews = [...companyInterviews, ...studentInterviews];
+        res.status(200).send(allInterviews);
     } catch (err) {
         res.status(400).send(err);
     }
 }
+
+
 
 
 

@@ -7,10 +7,13 @@ const Interview = new Schema(
         title: String,
         descrInter: String,
         dateInterv: Date,
-        company: String,
+        assignedCompanyId: {
+            type: Schema.Types.ObjectId,
+            ref: "user", 
+        },
         assignedStudentId: {
             type: Schema.Types.ObjectId,
-            ref: "user", // Make sure this matches the model name for User
+            ref: "user", 
         },
         address: String,
         typeIntrv: {
@@ -21,7 +24,7 @@ const Interview = new Schema(
         statusInterv: {
             type: String,
             enum: statusIntrvEnum,
-            default: "En attente"
+            default: "A venir"
         },
     },
     {
