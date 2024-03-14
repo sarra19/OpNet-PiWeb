@@ -76,7 +76,7 @@ function InterviewManagement() {
         return "red";
       case "Demande report":
         return "darkorange";
-      case "En attente":
+      case "A venir":
         return "darkblue";
       case "Terminé":
         return "green";
@@ -157,9 +157,23 @@ function InterviewManagement() {
     setIsEditMode(false); // Réinitialiser le mode d'édition
   };
   
-
+  const [formErrorMessage, setFormErrorMessage] = useState("");
   const handleAddInterview = async () => {
+    if (
+      !formData.title ||
+      !formData.descrInter ||
+      !formData.assignedStudentId ||
+      !formData.dateInterv ||
+      !formData.address ||
+      !formData.statusInterv ||
+      !formData.typeIntrv
+    ) {
+      // Mettez à jour l'état du message d'erreur
+      setFormErrorMessage("Veuillez remplir tous les champs requis !");
+      return;
+    }
     try {
+      setFormErrorMessage("");
       console.log("Adding/Editing interview...", formData);
       console.log("Editing interview with ID:", editInterviewId);
   
@@ -257,6 +271,7 @@ function InterviewManagement() {
             <Grid container spacing={2}>
               {interviews.map((interview, index) => (
                 <Grid item key={interview._id || index} xs={12}>
+                  {/* <Link to={`/calendrier`}> */}
                   <Paper
                     elevation={3}
                     className={`${getStatusColor(interview.statusInterv)}-border ${getStatusColor(interview.statusInterv)}-background inline-elements`}
@@ -276,6 +291,7 @@ function InterviewManagement() {
                       <Icon style={{ marginRight: "20px" , color: "#013a63"}} fontSize="medium" onClick={() => deleteInterview(interview._id)}>delete_forever</Icon>
                     </div>
                   </Paper>
+                  {/* </Link> */}
                 </Grid>
               ))}
             </Grid>
@@ -290,13 +306,13 @@ function InterviewManagement() {
             <TextField style={{marginBlock:"10px"}}  label="Description d'entretien" name="descrInter" value={formData.descrInter} onChange={handleInputChange} fullWidth multiline  />
             <TextField style={{ marginBlock: "10px" }} label="Nom du candidat" name="assignedStudentId" value={formData.assignedStudentId} onChange={handleInputChange} fullWidth required/>
             <TextField style={{ marginBlock: "10px" }}  type="datetime-local" name="dateInterv" value={formData.dateInterv} onChange={handleInputChange} fullWidth error={Boolean(dateError)} helperText={dateError} required />
-
             <TextField style={{marginBlock:"10px"}}  label="Adresse" name="address" value={formData.address} onChange={handleInputChange} fullWidth required/>
             <TextField style={{marginBlock:"10px"}}  label="Etat d'entretien" name="statusInterv" value={formData.statusInterv} onChange={handleInputChange} fullWidth required/>
             <TextField style={{ marginBlock: "10px" }} label="Type d'entretien" name="typeIntrv" value={formData.typeIntrv} onChange={handleInputChange} fullWidth select required >
               <MenuItem value="En ligne" >En ligne</MenuItem>
               <MenuItem value="En face">En face</MenuItem>
             </TextField>
+            {formErrorMessage && (<p style={{fontSize: 'small', fontWeight: 'thin', color: 'red' , marginLeft: "15px" }}>{formErrorMessage}</p>)}
             <Button variant="contained" style={{backgroundColor:"red" , color: 'white' , marginTop:"23px"}} onClick={handleAddInterview}>
               {isEditMode ? "Modifier" : "Ajouter"}
             </Button>

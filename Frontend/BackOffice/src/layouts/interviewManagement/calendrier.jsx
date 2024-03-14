@@ -27,7 +27,7 @@ function Calendrier() {
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [interviews, setInterviews] = useState([]);
-
+  const [assignedStudent, setAssignedStudent] = useState(null);
 
   useEffect(() => {
     fetchEvents();
@@ -137,9 +137,6 @@ function Calendrier() {
     })
 };
   
-  
-
-
 
   const messages = {
     allDay: 'Toute la journée',
@@ -166,6 +163,20 @@ function Calendrier() {
     return `${day}/${month}/${year}   ${hours}:${minutes}`;
   };
 
+  const fetchAssignedStudent = async (studentId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/user/get/${studentId}`); 
+      setAssignedStudent(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des détails de l\'utilisateur :', error);
+    }
+  };
+  useEffect(() => {
+    if (selectedEvent && selectedEvent.assignedStudentId) {
+      fetchAssignedStudent(selectedEvent.assignedStudentId);
+    }
+  }, [selectedEvent]);
+  
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -194,11 +205,11 @@ function Calendrier() {
                   case 'Demande report':
                     color = '#eb861bb2';
                     break;
-                  case "En attente":
+                  case "A venir":
                     color= "rgba(102, 138, 186, 0.962) ";
                     break;
                   case "Terminé":
-                    color =  "#0c80a99";
+                    color =  "#00c860";
                     break;
                   default:
                     color = 'gray';
@@ -223,6 +234,7 @@ function Calendrier() {
                   {selectedEvent && (
                     <div className="event-details">
                       <h3 className="red-text" style={{ marginBottom: "25px" }}>{selectedEvent.descrInter}</h3>
+                      {assignedStudent && (<p className="thin-text"><strong>Nom de l'étudiant :</strong> {assignedStudent.firstname} {assignedStudent.lastname}</p>)}
                       <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(selectedEvent.dateInterv)}</p>
                       <p className="thin-text"><strong>Adresse :</strong>{selectedEvent.address}</p>
                       <p className="thin-text"><strong>Type d'entretien :</strong>{selectedEvent.typeIntrv}</p>
