@@ -43,7 +43,12 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Offers from "layouts/offers";
 
+//import UpdateOffer from "layouts/modifier";
+//import Ajouter from "layouts/ajouter";
+//import Offers from "layouts/offers";
+/*esplin-disabled*/
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -58,35 +63,19 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Offers",
+    key: "offers",
+    icon: <Icon fontSize="small">work</Icon>,
+    route: "/offers",
+    component: <Offers />,
+  },
+  {
+    type: "collapse",
     name: "Network",
     key: "tables",
     icon: <Icon fontSize="small">people</Icon>,
     route: "/tables",
     component: <Tables />,
-  },
-  {
-    type: "collapse",
-    name: "Offers",
-    key: "billing",
-    icon: <Icon fontSize="small">work</Icon>,
-    route: "/billing",
-    component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "Chat",
-    key: "notifications",
-    icon: <Icon fontSize="small">chat</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
-  {
-    type: "collapse",
-    name: "Compagny",
-    key: "",
-    icon: <Icon fontSize="small">business</Icon>,
-    route: "",
-    //component: <Notifications />,
   },
   {
     type: "collapse",

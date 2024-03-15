@@ -1,27 +1,39 @@
-const express=require("express");
-const http =require("http");
-const config=require ("./config/dbconnection.json");
-const mongo = require ("mongoose");
-const bodyParser =require('body-parser')
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+const http = require("http");
 
-mongo.connect(config.url, {useNewUrlParser:true , useUnifiedTopology: true}).then(()=> console.log("database connected")).catch(()=>console.log("database not connected"))
-//mongo.connect(config.url).then(()=>console.log("database connected")).catch(()=>console.log("database not connected"));
-//mongo.connect(config.url,{useNewUrlParser:true,useUnifiedTopology:true})
-const userRouter=require("./routes/user") 
+const config = require("./config/dbconnection.json");
+const userRouter = require("./routes/user");
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
+const offerRouter =require("./routes/offer");
 
-const app=express();
+const app = express();
 
+// Connect to MongoDB
+mongoose.connect(config.url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Database connected"))
+  .catch((err) => console.error("Database connection error:", err));
+
+// Middleware
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:4000'] // Replace with your frontend URL
+  }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/user', userRouter) 
-app.use('/chat', chatRoomRouter) 
-app.use('/messages', messageRouter) 
+// Routes
+app.use('/user', userRouter);
+app.use('/chat', chatRoomRouter);
+app.use('/messages', messageRouter);
+app.use('/offer',offerRouter);
 
+// Server setup
 const server = http.createServer(app);
-server.listen(3000, console.log("server run"));
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-module.exports = app ;
+module.exports = app;
 
