@@ -36,18 +36,37 @@ Coded by www.creative-tim.com
 */
 
 // Material Dashboard 2 React layouts
+/*eslint-disable*/
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
-import Billing from "layouts/billing";
-import Notifications from "layouts/notifications";
+import Chat from "layouts/Chat";
+import Candidacy from "layouts/Candidacy";
+import Question from "layouts/GetQuestions";
+
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import ResetPassword from "layouts/authentication/reset-password";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import AddQuestionForm from "layouts/AddQuestion";
+import ModifierQuestionForm from "layouts/PutQuestion";
+import Home from "layouts/Home";
 
 const routes = [
+  {
+    route: "/authentication/rest-password",
+    component: <ResetPassword />,
+  },
+  {
+    type: "route",
+    name: "question", // Nom de la route affiché dans le sidenav
+    key: "questions", // Clé unique pour cette route
+    route: "/question/ajouter", // Chemin vers la page des détails de l'utilisateur avec un paramètre pour l'ID de l'utilisateur
+    component: <AddQuestionForm />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
   {
     type: "collapse",
     name: "Home",
@@ -66,35 +85,35 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Offers",
-    key: "billing",
+    name: "Candidacy",
+    key: "Candidacy",
     icon: <Icon fontSize="small">work</Icon>,
-    route: "/billing",
-    component: <Billing />,
+    route: "/candidature/ajouter",
+    component: <Candidacy />,
   },
   {
     type: "collapse",
-    name: "Chat",
-    key: "notifications",
-    icon: <Icon fontSize="small">chat</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
+    name: "Question",
+    key: "Question",
+    icon: <Icon fontSize="small">people</Icon>,
+    route: "/Question",
+    component: <Question />,
   },
   {
     type: "collapse",
     name: "Compagny",
     key: "",
     icon: <Icon fontSize="small">business</Icon>,
-    route: "",
-    //component: <Notifications />,
+    route: "/quiz/home",
+    component: <Home/>,
   },
   {
     type: "collapse",
     name: "Profile",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
+    route: "/question/modifier/${question._id}",
+    component: <ModifierQuestionForm />,
   },
   {
     type: "collapse",

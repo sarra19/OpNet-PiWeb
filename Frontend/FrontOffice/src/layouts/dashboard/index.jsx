@@ -1,36 +1,31 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
-//import Grid from "@mui/material/Grid";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React example components
+import React from "react";
+import { Link } from "react-router-dom";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-function Dashboard() {
+import MDBox from "components/MDBox";
+/* eslint-disable */
+
+function Homepage() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}></MDBox>
+      <MDBox py={3}>
+        <div style={{ textAlign: "center" }}>
+          <h1>Welcome to Our Professional Opportunities Platform</h1>
+          <p>This is the homepage of your dashboard application.</p>
+          <p>Here are some things you can do:</p>
+          
+          <Link to="/dashboard" style={{ textDecoration: "none" }}>
+            <button style={{ padding: "10px 20px", fontSize: "16px", borderRadius: "4px", backgroundColor: "#007bff", color: "#fff", border: "none", cursor: "pointer" }}>
+              Go to Dashboard
+            </button>
+          </Link>
+        </div>
+      </MDBox>
       <Footer />
     </DashboardLayout>
   );
 }
 
-export default Dashboard;
+export default Homepage;

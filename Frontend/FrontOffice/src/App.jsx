@@ -12,8 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-/* eslint-disable */
-
+/* eslint-disable*/
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
@@ -30,7 +29,10 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
-
+import Home from './layouts/Home';
+import QuizInstructions from './layouts/Quiz/quiz/QuizInstructions';
+import Play from './layouts/Quiz/quiz/Play';
+import QuizSummary from './layouts/Quiz/quiz/QuizSummary';
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
@@ -74,7 +76,7 @@ export default function App() {
   useMemo(() => {
     const cacheRtl = createCache({
       key: "rtl",
-     //stylisPlugins: [rtlPlugin],
+     // stylisPlugins: [rtlPlugin],
     });
 
     setRtlCache(cacheRtl);
@@ -193,6 +195,10 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/play/instructions" element={<QuizInstructions />} />
+        <Route path="/play/quiz" element={<Play />} />
+        <Route path="/play/quizSummary" element={<QuizSummary />} />
       </Routes>
     </ThemeProvider>
   );

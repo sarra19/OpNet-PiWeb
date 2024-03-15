@@ -12,12 +12,16 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
+/*eslint-disable*/
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
-
+import ReactDOM from 'react-dom';
+import '../node_modules/@mdi/font/css/materialdesignicons.min.css';
+import '../node_modules/materialize-css/dist/css/materialize.min.css';
+import '../node_modules/materialize-css/dist/js/materialize.min.js';
+import './styles/styles.scss';
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
 

@@ -1,0 +1,101 @@
+[
+    {
+        "question": "Qu'est-ce que le HTML ?",
+        "optionA": "Un langage de programmation pour créer des bases de données",
+        "optionB": "Un langage de balisage pour créer des pages web",
+        "optionC": "Un langage de programmation pour créer des applications mobiles",
+        "optionD": "Un langage de requête pour interagir avec les serveurs",
+        "answer": "Un langage de balisage pour créer des pages web"
+    },
+
+    {
+        "question": "Qu'est-ce qu'un algorithme ?",
+        "optionA": "Un langage de programmation orienté objet",
+        "optionB": "Une méthode pour stocker des données dans une base de données",
+        "optionC": "Une série d'étapes pour résoudre un problème ou accomplir une tâche",
+        "optionD": "Un type de réseau informatique",
+        "answer": "Une série d'étapes pour résoudre un problème ou accomplir une tâche"
+    },
+
+    {
+        "question":"Qu'est-ce que le CSS et quel est son rôle dans le développement web ?",
+        "optionA": "Un langage de programmation pour créer des bases de données",
+        "optionB": "Un langage de requête pour interagir avec les serveurs",
+        "optionC": "Un langage de balisage pour créer des pages web",
+        "optionD": "Un langage pour ajouter des fonctionnalités interactives aux sites web",
+        "answer":  "Un langage de balisage pour créer des pages web"
+    },
+
+    {
+        "question":"Qu'est-ce qu'une base de données relationnelle ?",
+        "optionA": "Une base de données stockant uniquement des images et des vidéos",
+        "optionB": "Une base de données qui stocke les données sous forme de tables reliées les unes aux autres",
+        "optionC": "Une base de données stockant des données uniquement sous forme de texte brut",
+        "optionD": "Une base de données stockant des données en utilisant une structure de type arbre",
+        "answer":  "Une base de données qui stocke les données sous forme de tables reliées les unes aux autres"
+    },
+
+    {
+        "question": "Qu'est-ce qu'une boucle en programmation ?",
+        "optionA": "Un ensemble d'instructions pour résoudre un problème",
+        "optionB": "Une fonction qui prend des paramètres en entrée et renvoie une valeur",
+        "optionC": "Une structure de contrôle qui répète un bloc d'instructions jusqu'à ce qu'une condition spécifiée soit vraie",
+        "optionD": "Une méthode pour stocker des données dans une base de données",
+        "answer": "Une structure de contrôle qui répète un bloc d'instructions jusqu'à ce qu'une condition spécifiée soit vraie"
+    },
+
+    {
+        "question": "Quels sont les trois types de structures de données les plus courants ?",
+        "optionA": "Tableaux, listes chaînées, piles",
+        "optionB": "Graphes, arbres, files",
+        "optionC": "Tableaux, enregistrements, piles",
+        "optionD": "Listes, graphes, enregistrements",
+        "answer": "Tableaux, listes chaînées, piles"
+    },
+
+    {
+        "question":"Qu'est-ce que le cloud computing ?",
+        "optionA": "Un type de réseau informatique sans fil",
+        "optionB": "Un modèle de fourniture de services informatiques via internet",
+        "optionC": " Un langage de programmation pour créer des applications web",
+        "optionD": "Un type de base de données relationnelle",
+        "answer": "Un modèle de fourniture de services informatiques via internet"
+    },
+
+    {
+        "question": "Qu'est-ce qu'une variable en programmation ?",
+        "optionA": "Un conteneur pour stocker des données",
+        "optionB": "Une fonction qui prend des paramètres en entrée et renvoie une valeur",
+        "optionC": "Un ensemble d'instructions pour résoudre un problème",
+        "optionD": "Un type de boucle en programmation",
+        "answer": "Un conteneur pour stocker des données"
+    },
+
+    {
+        "question": "Qu'est-ce que Git ?",
+        "optionA": " Un langage de programmation pour créer des interfaces utilisateur graphiques",
+        "optionB": " Un système de gestion de base de données relationnelle",
+        "optionC": "Un système de contrôle de version utilisé pour le développement de logiciels",
+        "optionD": "Un langage de balisage utilisé pour créer des documents structurés",
+        "answer": "Un système de contrôle de version utilisé pour le développement de logiciels"
+    },
+
+    {
+        "question": "Qu'est-ce que la programmation orientée objet ?",
+        "optionA": "Un style de programmation basé sur la résolution de problèmes mathématiques",
+        "optionB": "Un paradigme de programmation où les programmes sont organisés autour d'objets qui représentent des entités du monde réel",
+        "optionC": "Un langage de programmation utilisé principalement pour les applications mobiles",
+        "optionD": "Un modèle de programmation pour les applications web dynamiques",
+        "answer": "Un paradigme de programmation où les programmes sont organisés autour d'objets qui représentent des entités du monde réel"
+    },
+
+    {
+        "question": "Qu'est-ce qu'un langage de script ?",
+        "optionA": "Un langage de programmation utilisé pour créer des scripts de film",
+        "optionB": "Un langage de programmation interprété conçu pour automatiser des tâches et ajouter des fonctionnalités à d'autres logiciels",
+        "optionC": "Un langage de programmation utilisé pour créer des bases de données relationnelles",
+        "optionD": "Un langage de programmation utilisé pour écrire des systèmes d'exploitation",
+        "answer": "Un langage de programmation interprété conçu pour automatiser des tâches et ajouter des fonctionnalités à d'autres logiciels"
+    }
+
+]
