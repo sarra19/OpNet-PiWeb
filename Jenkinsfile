@@ -46,9 +46,7 @@ pipeline {
                 dir('Backend') {
                     sh 'npm run dev'
                 }
-                dir('Frontend/BackOffice') {
-                    sh 'npm run dev'
-                }
+               
                 dir('Frontend/FrontOffice') {
                     sh 'npm run dev'
                 }
