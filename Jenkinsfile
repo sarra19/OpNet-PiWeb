@@ -44,13 +44,13 @@ pipeline {
         stage('Build application') {
             steps {
                 dir('Backend') {
-                    sh 'npm run build-dev'
+                    sh 'npm run dev'
                 }
                 dir('Frontend/BackOffice') {
-                    sh 'npm run build-dev'
+                    sh 'npm run dev'
                 }
                 dir('Frontend/FrontOffice') {
-                    sh 'npm run build-dev'
+                    sh 'npm run dev'
                 }
             }
         }
