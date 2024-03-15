@@ -8,13 +8,13 @@ pipeline {
                 }
             }
         }
-        stage('Install frontend dependencies - BackOffice') {
-            steps {
-                dir('Frontend/BackOffice') {
-                    sh 'npm install'
-                }
-            }
-        }
+        // stage('Install frontend dependencies - BackOffice') {
+        //     steps {
+        //         dir('Frontend/BackOffice') {
+        //             sh 'npm install'
+        //         }
+        //     }
+        // }
         stage('Install frontend dependencies - FrontOffice') {
             steps {
                 dir('Frontend/FrontOffice') {
