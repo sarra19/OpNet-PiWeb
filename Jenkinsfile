@@ -44,9 +44,7 @@ pipeline {
         stage('Build application') {
             steps {
               
-                dir('Frontend/BackOffice') {
-                    sh 'npm run dev'
-                }
+               
                 dir('Frontend/FrontOffice') {
                     sh 'npm run dev'
                 }
