@@ -6,13 +6,13 @@ import MDBox from "components/MDBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import Header from "layouts/profile/components/Header";
-import { Link } from "react-router-dom";
+import Header from "layouts/network/Header/index";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 
-function Overview() {
+function ProfileN() {
   const [userInfo, setUserInfo] = useState({});
-  const userId = sessionStorage.getItem("userId");
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -77,7 +77,11 @@ function Overview() {
             </div>
           </>
         )}
-         
+         <Link to="/Network">
+          <Button variant="contained" color="error" size="small">
+            Back
+          </Button>
+        </Link>
       </Header>
       <Footer />
     </DashboardLayout>
@@ -114,4 +118,4 @@ const textStyle = {
   fontSize: "16px"
 };
 
-export default Overview;
+export default ProfileN;

@@ -10,9 +10,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import MDBox from "components/MDBox";
 
 const useStyles = makeStyles((theme) => ({
   userContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1),
     boxShadow: theme.shadows[2],
@@ -21,21 +26,19 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.action.hover,
     },
   },
-  userDetails: {
-    display: 'flex',
-    alignItems: 'center',
+  profileImage: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
     marginBottom: theme.spacing(1),
   },
-  profileImage: {
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-    marginRight: theme.spacing(2),
+  userName: {
+    marginBottom: theme.spacing(1),
   },
   buttonContainer: {
-    marginLeft: 'auto',
-  },
-  userList: {
-    marginTop: theme.spacing(5), // Ajouter une marge supérieure
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -58,44 +61,36 @@ function Network() {
     fetchUsers();
   }, []);
 
-  const handleDeleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:5000/user/deleteUser/${userId}`);
-      setUsers(users.filter(user => user._id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
-      <Grid container spacing={2} className={classes.userList}> {/* Ajouter une classe pour la marge supérieure */}
-        {users.map((user, index) => (
-          <Grid item xs={12} key={index}>
-            <div className={classes.userContainer}>
-              <div className={classes.userDetails}>
-                <Avatar src={user.profileImage} alt="Profile" className={classes.profileImage} />
-                <Typography variant="subtitle1">{user.firstname} {user.lastname}</Typography>
-                <div className={classes.buttonContainer}>
-                  <Button component={Link} to={`/user/${user._id}`} variant="contained" color="primary">
-                    Voir Profile
-                  </Button>
-                  <Button component={Link} to={`/user/${user._id}`} variant="contained" color="error">
-                    Contacter
-                  </Button>
+      <MDBox mt={8}>
+        <MDBox mb={3}>
+          <Grid container spacing={2}>
+            {users.map((user, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <div className={classes.userContainer}>
+                  <Avatar src={user.profileImage} alt="Profile" className={classes.profileImage} />
+                  <Typography variant="subtitle2" className={classes.userName}>{user.firstname} {user.lastname}</Typography>
+                  <Typography variant="body2"><strong>Speciality:</strong> {user.speciality}</Typography>
+                  <div className={classes.buttonContainer}>
+                    <Button size="small" variant="contained" color="primary">
+                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>View Profile</Link>
+                    </Button>
+                    <Button component={Link} to={`/user/${user._id}`} variant="contained" color="secondary" style={{ marginLeft: 8 }}>
+                      Contact
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <Typography variant="body2"><strong>Speciality:</strong> {user.speciality}</Typography>
-            </div>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      {error && <div>Error: {error}</div>}
+          {error && <div>Error: {error}</div>}
+        </MDBox>
+      </MDBox>
       <Footer />
     </DashboardLayout>
   );
 }
 
 export default Network;
-

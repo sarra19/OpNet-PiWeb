@@ -13,12 +13,13 @@ import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-pofile.jpg";
+import { useParams } from "react-router-dom";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const [userInfo, setUserInfo] = useState({});
-  const userId = sessionStorage.getItem("userId"); // Retrieve userId from sessionStorage
+  const { userId } = useParams();
 
   useEffect(() => {
     function handleTabsOrientation() {

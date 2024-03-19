@@ -50,6 +50,7 @@ import Chat from "layouts/Chat";
 import Basic from "layouts/authentication/sign-in";
 import PasswordReset from "layouts/authentication/PasswordReset";
 import Network from "layouts/network";
+import ProfileN from "layouts/network/profileN";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -61,7 +62,13 @@ const routes = [
     route: "/password-reset/:id/:token",
     component: <PasswordReset />,
   },
- 
+  {
+    type: "route",
+    name: "Profile", // Nom de la route affiché dans le sidenav
+    key: "user-profile", // Clé unique pour cette route
+    route: "/user/:userId", // Make sure it matches the backend route
+    component: <ProfileN />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
+  },
   {
     type: "collapse",
     name: "Home",
