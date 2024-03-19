@@ -46,11 +46,11 @@ import ForgotPassword from "layouts/authentication/ForgotPassword";
 // @mui icons
 import Icon from "@mui/material/Icon";
 import Interviews from "layouts/Interviews";
-import Chat from "layouts/Chat";
 import Basic from "layouts/authentication/sign-in";
 import PasswordReset from "layouts/authentication/PasswordReset";
 import Network from "layouts/network";
 import ProfileN from "layouts/network/profileN";
+import ChatManagement from "layouts/Chat/Chat";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -99,7 +99,7 @@ const routes = [
     key: "Chat",
     icon: <Icon fontSize="small">chat</Icon>,
     route: "/Chat",
-    component: <Chat />,
+    component: <ChatManagement />,
   },
   {
     type: "collapse",

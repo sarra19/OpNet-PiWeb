@@ -2,15 +2,14 @@ const mongo=require("mongoose")
 const Schema = mongo.Schema 
 const Chat=new Schema(
     {
-        nameChat: String,
-        dateCreationChat: {
-            type: Date,
-            default: Date.now 
+        members: {
+          type: Array,
         },
-        NbParticipantsChat: Number,
-        TypeChat:String,
+      },
+      {
+        timestamps: true,
+      }
+    );
 
-    }
-)
 
 module.exports = mongo.model("chat", Chat) ; 

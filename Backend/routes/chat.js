@@ -17,7 +17,7 @@ router.get('/:nameChat/:NbParticipantsChat/:dateCreationChat', function(req,res)
     res.send("Salle de discussion créée avec succès !");
 });
 //postman
-router.post("/add",chatController.add);
+//router.post("/add",chatController.add);
 
 router.get('/getall' ,chatController.getall);
 router.get('/getid/:id' ,chatController.getid);
@@ -27,4 +27,9 @@ router.put('/updateChatRoom/:id', chatController.UpdateChatRoom);
 
 router.delete('/deleteChatRoom/:id',chatController.deleteChatRoom);
 
+
+
+router.post('/', chatController.createChat);
+router.get('/:userId', chatController.userChats);
+router.get('/find/:firstId/:secondId', chatController.findChat);
 module.exports = router ;

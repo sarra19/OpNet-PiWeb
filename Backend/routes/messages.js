@@ -3,9 +3,9 @@ const router=express.Router()
 const Messages= require("../models/messages")
 const messageController=require("../controller/MessageController")
 
-router.get('/', function(req,res){
-    res.send("hello express");
-});
+// router.get('/', function(req,res){
+//     res.send("hello express");
+// });
 
 // router.get('/:sendDate/:Content', async function(req, res) {
 //     try {
@@ -55,5 +55,10 @@ router.get('/getbyDate/:date' ,messageController.getbyDate);
 router.put('/updateMessage/:id', messageController.UpdateMessage);
 
 router.delete('/deleteMessage/:id',messageController.deleteMessage);
+
+
+router.post('/', messageController.addMessage);
+
+router.get('/:chatId', messageController.getMessages);
 
 module.exports = router ;
