@@ -75,6 +75,11 @@ function Overview() {
                 </div>
               </div>
             </div>
+            <div style={{ textAlign: "center" }}>
+              <Link to={`/update/${userId}`} style={{ textDecoration: "none" }}>
+                <Button variant="contained" color="primary">Modifier</Button>
+              </Link>
+            </div>
           </>
         )}
          
