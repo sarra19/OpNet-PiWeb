@@ -2,16 +2,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { userChats } from "../../api/ChatRequests";
-
+import axios from "axios"; // Import axios
 import Button from '@material-ui/core/Button';
 import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import AddIcon from '@material-ui/icons/Add';
-
 import ChatBox from "../../components/ChatBox/ChatBox";
 import Conversation from "../../components/Coversation/Conversation";
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import TextField from '@material-ui/core/TextField';
 import "./Chat.css";
+import { MenuItem } from "@mui/material";
 
 function ChatManagement() {
   const socket = useRef();
@@ -20,6 +24,11 @@ function ChatManagement() {
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
+  const [addChatDialogOpen, setAddChatDialogOpen] = useState(false);
+  const [newChatData, setNewChatData] = useState({
+    receiverId: '', // Add receiverId field
+  });
+  const [allUsers, setAllUsers] = useState([]); // State to store all users
 
   useEffect(() => {
     const userId = window.sessionStorage.getItem('userId');
@@ -46,7 +55,7 @@ function ChatManagement() {
     });
 
     return () => {
-      socket.current.disconnect(); // Disconnect socket when component unmounts
+      socket.current.disconnect();
     };
   }, []);
 
@@ -74,9 +83,38 @@ function ChatManagement() {
     return online ? true : false;
   };
 
+  // Function to fetch all users
+  const fetchAllUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/user/getall");
+      setAllUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to handle adding a new chat
   const handleNewConversation = () => {
-    // Ajoutez ici le code pour démarrer une nouvelle conversation
-    console.log("Nouvelle conversation");
+    fetchAllUsers(); // Fetch all users before opening the dialog
+    setAddChatDialogOpen(true);
+  };
+
+  const handleCloseAddChatDialog = () => {
+    setAddChatDialogOpen(false);
+  };
+
+  const handleAddNewChat = async () => {
+    try {
+      // Logic to add a new chat
+      const response = await axios.post("http://localhost:5000/chat/", newChatData);
+      const newChat = response.data;
+      setChats([...chats, newChat]); // Update chats state with the new chat
+
+      // Close the dialog
+      setAddChatDialogOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -88,16 +126,17 @@ function ChatManagement() {
           <div className="Chat-container">
             <h2>Chats</h2>
             <Button
-  variant="contained"
-  style={{ backgroundColor: "#db6c6c", color: "#fff", marginBottom: '10px' }}
-  size="small"
-  onClick={handleNewConversation}
->
-  <AddIcon />
-</Button>
+              variant="contained"
+              style={{ backgroundColor: "#db6c6c", color: "#fff", marginBottom: '10px' }}
+              size="small"
+              onClick={handleNewConversation}
+            >
+              <AddIcon />
+            </Button>
             <div className="Chat-list">
               {chats.map((chat) => (
                 <div
+                  key={chat._id}
                   onClick={() => {
                     setCurrentChat(chat);
                   }}
@@ -125,6 +164,32 @@ function ChatManagement() {
           />
         </div>
       </div>
+
+      {/* Dialog for adding a new chat */}
+      <Dialog open={addChatDialogOpen} onClose={handleCloseAddChatDialog}>
+        <DialogTitle>Add New Chat</DialogTitle>
+        <DialogContent>
+          {/* Form fields for adding a new chat */}
+          {/* Select input for choosing receiver */}
+          <TextField
+            select
+            label="Select Receiver"
+            value={newChatData.receiverId}
+            onChange={(e) => setNewChatData({ ...newChatData, receiverId: e.target.value })}
+            fullWidth
+            required
+          >
+            {allUsers.map((user) => (
+              <MenuItem key={user._id} value={user._id}>
+                {user.firstname} {user.lastname}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button variant="contained" color="primary" onClick={handleAddNewChat}>
+            Add Chat
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </DashboardLayout>
