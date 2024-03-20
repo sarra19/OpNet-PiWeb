@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import AddIcon from '@material-ui/icons/Add';
 
 import ChatBox from "../../components/ChatBox/ChatBox";
 import Conversation from "../../components/Coversation/Conversation";
@@ -73,6 +74,11 @@ function ChatManagement() {
     return online ? true : false;
   };
 
+  const handleNewConversation = () => {
+    // Ajoutez ici le code pour démarrer une nouvelle conversation
+    console.log("Nouvelle conversation");
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
@@ -81,6 +87,14 @@ function ChatManagement() {
         <div className="Left-side-chat">
           <div className="Chat-container">
             <h2>Chats</h2>
+            <Button
+  variant="contained"
+  style={{ backgroundColor: "#db6c6c", color: "#fff", marginBottom: '10px' }}
+  size="small"
+  onClick={handleNewConversation}
+>
+  <AddIcon />
+</Button>
             <div className="Chat-list">
               {chats.map((chat) => (
                 <div
@@ -100,7 +114,6 @@ function ChatManagement() {
         </div>
 
         {/* Right Side */}
-
         <div className="Right-side-chat">
           <div style={{ width: "20rem", alignSelf: "flex-end" }}>
           </div>
