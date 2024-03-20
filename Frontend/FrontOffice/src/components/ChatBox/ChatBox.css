@@ -98,3 +98,27 @@
 .send-button:hover {
     background-color: #db6c6c; /* Darker Green */
 }
+
+/* Ajoutez ces styles à votre fichier ChatBox.css ou à votre feuille de styles CSS */
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    margin-left: 10px; /* Ajustez la marge pour l'espacement */
+    color: red; /* Couleur du texte du bouton */
+  }
+  
+  .delete-button:hover {
+    color: darkred; /* Couleur du texte du bouton au survol */
+  }
+  
+  .delete-button:focus {
+    outline: none; /* Supprime le contour du bouton lorsqu'il est en focus */
+  }
+  
+  .delete-button:active {
+    transform: translateY(1px); /* Effet de pression vers le bas */
+  }
+  

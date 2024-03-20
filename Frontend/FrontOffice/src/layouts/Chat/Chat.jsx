@@ -103,19 +103,36 @@ function ChatManagement() {
     setAddChatDialogOpen(false);
   };
 
-  const handleAddNewChat = async () => {
-    try {
-      // Logic to add a new chat
-      const response = await axios.post("http://localhost:5000/chat/", newChatData);
-      const newChat = response.data;
-      setChats([...chats, newChat]); // Update chats state with the new chat
+  // Function to handle adding a new chat
+const handleAddNewChat = async () => {
+  try {
+    // Update newChatData with the sender ID
+    const userId = window.sessionStorage.getItem('userId');
+    const updatedChatData = {
+      ...newChatData,
+      senderId: userId,
+    };
 
-      // Close the dialog
-      setAddChatDialogOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    // Logic to add a new chat
+    const response = await axios.post("http://localhost:5000/chat/", updatedChatData);
+    const newChat = response.data;
+    setChats([...chats, newChat]); // Update chats state with the new chat
+
+    // Close the dialog
+    setAddChatDialogOpen(false);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleDelete = async (chatId) => {
+  try {
+    await axios.delete(`http://localhost:5000/chat/deleteChatRoom/${chatId}`);
+    setChats(chats.filter((chat) => chat._id !== chatId));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <DashboardLayout>
@@ -145,6 +162,7 @@ function ChatManagement() {
                     data={chat}
                     currentUser={window.sessionStorage.getItem('userId')}
                     online={checkOnlineStatus(chat)}
+
                   />
                 </div>
               ))}
@@ -161,6 +179,8 @@ function ChatManagement() {
             currentUser={window.sessionStorage.getItem('userId')}
             setSendMessage={setSendMessage}
             receivedMessage={receivedMessage}
+            onDelete={handleDelete} // Passer la fonction handleDelete
+
           />
         </div>
       </div>

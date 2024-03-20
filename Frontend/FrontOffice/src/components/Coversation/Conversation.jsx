@@ -3,14 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../api/UserRequests";
 import Avatar from '@material-ui/core/Avatar';
+import DeleteIcon from '@material-ui/icons/Delete'; // Import DeleteIcon
 
-const Conversation = ({ data, currentUser, online }) => {
+const Conversation = ({ data, currentUser, online, onDelete }) => {
   const [userData, setUserData] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(()=> {
-    const userId = data.members.find((id)=>id!==currentUser);
-    const getUserData = async ()=> {
+  useEffect(() => {
+    const userId = data.members.find((id) => id !== currentUser);
+    const getUserData = async () => {
       try {
         const { data } = await getUser(userId);
         setUserData(data);
@@ -33,6 +34,7 @@ const Conversation = ({ data, currentUser, online }) => {
             <span>{userData?.firstname} {userData?.lastname}</span>
             <span style={{ color: online ? "#51e200" : "" }}>{online ? "Online" : "Offline"}</span>
           </div>
+        
         </div>
       </div>
       <hr style={{ width: "85%", border: "0.1px solid #ececec" }} />
