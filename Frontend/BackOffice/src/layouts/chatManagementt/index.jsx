@@ -42,7 +42,7 @@ const buttonStyles = {
   marginRight: "5px",
 };
 
-function ChatManagement() {
+function ChatManagementt() {
   const [chats, setChats] = useState([]);
   const [error, setError] = useState(null);
 
@@ -134,4 +134,4 @@ function ChatManagement() {
   );
 }
 
-export default ChatManagement;
+export default ChatManagementt;

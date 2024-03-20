@@ -47,16 +47,13 @@ import Icon from "@mui/material/Icon";
 
 import Statistics from "layouts/statistics";
 import UserManagement from "layouts/userManagement";
-import ChatManagement from "layouts/chatManagement";
 import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import UserDetails from "layouts/userManagement/UserDetails";
 import Ajout from "layouts/userManagement/ajout";
 import Modifier from "layouts/userManagement/modify";
-import AjoutChat from "layouts/chatManagement/ajout";
-import ModifierChat from "layouts/chatManagement/modify";
-import MessageManagement from "layouts/MessageManagement";
+import ChatManagement from "layouts/chatManagement/Chat";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -78,13 +75,7 @@ const routes = [
     route: "/update/:userId", // Make sure it matches the backend route
     component: <Modifier />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
-  {
-    type: "route",
-    name: "Modify Chat", // Nom de la route affiché dans le sidenav
-    key: "Modify Chat", // Clé unique pour cette route
-    route: "/updateChat/:chatId", // Make sure it matches the backend route
-    component: <ModifierChat />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
-  },
+
   {
     type: "route",
     name: "Add User",
@@ -93,21 +84,8 @@ const routes = [
     component: <Ajout />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
   
-  {
-    type: "route",
-    name: "Add Chat",
-    key: "Add Chat", // Clé unique pour cette route
-    route:  "/AddChat",
-    component: <AjoutChat />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
-  },
   
-  {
-    type: "route",
-    name: "View messages",
-    key: "View messages", // Clé unique pour cette route
-    route:  "/messages/:chatId",
-    component: <MessageManagement/>, // Composant UserDetailsPage à afficher lorsque cette route est visitée
-  },
+
   
   {
     type: "collapse",
@@ -137,10 +115,10 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Chat Management",
-    key: "Chat-Management",
-    icon: <Icon fontSize="small">chat_bubble_outline</Icon>,
-    route: "/chaManagement",
+    name: "Chat",
+    key: "Chat",
+    icon: <Icon fontSize="small">chat</Icon>,
+    route: "/Chat",
     component: <ChatManagement />,
   },
   {
