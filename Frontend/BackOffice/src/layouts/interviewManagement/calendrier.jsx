@@ -245,8 +245,8 @@ function Calendrier() {
                           <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(selectedEvent._id)} >
                             Décliner
                           </Button>
-                          <Button style={{ color: 'red' }} onClick={() => requestAnotherDate(selectedEvent?._id)} disabled={selectedEvent?.statusInterv === "Demande report"} >
-                            Autre date ?
+                          <Button style={{ color: 'red' }} >
+                            <Link style={{ color: 'inherit' }} to={`/interviewManagement`}>Modifier</Link>
                           </Button>
                         </div>
                 </DialogContent>
