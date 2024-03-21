@@ -32,7 +32,7 @@ function Interview() {
     try {
         const response = await axios.get("http://localhost:5000/interviews/getall");
         const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
-        const sortedInterviews = filteredInterviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedInterviews = filteredInterviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         const reversedInterviews = sortedInterviews.reverse();
         setInterviews(reversedInterviews);
     } catch (error) {
