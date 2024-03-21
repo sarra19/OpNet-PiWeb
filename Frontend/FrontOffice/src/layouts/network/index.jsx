@@ -11,7 +11,6 @@ import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
-import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   userContainer: {
@@ -46,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
 function Network() {
   const classes = useStyles();
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -54,11 +52,9 @@ function Network() {
       try {
         const response = await axios.get("http://localhost:5000/user/getall");
         setUsers(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
         setError("Error fetching users. Please try again later.");
-        setLoading(false);
       }
     };
 
@@ -84,23 +80,19 @@ function Network() {
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Grid container spacing={3}>
+        <MDBox mb={3}>
+          <Grid container spacing={2}>
             {users.map((user, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <div className={classes.userContainer}>
-                  <Avatar src={user.profileImage || ""} alt="Profile" className={classes.profileImage}>
-                    {!user.profileImage && <Typography>{`${user.firstname.charAt(0)}${user.lastname.charAt(0)}`}</Typography>}
-                  </Avatar>
+                  <Avatar src={user.profileImage} alt="Profile" className={classes.profileImage} />
                   <Typography variant="subtitle2" className={classes.userName}>{user.firstname} {user.lastname}</Typography>
                   <Typography variant="body2"><strong>Speciality:</strong> {user.speciality}</Typography>
                   <div className={classes.buttonContainer}>
-                    <Button size="small" variant="contained" color="primary" component={Link} to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>
-                      View Profile
+                    <Button size="small" variant="contained" color="primary">
+                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>View Profile</Link>
                     </Button>
-                    <Button size="small" variant="contained" color="secondary" style={{ marginLeft: 8 }} onClick={() => handleContact(user._id)}>
+                    <Button size="small" component={Link} to={`/Chat`} onClick={() => handleContact(user._id)} variant="contained" color="secondary" style={{ marginLeft: 8 }}>
                       Contact
                     </Button>
                   </div>
@@ -108,8 +100,8 @@ function Network() {
               </Grid>
             ))}
           </Grid>
-        )}
-        {error && <div>Error: {error}</div>}
+          {error && <div>Error: {error}</div>}
+        </MDBox>
       </MDBox>
       <Footer />
     </DashboardLayout>
@@ -117,3 +109,4 @@ function Network() {
 }
 
 export default Network;
+
