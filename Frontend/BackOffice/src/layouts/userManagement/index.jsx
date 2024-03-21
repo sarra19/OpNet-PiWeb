@@ -77,7 +77,7 @@ function UserManagement() {
         <MDBox mb={3}>
           <tr>
             <td colSpan="8" style={cellStyles}>
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" style={{ backgroundColor: '#E82227', color: '#fff' }}>
                 <Link to="/AddUser" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
               </Button>
             </td>
@@ -110,11 +110,9 @@ function UserManagement() {
                     <Button size="small" variant="contained" color="primary" style={buttonStyles}>
                       <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Details</Link>
                     </Button>
-                    <Button size="small" variant="contained" color="secondary" style={buttonStyles} onClick={() => handleDeleteUser(user._id)}>Delete</Button>
-                    <Button size="small" variant="contained" color="default" style={buttonStyles}>
-                    <Link to={`/update/${user._id}`} >Modify </Link>
+                    <Button size="small" variant="contained" style={{ backgroundColor: '#E82227', color: '#fff', cursor: "pointer" ,marginRight: "5px" }}
+  onClick={() => handleDeleteUser(user._id)}>Delete</Button>
 
-                      </Button>
                   </td>
                 </tr>
               ))}

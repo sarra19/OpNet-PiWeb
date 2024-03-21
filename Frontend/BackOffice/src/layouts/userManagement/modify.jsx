@@ -25,13 +25,9 @@ function Modifier() {
     firstname: "",
     lastname: "",
     email: "",
-    password: "",
-    confirmPassword: "",
     firstnameError: "",
     lastnameError: "",
     emailError: "",
-    passwordError: "",
-    confirmPasswordError: "",
     role: "",
   });
   const [error, setError] = useState("");
@@ -69,15 +65,7 @@ function Modifier() {
       if (!/\S+@\S+\.\S{2,}/.test(value)) {
         errorMessage = "Invalid email format";
       }
-    } else if (name === "password") {
-      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(value)) {
-        errorMessage = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character";
-      }
-    } else if (name === "confirmPassword") {
-      if (value !== formData.password) {
-        errorMessage = "Passwords do not match";
-      }
-    }
+    } 
     setFormData({
       ...formData,
       [name]: value,
@@ -110,14 +98,11 @@ function Modifier() {
       formData.firstname &&
       formData.lastname &&
       formData.email &&
-      formData.password &&
-      formData.confirmPassword &&
+     
       formData.role &&
       !formData.firstnameError &&
       !formData.lastnameError &&
       !formData.emailError &&
-      !formData.passwordError &&
-      !formData.confirmPasswordError &&
       capVal
     );
   };
@@ -191,38 +176,7 @@ function Modifier() {
               </MDTypography>
             )}
           </MDBox>
-          <MDBox mb={2}>
-            <MDInput
-              type="password"
-              name="password"
-              label="Password"
-              variant="standard"
-              fullWidth
-              value={formData.password}
-              onChange={handleChange}
-            />
-            {formData.passwordError && (
-              <MDTypography variant="body2" color="error">
-                {formData.passwordError}
-              </MDTypography>
-            )}
-          </MDBox>
-          <MDBox mb={2}>
-            <MDInput
-              type="password"
-              name="confirmPassword"
-              label="Confirm Password"
-              variant="standard"
-              fullWidth
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            {formData.confirmPasswordError && (
-              <MDTypography variant="body2" color="error">
-                {formData.confirmPasswordError}
-              </MDTypography>
-            )}
-          </MDBox>
+         
           <MDBox mb={2}>
             <Grid>
               <Grid item xs={12}>

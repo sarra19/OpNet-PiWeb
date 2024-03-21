@@ -45,10 +45,8 @@ function ProfileN() {
                 </div>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Profile Information</h3>
-                  <p><strong>Email:</strong> <span style={textStyle}>{userInfo.email}</span></p>
                   <p><strong>Date of Birth:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
                   <p><strong>Country:</strong> <span style={textStyle}>{userInfo.country}</span></p>
-                  <p><strong>Phone:</strong> <span style={textStyle}>{userInfo.phone}</span></p>
                   <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                 </div>
               </div>
