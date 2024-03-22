@@ -1,6 +1,7 @@
 const mongo = require ("mongoose");
 const Schema =mongo.Schema 
-const typeIntrvEnum = ["En ligne","En face"];
+const typeRencontreEnum = ["En ligne","En face"];
+const typeIntrvEnum = ["Entretien avec le RH","Entretien technique" , "Entretien psychologique"];
 const statusIntrvEnum =["En attente","Terminé" ,"En cours" , "A venir" , "Passé" , "Reporté"]
 const Interview = new Schema(
     {
@@ -16,10 +17,15 @@ const Interview = new Schema(
             ref: "user", 
         },
         address: String,
+        typeRencontre: {
+            type: String,
+            enum: typeRencontreEnum,
+            default: "En ligne"
+        },
         typeIntrv: {
             type: String,
             enum: typeIntrvEnum,
-            default: "En ligne"
+            default: "Entretien avec le RH"
         },
         statusInterv: {
             type: String,
