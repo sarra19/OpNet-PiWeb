@@ -52,6 +52,7 @@ import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import Calendrier from "layouts/interviewManagement/calendrier";
+import Forminput from "layouts/interviewManagement/forminput";
 
 const routes = [
   {
@@ -104,17 +105,17 @@ const routes = [
     name: "Interview Management",
     key: "interview-Management",
     icon: <Icon fontSize="small">assignment_ind_outlined</Icon>,
-    route: "/interviewManagement",
-    component: <InterviewManagement />,
+    route: "/calendrier",
+    component: <Calendrier />,
 
   },
-  {
-    type: "route",
-    name: "calendrier", 
-    key: "calendrier", 
-    route: "/calendrier", 
-    component: <Calendrier />, 
-  },
+  // {
+  //   type: "route",
+  //   name: "calendrier", 
+  //   key: "calendrier", 
+  //   route: "/calendrier", 
+  //   component: <Calendrier />, 
+  // },
   {
     type: "collapse",
     name: "Condidacy Management",

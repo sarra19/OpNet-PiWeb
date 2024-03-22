@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import { Alert, Grid, Icon } from "@mui/material";
+import { Alert, Box, Card, CardContent, Grid, Icon, Typography } from "@mui/material";
 import Footer from "examples/Footer";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -16,6 +16,8 @@ import MDBox from "components/MDBox";
 import axios from "axios";
 import 'moment/locale/fr';
 import { Link } from "react-router-dom";
+import Forminput from "./forminput";
+import { blue, grey, red } from "@mui/material/colors";
 
 const localizer = momentLocalizer(moment);
 moment.locale('fr');
@@ -28,7 +30,7 @@ function Calendrier() {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [interviews, setInterviews] = useState([]);
   const [assignedStudent, setAssignedStudent] = useState(null);
-
+  const [interviewId, setInterviewId] = useState(null);
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -57,6 +59,7 @@ function Calendrier() {
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setDialogOpen(true);
+    setInterviewId(event._id);
   };
 
   const handleCloseDetails = () => {
@@ -176,18 +179,64 @@ function Calendrier() {
       fetchAssignedStudent(selectedEvent.assignedStudentId);
     }
   }, [selectedEvent]);
-  
+
+
+  const [showFormPopup, setShowFormPopup] = useState(false);
+
+  const handleOpenAddForm = () => {
+    setShowFormPopup(true);
+  };
+
+  const handleCloseFormPopup = () => {
+    setShowFormPopup(false);
+  };
+
+  const handleOpenEditForm = (event) => {
+    setSelectedEvent(event); // Définir l'événement sélectionné
+    setDialogOpen(false); // Fermer le dialogue actuel
+    setShowFormPopup(true); // Ouvrir le dialogue avec le formulaire rempli
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <div style={{ position: 'absolute', top: '90%', left: '0' , marginLeft:'17px'}}>
+        <Card style={{ transform: 'rotate(-90deg)', transformOrigin: 'left top', height: '70%', width: '100%', backgroundColor: "#eeeeee", padding: 0 }}>
+          <CardContent style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: 0, paddingTop: 0 }}>
+            <Typography style={{ fontWeight: "600", fontSize: "15px", color: "#344880" }}>Etat entretien : </Typography>
+            <Box display="flex" alignItems="center" ml={2}>
+              <Box display="inline-block" width={10} height={7} bgcolor="rgba(246, 10, 10, 0.6)" mr={1} borderRadius={3} />
+              <Typography style={{ fontWeight: "550", fontSize: "12px" }}>Décliné</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" ml={2}>
+              <Box display="inline-block" width={10} height={7} bgcolor="#eb861b" mr={1} borderRadius={3} />
+              <Typography style={{ fontWeight: "550", fontSize: "12px" }}>Demande report</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" ml={2}>
+              <Box display="inline-block" width={10} height={7} bgcolor="rgba(102, 138, 186, 0.962)" mr={1} borderRadius={3} />
+              <Typography style={{ fontWeight: "550", fontSize: "12px" }}>A venir</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" ml={2}>
+              <Box display="inline-block" width={10} height={7} bgcolor="#00c860" mr={1} borderRadius={3} />
+              <Typography style={{ fontWeight: "550", fontSize: "12px" }}>Terminé</Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </div>
+      <Typography  mb={2.2} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
+        Vos entretiens
+        <Button style={{marginTop:"10px", color: 'red', marginLeft: "560px", justifyContent: 'flex-end' }} onClick={handleOpenAddForm} >
+          <Icon style={{ marginRight: "10px" }} fontSize="small">add_to_photos</Icon>Ajouter entretien
+        </Button>
+      </Typography>
       {message && (
               <Alert style={{ textAlign: "center" , marginBottom: "15px" , marginLeft:"50px"}}>
                 <strong>{message}</strong>
                 </Alert>
             )}
-      <MDBox mt={3} mb={0}>
+      <MDBox  mb={3}>
         <Grid container justifyContent="center">
-          <Grid item xs={8} md={10}>
+          <Grid item xs={8} md={11} mr={2} >
             <Calendar
               localizer={localizer}
               events={events}
@@ -197,7 +246,7 @@ function Calendrier() {
               style={{ height: '500px' }}
               messages={messages}
               eventPropGetter={(event) => {
-                let color = 'red'; // Couleur par défaut
+                let color = 'red'; 
                 switch (event.statusInterv) {
                   case 'Décliné':
                     color = 'rgba(246, 10, 10, 0.6) ';
@@ -223,20 +272,21 @@ function Calendrier() {
                 };
                 }}
             />
-            <Button style={{ marginInline: "43%", marginTop: "20px", color: 'red' }} onClick={handleCloseDetails}>
+            {/* <Button style={{ marginInline: "43%", marginTop: "20px", color: 'red' }} onClick={handleCloseDetails}>
               <Icon style={{ marginRight: "10px" }} fontSize="small">undo</Icon>
               <Link style={{ color: 'inherit' }} to={`/interviewManagement`}>Retour</Link>
-            </Button>
+            </Button> */}
             <Dialog open={dialogOpen} onClose={handleCloseDetails}>
               <Icon style={{ marginLeft: "370px" , marginTop : "10px"}} fontSize="small" onClick={handleCloseDetails} >close</Icon>
                 <DialogTitle>{selectedEvent && selectedEvent.title}</DialogTitle>
-                <DialogContent style={{ height: '270px', width: '400px' }} >
+                <DialogContent style={{ height: '340px', width: '400px' }} >
                   {selectedEvent && (
                     <div className="event-details">
                       <h3 className="red-text" style={{ marginBottom: "25px" }}>{selectedEvent.descrInter}</h3>
                       {assignedStudent && (<p className="thin-text"><strong>Nom de l'étudiant :</strong> {assignedStudent.firstname} {assignedStudent.lastname}</p>)}
                       <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(selectedEvent.dateInterv)}</p>
                       <p className="thin-text"><strong>Adresse :</strong>{selectedEvent.address}</p>
+                      <p className="thin-text"><strong>Type de rencontre :</strong>{selectedEvent.typeRencontre}</p>
                       <p className="thin-text"><strong>Type d'entretien :</strong>{selectedEvent.typeIntrv}</p>
                       <p className="thin-text"><strong>Etat entretien :</strong>{selectedEvent.statusInterv}</p>
                     </div>
@@ -245,10 +295,13 @@ function Calendrier() {
                           <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(selectedEvent._id)} >
                             Décliner
                           </Button>
-                          <Button style={{ color: 'red' }} >
-                            <Link style={{ color: 'inherit' }} to={`/interviewManagement`}>Modifier</Link>
+                          <Button style={{ color: 'red' }} onClick={() => {
+                            handleCloseDetails(); // Fermer le dialogue actuel
+                            handleOpenEditForm(selectedEvent); // Ouvrir le dialogue avec le formulaire rempli
+                          }} >
+                            Modifier
                           </Button>
-                        </div>
+                    </div>
                 </DialogContent>
                 <Dialog open={confirmationOpen} onClose={() => handleConfirmationClose(false)}>
                   <DialogTitle>Voulez-vous vraiment décliner cet entretien ?</DialogTitle>
@@ -265,6 +318,16 @@ function Calendrier() {
           </Grid>
         </Grid>
       </MDBox>
+      <Dialog open={showFormPopup} onClose={handleCloseFormPopup}>
+      <DialogActions>
+          <Button style={{color: 'red'}} onClick={handleCloseFormPopup}><Icon fontSize="medium">close</Icon></Button>
+        </DialogActions>
+        <DialogTitle style={{ display: 'flex' , justifyContent: 'center' }}>{selectedEvent ? "Modifier un entretien" : "Ajouter un entretien"}</DialogTitle>
+        <DialogContent style={{ display: 'flex' , justifyContent: 'center' }}>
+          <Forminput interviewId={interviewId} selectedEvent={selectedEvent} />
+        </DialogContent>
+        
+      </Dialog>
       <Footer />
     </DashboardLayout>
   );
