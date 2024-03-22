@@ -246,4 +246,6 @@ async function deleteUser (req, res) {
         res.status(500).json(err);
     }
 }
+
+
 module.exports={getall ,googlelogin,storeUserRole, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}

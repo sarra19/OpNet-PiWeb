@@ -7,8 +7,45 @@ const Token = require("../models/token");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+const path = require("path"); // Importer le module path
 
+// Configuration de multer pour le stockage des fichiers
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/"); // Spécifiez le répertoire de destination où les fichiers seront stockés
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now()); // Générez un nom de fichier unique
+  },
+});
 
+// Initialiser l'upload avec multer
+const upload = multer({ storage: storage });
+
+// Route pour télécharger et stocker l'image
+router.put("/uploadAvatar", upload.single("avatar"), async (req, res) => {
+  try {
+    const userId = req.body.userId; // récupérer l'ID de l'utilisateur associé à l'image
+    const avatarPath = req.file.path; // récupérer le chemin de l'image téléchargée
+
+    // Enregistrer le chemin de l'image dans la base de données pour l'utilisateur avec l'ID correspondant
+    await User.findByIdAndUpdate(userId, { profileImage: avatarPath });
+
+    res.status(200).send("Avatar uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading avatar:", error);
+    res.status(500).send("An error occurred while uploading avatar");
+  }
+});
+router.get('/images/:imageName', (req, res) => {
+	const imageName = req.params.imageName;
+	// Construire le chemin de l'image en utilisant path.join()
+	const imagePath = path.join(__dirname, '..', 'images', imageName);
+	// Envoyer le fichier image en tant que réponse
+	res.sendFile(imagePath);
+  });
+  
 // router.get('/', function(req,res){
 //     res.send("hello user");
 // });

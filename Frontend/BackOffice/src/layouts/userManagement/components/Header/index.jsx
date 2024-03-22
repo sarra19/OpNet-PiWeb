@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import Card from "@mui/material/Card";
@@ -10,26 +10,28 @@ import Tab from "@mui/material/Tab";
 import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
-import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-pofile.jpg";
-import { useParams } from "react-router-dom"; // Import useParams from React Router
+import { useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
+import MDAvatar from "components/MDAvatar";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const [userInfo, setUserInfo] = useState({});
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const { userId } = useParams(); // Extract userId from the URL using useParams
+  const { userId } = useParams();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     speciality: "",
-    
   });
+  const [avatarImage, setAvatarImage] = useState(null);
+
+  const inputRef = useRef(null);
+
   useEffect(() => {
     function handleTabsOrientation() {
       return window.innerWidth < breakpoints.values.sm
@@ -52,13 +54,21 @@ function Header({ children }) {
         }
         const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
         setUserInfo(response.data);
+        setFormData({
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          speciality: response.data.speciality,
+        });
+        if (response.data.profileImage) {
+          setAvatarImage(response.data.profileImage);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
 
     fetchUserData();
-  }, [userId]); // Fetch user data whenever userId changes
+  }, [userId]);
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
@@ -72,23 +82,41 @@ function Header({ children }) {
 
   const handleUpdateUserInfo = async () => {
     try {
-      // Send updated user info to the backend
-      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, userInfo);
+      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
       console.log(response.data);
-      // Close the edit dialog
       handleEditDialogClose();
     } catch (error) {
       console.error("Error updating user info:", error);
     }
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
+    setFormData({
+      ...formData,
       [name]: value,
     });
   };
+  const handleAvatarClick = () => {
+    inputRef.current.click();
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      formData.append("userId", userId); // Utilisez userId au lieu de sessionStorage.getItem("userId")
+      axios.put("http://localhost:5000/user/uploadAvatar", formData)
+        .then(response => {
+          console.log(response.data);
+          setAvatarImage(URL.createObjectURL(file));
+        })
+        .catch(error => {
+          console.error("Error uploading avatar:", error);
+        });
+    }
+  };
+  
 
   return (
     <MDBox position="relative" mb={5}>
@@ -119,9 +147,22 @@ function Header({ children }) {
         }}
       >
         <Grid container spacing={3} alignItems="center">
-          <Grid item>
-            <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
-          </Grid>
+        <Grid item>
+
+        <input
+    type="file"
+    ref={inputRef}
+    style={{ display: "none" }}
+    onChange={handleFileChange}
+  />
+  <MDAvatar
+    src={avatarImage}
+    alt={`${userInfo.firstname} ${userInfo.lastname}`}
+    sx={{ width: 120, height: 120 }}
+    onClick={handleAvatarClick}
+  />
+  </Grid>
+
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
@@ -167,14 +208,13 @@ function Header({ children }) {
         {children}
       </Card>
 
-      {/* Edit Dialog */}
       <Dialog open={openEditDialog} onClose={handleEditDialogClose}>
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
           <TextField
             label="First Name"
             name="firstname"
-            value={userInfo.firstname}
+            value={formData.firstname}
             onChange={handleChange}
             fullWidth
             margin="normal"
@@ -182,7 +222,7 @@ function Header({ children }) {
           <TextField
             label="Last Name"
             name="lastname"
-            value={userInfo.lastname}
+            value={formData.lastname}
             onChange={handleChange}
             fullWidth
             margin="normal"
@@ -190,7 +230,7 @@ function Header({ children }) {
           <TextField
             label="Speciality"
             name="speciality"
-            value={userInfo.speciality}
+            value={formData.speciality}
             onChange={handleChange}
             fullWidth
             margin="normal"

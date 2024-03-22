@@ -9,7 +9,7 @@ const http = require("http");
 const passport = require("passport");
 const app = express();
 const router = express.Router();
-
+app.use(express.static('images'));
 dotenv.config();
 const { Connect } = require("./config/connect.js");
 const userRouter = require("./routes/user");
@@ -37,6 +37,14 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Define a route for serving images
+app.get('/images/:imageName', (req, res) => {
+  const imageName = req.params.imageName;
+  // Construct the path to the image file
+  const imagePath = path.join(__dirname, 'images', imageName);
+  // Send the image file as the response
+  res.sendFile(imagePath);
+});
 // Routes
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
