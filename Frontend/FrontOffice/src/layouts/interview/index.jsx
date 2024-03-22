@@ -166,7 +166,7 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
   return (
     <DashboardLayout>
       <DashboardNavbar searchInput={searchInput} onSearchInputChange={handleSearchInputChange}/>
-      <MDBox mt={3}>
+      <MDBox mt={1}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8}>
             

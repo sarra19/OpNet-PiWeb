@@ -223,7 +223,7 @@ function Calendrier() {
           </CardContent>
         </Card>
       </div>
-      <Typography  mb={2.2} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
+      <Typography  mb={1.2} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
         Vos entretiens
         <Button style={{marginTop:"10px", color: 'red', marginLeft: "560px", justifyContent: 'flex-end' }} onClick={handleOpenAddForm} >
           <Icon style={{ marginRight: "10px" }} fontSize="small">add_to_photos</Icon>Ajouter entretien
