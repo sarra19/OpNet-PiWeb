@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -13,12 +14,19 @@ import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-pofile.jpg";
+import EditIcon from "@mui/icons-material/Edit";
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const [userInfo, setUserInfo] = useState({});
-  const userId = sessionStorage.getItem("userId"); // Retrieve userId from sessionStorage
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    speciality: "",
+  });
 
   useEffect(() => {
     function handleTabsOrientation() {
@@ -36,21 +44,55 @@ function Header({ children }) {
   useEffect(() => {
     async function fetchUserData() {
       try {
+        const userId = sessionStorage.getItem("userId");
         if (!userId) {
           console.error("User ID not found in sessionStorage");
           return;
         }
         const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
         setUserInfo(response.data);
+        setFormData({
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          speciality: response.data.speciality,
+        });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
 
     fetchUserData();
-  }, [userId]); // Fetch user data whenever userId changes
+  }, []);
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+
+  const handleEditDialogOpen = () => {
+    setOpenEditDialog(true);
+  };
+
+  const handleEditDialogClose = () => {
+    setOpenEditDialog(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleUpdateUserInfo = async () => {
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
+      console.log(response.data);
+      setUserInfo(formData);
+      handleEditDialogClose();
+    } catch (error) {
+      console.error("Error updating user info:", error);
+    }
+  };
 
   return (
     <MDBox position="relative" mb={5}>
@@ -88,6 +130,7 @@ function Header({ children }) {
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
                 {userInfo.firstname} {userInfo.lastname}
+                <EditIcon color="primary" onClick={handleEditDialogOpen} />
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
                 {userInfo.speciality}
@@ -127,6 +170,43 @@ function Header({ children }) {
         </Grid>
         {children}
       </Card>
+
+      {/* Edit Dialog */}
+      <Dialog open={openEditDialog} onClose={handleEditDialogClose}>
+        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="First Name"
+            name="firstname"
+            value={formData.firstname}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Last Name"
+            name="lastname"
+            value={formData.lastname}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Speciality"
+            name="speciality"
+            value={formData.speciality}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditDialogClose}>Cancel</Button>
+          <Button onClick={handleUpdateUserInfo} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </MDBox>
   );
 }

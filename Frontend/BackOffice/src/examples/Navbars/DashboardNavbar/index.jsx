@@ -33,6 +33,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
   const getUserRole = () => sessionStorage.getItem("userRole"); // Use sessionStorage instead of localStorage
+// Analyser l'URL actuelle pour obtenir les paramètres de requête
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+// Extraire la valeur du paramètre "userRole"
+const userRole = urlParams.get('userRole');
+const userId = urlParams.get('userId');
+
+// Utiliser la valeur de userRole comme nécessaire
+console.log(userRole);
+console.log(userId);
 
   useEffect(() => {
     // Clear userRole from sessionStorage when component mounts
@@ -111,7 +122,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox>
-              <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
+              <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard/${userRole}`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
                 User View
               </Button>
 

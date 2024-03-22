@@ -51,7 +51,6 @@ import PasswordReset from "layouts/authentication/PasswordReset";
 import Network from "layouts/network";
 import ProfileN from "layouts/network/profileN";
 import ChatManagement from "layouts/Chat/Chat";
-import Modifier from "layouts/profile/modify";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -59,13 +58,7 @@ const routes = [
     route: "/forgot-password",
     component: <ForgotPassword />,
   },
-  {
-    type: "route",
-    name: "Modify User", // Nom de la route affiché dans le sidenav
-    key: "Modify User", // Clé unique pour cette route
-    route: "/update/:userId", // Make sure it matches the backend route
-    component: <Modifier />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
-  },
+  
   {
     route: "/password-reset/:id/:token",
     component: <PasswordReset />,

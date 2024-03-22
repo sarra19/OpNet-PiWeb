@@ -29,9 +29,14 @@ function ChatManagement() {
     receiverId: '', // Add receiverId field
   });
   const [allUsers, setAllUsers] = useState([]); // State to store all users
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+  const userId = urlParams.get('userId');
+  console.log(userId);
 
   useEffect(() => {
-    const userId = window.sessionStorage.getItem('userId');
+   // const userId = window.sessionStorage.getItem('userId');
     if (!userId) {
       // Handle if userId is not available in session storage
       return;
@@ -66,14 +71,16 @@ function ChatManagement() {
   }, [sendMessage]);
 
   useEffect(() => {
-    socket.current.on("recieve-message", (data) => {
-      console.log(data);
-      setReceivedMessage(data);
-    });
-  }, []);
+    if (socket.current) {
+      socket.current.on("get-users", (users) => {
+        setOnlineUsers(users);
+      });
+    }
+  }, [socket]);
+  
 
   const checkOnlineStatus = (chat) => {
-    const userId = window.sessionStorage.getItem('userId');
+   // const userId = window.sessionStorage.getItem('userId');
     if (!userId) {
       // Handle if userId is not available in session storage
       return false;
@@ -107,7 +114,7 @@ function ChatManagement() {
 const handleAddNewChat = async () => {
   try {
     // Update newChatData with the sender ID
-    const userId = window.sessionStorage.getItem('userId');
+    //const userId = window.sessionStorage.getItem('userId');
     const updatedChatData = {
       ...newChatData,
       senderId: userId,

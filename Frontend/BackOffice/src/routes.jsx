@@ -106,14 +106,14 @@ const routes = [
     route: "/userManagement",
     component: <UserManagement />,
   },
-  {
-    type: "collapse",
-    name: "Chat",
-    key: "Chat",
-    icon: <Icon fontSize="small">chat</Icon>,
-    route: "/Chat",
-    component: <ChatManagement />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Chat",
+  //   key: "Chat",
+  //   icon: <Icon fontSize="small">chat</Icon>,
+  //   route: "/Chat",
+  //   component: <ChatManagement />,
+  // },
   {
     type: "collapse",
     name: "Offer Management",

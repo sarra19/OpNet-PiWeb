@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
-
 import { Link, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import AppBar from "@mui/material/AppBar";
@@ -19,6 +18,7 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
+import queryString from "query-string";
 import {
   navbar,
   navbarContainer,
@@ -28,11 +28,13 @@ import {
 } from "examples/Navbars/DashboardNavbar/styles";
 
 function DashboardNavbar({ absolute, light, isMini }) {
+  const location = useLocation();
+  const queryParams = queryString.parse(location.search);
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
-  const route = useLocation().pathname.split("/").slice(1);
+  const route = location.pathname.split("/").slice(1);
 
   const setUserRole = (role) => {
     sessionStorage.setItem("userRole", role);
@@ -66,6 +68,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const handleLogout = () => {
     sessionStorage.removeItem("userRole");
+    sessionStorage.removeItem("userId");
   };
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -121,19 +124,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
             <MDBox>
               {["Admin", "Subadmin", "Company", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
                 <Link 
-                to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}`} 
-                style={{ textDecoration: 'none' }} // Pour supprimer la soulignement par défaut
-              >
-                <Button 
-                  variant="outlined" 
-                  style={{ backgroundColor: '#E82227', color: '#fff' }}
+                  to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}&userId=${sessionStorage.getItem("userId")}`} 
+                  style={{ textDecoration: 'none' }} // Remove default underline
                 >
-                  Admin View
-                </Button>
-              </Link>
-              
+                  <Button 
+                    variant="outlined" 
+                    style={{ backgroundColor: '#E82227', color: '#fff' }}
+                  >
+                    Admin View
+                  </Button>
+                </Link>
               )}
-
               <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Logout</Button>
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
