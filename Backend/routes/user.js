@@ -38,6 +38,23 @@ router.put("/uploadAvatar", upload.single("avatar"), async (req, res) => {
     res.status(500).send("An error occurred while uploading avatar");
   }
 });
+router.put("/upload", upload.single("avatar"), async (req, res) => {
+	try {
+	  // Vérifier si un fichier a été téléchargé
+	  if (!req.file) {
+		return res.status(400).json({ message: "No file uploaded" });
+	  }
+  
+	  const avatarPath = req.file.path; // récupérer le chemin de l'image téléchargée
+  
+	  // Retourner le chemin de l'image téléchargée
+	  res.status(200).json({ avatarPath: avatarPath });
+	} catch (error) {
+	  console.error("Error uploading avatar:", error);
+	  res.status(500).json({ message: "An error occurred while uploading avatar" });
+	}
+  });
+  
 router.get('/images/:imageName', (req, res) => {
 	const imageName = req.params.imageName;
 	// Construire le chemin de l'image en utilisant path.join()
