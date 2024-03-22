@@ -1,7 +1,30 @@
-const express = require ("express");
-const router=express.Router()
-const Messages= require("../models/messages")
-const messageController=require("../controller/MessageController")
+const express = require("express");
+const router = express.Router();
+const Messages = require("../models/messages");
+const messageController = require("../controller/MessageController");
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, "../images/")); // Corriger le chemin de destination
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "-" + file.originalname); // Nom du fichier
+    },
+});
+
+// Initialisation de multer avec la configuration de stockage
+const upload = multer({ storage: storage });
+
+// Route pour gérer l'upload de fichiers
+router.post("/upload", upload.single("file"), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send("Aucun fichier n'a été téléchargé.");
+    }
+    res.send(req.file.filename); // Renvoyer le nom du fichier téléchargé
+});
+
 
 // router.get('/', function(req,res){
 //     res.send("hello express");
