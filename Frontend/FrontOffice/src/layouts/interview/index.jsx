@@ -15,14 +15,17 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { Alert, Icon } from "@mui/material";
+import { Alert, Icon, Pagination, PaginationItem } from "@mui/material";
 import clsx from "clsx"; //pour le blur
 function Interview() {
   const [searchInput, setSearchInput] = useState("");
   const [interviews, setInterviews] = useState([]);
   const [interviewToDelete, setInterviewToDelete] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [visibleInterviews, setVisibleInterviews] = useState(5);
+  // const [visibleInterviews, setVisibleInterviews] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const interviewsPerPage = 3; // Nombre d'entretiens par page
+
   
   useEffect(() => {
     getInterviews();
@@ -41,9 +44,9 @@ function Interview() {
 };
 
 
-  const handleVoirPlusClick = () => {
-    setVisibleInterviews((prevVisibleInterviews) => prevVisibleInterviews + 5);
-  };
+  // const handleVoirPlusClick = () => {
+  //   setVisibleInterviews((prevVisibleInterviews) => prevVisibleInterviews + 5);
+  // };
 
   const formatInterviewDate = (dateString) => {
     const date = new Date(dateString);
@@ -148,10 +151,22 @@ const isInterviewExpired = (dateString) => {
   return interviewDate < currentDate;
 }; 
   
+// Calcul du nombre total de pages
+const pageCount = Math.ceil(filteredInterviews.length / interviewsPerPage);
+
+// Fonction pour gérer le changement de page
+const handlePageChange = (event, value) => {
+  setCurrentPage(value);
+};
+// Index du premier entretien de la page actuelle
+const indexOfLastInterview = currentPage * interviewsPerPage;
+const indexOfFirstInterview = indexOfLastInterview - interviewsPerPage;
+const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexOfLastInterview);
+
   return (
     <DashboardLayout>
       <DashboardNavbar searchInput={searchInput} onSearchInputChange={handleSearchInputChange}/>
-      <MDBox mt={3} mb={3}>
+      <MDBox mt={3}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8}>
             
@@ -166,45 +181,46 @@ const isInterviewExpired = (dateString) => {
                 <strong>{message}</strong>
                 </Alert>
             )}
-            <Grid container spacing={2} mb={13}>
+            <Grid container spacing={2} >
 
-            {filteredInterviews.slice(0, visibleInterviews).map((interview, index) => (
-                <Grid item key={interview.id || index } xs={12} sm={6} md={4}>
+            {currentInterviews.map((interview, index) => (
+              <Grid item key={interview.id || index } xs={12} sm={6} md={4}>
                   <Card className={clsx({expiredInterview: isInterviewExpired(interview.dateInterv)})} style={{ height: '360px', width: '100%' }}>
-                    <CardContent>
-                    <Typography variant="h5">{interview.title}</Typography>
-                      <Typography variant="h6" mt={2}>
-                        <div className="interview-details">
-                          <h4 className="red-text" style={{ textAlign: "center", marginBottom: "25px" }}>{interview.descrInter}</h4>
-                          <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(interview.dateInterv)}</p>
-                          <p className="thin-text"><strong>Adresse :</strong>{interview.address}</p>
-                          <p className="thin-text"><strong>Type d'entretien :</strong>{interview.typeIntrv}</p>
-                          <p className="thin-text"><strong>Etat entretien :</strong>{interview.statusInterv}</p>
-                        </div>
-                      </Typography>
-                      <div style={{ display: "flex", marginTop: "16px" }}>
-                        <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} >
-                          Décliner
-                        </Button>
-                        <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"} >
-                          Autre date ?
-                        </Button>
-                      </div>
-                    </CardContent>
+                      <CardContent>
+                          <Typography variant="h5">{interview.title}</Typography>
+                          <Typography variant="h6" mt={2}>
+                              <div className="interview-details">
+                                  <h4 className="red-text" style={{ textAlign: "center", marginBottom: "25px" }}>{interview.descrInter}</h4>
+                                  <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(interview.dateInterv)}</p>
+                                  <p className="thin-text"><strong>Adresse :</strong>{interview.address}</p>
+                                  <p className="thin-text"><strong>Type d'entretien :</strong>{interview.typeIntrv}</p>
+                                  <p className="thin-text"><strong>Etat entretien :</strong>{interview.statusInterv}</p>
+                              </div>
+                          </Typography>
+                          <div style={{ display: "flex", marginTop: "16px" }}>
+                              <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} >
+                                  Décliner
+                              </Button>
+                              <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"} >
+                                  Autre date ?
+                              </Button>
+                          </div>
+                      </CardContent>
                   </Card>
-                </Grid>
-              ))}
-              {filteredInterviews.length > visibleInterviews && (
-                <Card  style={{ height: '360px', width: '31%', background: 'transparent' , marginTop:"16px" , marginLeft:"17px"}}>
-                    <Button
-                      onClick={handleVoirPlusClick}
-                      style={{color: 'red' ,  margin:"50px",marginTop: "60%"  }}
-                    >
-                      Voir plus
-                      <Icon style={{ marginLeft: "10px" }} fontSize="small">keyboard_double_arrow_down</Icon>
-                    </Button>
-                    </Card>
-                  )}
+              </Grid>
+          ))}
+
+              {/* {filteredInterviews.length > visibleInterviews && (
+                // <Card  style={{ height: '360px', width: '31%', background: 'transparent' , marginTop:"16px" , marginLeft:"17px"}}>
+                //     <Button
+                //       onClick={handleVoirPlusClick}
+                //       style={{color: 'red' ,  margin:"50px",marginTop: "60%"  }}
+                //     >
+                //       Voir plus
+                //       <Icon style={{ marginLeft: "10px" }} fontSize="small">keyboard_double_arrow_down</Icon>
+                //     </Button>
+                //     </Card>
+                  )} */}
             </Grid>
           </Grid>
         </Grid>
@@ -219,7 +235,20 @@ const isInterviewExpired = (dateString) => {
             Oui
           </Button>
         </DialogActions>
-      </Dialog>       
+      </Dialog>  
+      {/* Pagination */}
+      <div style={{ display: 'flex', justifyContent: 'center' , marginTop: "50px" , marginBottom: "20px"}}>
+      <Pagination
+        count={pageCount}
+        page={currentPage}
+        onChange={handlePageChange}
+        boundaryCount={2}
+        siblingCount={0}
+        defaultPage={1}
+        showFirstButton
+        showLastButton
+      />
+    </div>     
       <Footer />
     </DashboardLayout>
   );
