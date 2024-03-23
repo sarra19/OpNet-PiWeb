@@ -8,13 +8,341 @@ import Footer from "examples/Footer";
 import Header from "layouts/profile/components/Header";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import MDBox from "components/MDBox";
+import { isValid } from "date-fns";
+import Autocomplete from "@mui/material/Autocomplete";
+const countryOptions = [
+  "United States",
+  "United Kingdom",
+  "Canada",
+  "Australia",
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Antigua and Barbuda",
+  "Argentina",
+  "Armenia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia and Herzegovina",
+  "Botswana",
+  "Brazil",
+  "Brunei",
+  "Bulgaria",
+  "Burkina Faso",
+  "Burundi",
+  "Cabo Verde",
+  "Cambodia",
+  "Cameroon",
+  "Central African Republic",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Comoros",
+  "Congo, Democratic Republic of the",
+  "Congo, Republic of the",
+  "Costa Rica",
+  "Croatia",
+  "Cuba",
+  "Cyprus",
+  "Czech Republic",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "East Timor (Timor-Leste)",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Eswatini",
+  "Ethiopia",
+  "Fiji",
+  "Finland",
+  "France",
+  "Gabon",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Greece",
+  "Grenada",
+  "Guatemala",
+  "Guinea",
+  "Guinea-Bissau",
+  "Guyana",
+  "Haiti",
+  "Honduras",
+  "Hungary",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Jordan",
+  "Kazakhstan",
+  "Kenya",
+  "Kiribati",
+  "Korea, North",
+  "Korea, South",
+  "Kosovo",
+  "Kuwait",
+  "Kyrgyzstan",
+  "Laos",
+  "Latvia",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Liechtenstein",
+  "Lithuania",
+  "Luxembourg",
+  "Madagascar",
+  "Malawi",
+  "Malaysia",
+  "Maldives",
+  "Mali",
+  "Malta",
+  "Marshall Islands",
+  "Mauritania",
+  "Mauritius",
+  "Mexico",
+  "Micronesia",
+  "Moldova",
+  "Monaco",
+  "Mongolia",
+  "Montenegro",
+  "Morocco",
+  "Mozambique",
+  "Myanmar (Burma)",
+  "Namibia",
+  "Nauru",
+  "Nepal",
+  "Netherlands",
+  "New Zealand",
+  "Nicaragua",
+  "Niger",
+  "Nigeria",
+  "North Macedonia",
+  "Norway",
+  "Oman",
+  "Pakistan",
+  "Palau",
+  "Palestine",
+  "Panama",
+  "Papua New Guinea",
+  "Paraguay",
+  "Peru",
+  "Philippines",
+  "Poland",
+  "Portugal",
+  "Qatar",
+  "Romania",
+  "Russia",
+  "Rwanda",
+  "Saint Kitts and Nevis",
+  "Saint Lucia",
+  "Saint Vincent and the Grenadines",
+  "Samoa",
+  "San Marino",
+  "Sao Tome and Principe",
+  "Saudi Arabia",
+  "Senegal",
+  "Serbia",
+  "Seychelles",
+  "Sierra Leone",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "Solomon Islands",
+  "Somalia",
+  "South Africa",
+  "South Sudan",
+  "Spain",
+  "Sri Lanka",
+  "Sudan",
+  "Suriname",
+  "Sweden",
+  "Switzerland",
+  "Syria",
+  "Taiwan",
+  "Tajikistan",
+  "Tanzania",
+  "Thailand",
+  "Togo",
+  "Tonga",
+  "Trinidad and Tobago",
+  "Tunisia",
+  "Turkey",
+  "Turkmenistan",
+  "Tuvalu",
+  "Uganda",
+  "Ukraine",
+  "United Arab Emirates",
+  "Uruguay",
+  "Uzbekistan",
+  "Vanuatu",
+  "Vatican City",
+  "Venezuela",
+  "Vietnam",
+  "Yemen",
+  "Zambia",
+  "Zimbabwe"
+];
+
+// Définir la liste des langues
+const languageOptions = [
+  "English",
+  "French",
+  "Spanish",
+  "German",
+  "Chinese (Mandarin)",
+  "Hindi",
+  "Arabic",
+  "Bengali",
+  "Portuguese",
+  "Russian",
+  "Japanese",
+  "Punjabi",
+  "Turkish",
+  "Korean",
+  "Italian",
+  "Vietnamese",
+  "Tamil",
+  "Urdu",
+  "Gujarati",
+  "Polish",
+  "Persian",
+  "Malayalam",
+  "Telugu",
+  "Thai",
+  "Javanese",
+  "Kannada",
+  "Burmese",
+  "Odia",
+  "Sunda",
+  "Sindhi",
+  "Romanian",
+  "Dutch",
+  "Greek",
+  "Swedish",
+  "Czech",
+  "Danish",
+  "Finnish",
+  "Hungarian",
+  "Norwegian",
+  "Slovak",
+  "Bulgarian",
+  "Catalan",
+  "Hebrew",
+  "Indonesian",
+  "Malay",
+  "Swahili",
+  "Ukrainian",
+  "Lithuanian",
+  "Filipino",
+  "Slovenian",
+  "Latvian",
+  "Estonian",
+  "Icelandic",
+  "Vietnamese",
+  "Yoruba",
+  "Zulu",
+  "Marathi",
+  "Swedish",
+  "Tagalog",
+  "Hausa",
+  "Serbian",
+  "Albanian",
+  "Azerbaijani",
+  "Igbo",
+  "Amharic",
+  "Farsi",
+  "Pashto",
+  "Tajik",
+  "Somali",
+  "Kurdish",
+  "Tigrinya",
+  "Malagasy",
+  "Hmong",
+  "Uzbek",
+  "Kinyarwanda",
+  "Sinhala",
+  "Bhojpuri",
+  "Turkmen",
+  "Cebuano",
+];
 
 function Overview() {
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [SelectedCountries, setSelectedCountries] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editingSection, setEditingSection] = useState(null);
+  const handleOpenDialog = (section) => {
+    setEditingSection(section);
+    setOpenDialog(true);
+    // Pre-fill the dialog fields with existing data
+    setFormData({
+      ...formData,
+      [section]: userInfo[section],
+    });
+  };
+
+ 
+
+  const handleUpdateUser = async () => {
+    try {
+      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
+      console.log(response.data);
+      setOpenDialog(false);
+      setUserInfo(formData);
+      setOpenContactDialog(false);
+      setOpenProfileDialog(false);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
+  const handleLanguagesChange = (event, newLanguages) => {
+    setSelectedLanguages(newLanguages);
+    setFormData({
+      ...formData,
+      languages: newLanguages.join(", "),
+    });
+  };
+
+  const handleCountriesChange = (event, newCountries) => {
+    setSelectedCountries(newCountries);
+    setFormData({
+      ...formData,
+      country: newCountries.join(", "),
+    });
+  };
+
+
   const [userInfo, setUserInfo] = useState({});
 
   const [openContactDialog, setOpenContactDialog] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const [editingSection, setEditingSection] = useState(null);
   const userId = sessionStorage.getItem("userId");
 
   const [formData, setFormData] = useState({
@@ -29,9 +357,32 @@ function Overview() {
     experience: "",
     formation: "",
     skills: "",
-    certificates: ""
+    certificates: "",
+    emailError: "",
+
+    phoneError: "",
+
   });
 
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let errorMessage = "";
+    if (name === "email") {
+      if (!/\S+@\S+\.\S{2,}/.test(value)) {
+        errorMessage = "Invalid email format";
+      }
+    } else if (name === "phone") {
+      if (!/^\d{8}$/.test(value)) {
+        errorMessage = "Phone must be 8 numbers";
+      }
+    }
+    setFormData({
+      ...formData,
+      [name]: value,
+      [`${name}Error`]: errorMessage,
+    });
+  };
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -77,28 +428,13 @@ function Overview() {
     setOpenContactDialog(false);
     setOpenProfileDialog(false);
     setEditingSection(null);
+    setOpenDialog(false);
+
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleUpdateUser = async () => {
-    try {
-      // Envoyer les données modifiées au backend
-      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
-      console.log(response.data);
-      setOpenContactDialog(false);
-      setOpenProfileDialog(false);
-      // Facultatif : mettre à jour les infos utilisateur affichées sans faire une autre requête
-      setUserInfo(formData);
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
-  };
+
+
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -107,8 +443,8 @@ function Overview() {
         {userInfo && (
           <>
             <div style={containerStyle}>
-            <div style={columnStyle}>
-                <div style={sectionStyle}>
+              <div style={columnStyle}>
+              <div style={sectionStyle}>
                   <h3 style={headingStyle}>
                     Contact
                     <EditIcon style={editIconStyle} color="primary" onClick={handleOpenContactDialog} />
@@ -135,6 +471,7 @@ function Overview() {
                   </div>
                 </div>
               </div>
+
               <div style={columnStyle}>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>About Me
@@ -187,7 +524,28 @@ function Overview() {
               </div>
             </div>
             {/* Dialogue pour modifier les informations de contact */}
-            <Dialog open={openContactDialog} onClose={handleCloseDialog}>
+            {/* Dialog for editing sections */}
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+              <DialogTitle>Edit {editingSection}</DialogTitle>
+              <DialogContent>
+                <TextField
+                  name={editingSection}
+                  label={editingSection}
+                  value={formData[editingSection]}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                />
+              </DialogContent>
+              
+              <DialogActions>
+                <Button onClick={handleCloseDialog}>Cancel</Button>
+                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+              </DialogActions>
+            </Dialog>
+
+ {/* Dialogue pour modifier les informations de contact */}
+ <Dialog open={openContactDialog} onClose={handleCloseDialog}>
               <DialogTitle>Modify Contact Information</DialogTitle>
               <DialogContent>
                 <TextField
@@ -198,6 +556,9 @@ function Overview() {
                   fullWidth
                   margin="normal"
                 />
+                {formData.phoneError && (
+                  <p style={{ color: "red" }}>{formData.phoneError}</p>
+                )}
                 <TextField
                   name="email"
                   label="Email"
@@ -205,11 +566,13 @@ function Overview() {
                   onChange={handleChange}
                   fullWidth
                   margin="normal"
-                />
+                />{formData.emailError && (
+                  <p style={{ color: "red" }}>{formData.emailError}</p>
+                )}
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseDialog}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={handleUpdateUser} color="primary" disabled={!isValid}>Save</Button>
               </DialogActions>
             </Dialog>
 
@@ -225,28 +588,28 @@ function Overview() {
                   fullWidth
                   margin="normal"
                 />
-                <TextField
-                  name="country"
-                  label="Country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
-                <TextField
-                  name="languages"
-                  label="Languages"
-                  value={formData.languages}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
+        <Autocomplete
+  multiple
+  options={countryOptions}
+  value={SelectedCountries}
+  onChange={handleCountriesChange}
+  renderInput={(params) => <TextField {...params} label="Countries" />}
+/>
+              <Autocomplete
+          multiple
+          options={languageOptions}
+          value={selectedLanguages}
+          onChange={handleLanguagesChange}
+          renderInput={(params) => <TextField {...params} label="Languages" />}
+        />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseDialog}>Cancel</Button>
                 <Button onClick={handleUpdateUser} color="primary">Save</Button>
               </DialogActions>
             </Dialog>
+
+
 
           </>
         )}

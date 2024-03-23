@@ -25,8 +25,11 @@ function Header({ children }) {
     firstname: "",
     lastname: "",
     speciality: "",
+    firstnameError: "",
+    lastnameError: "",
   });
   const [avatarImage, setAvatarImage] = useState(null);
+  const [isValid, setIsValid] = useState(true); // State variable for form validation
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -78,12 +81,26 @@ function Header({ children }) {
     setOpenEditDialog(false);
   };
 
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let errorMessage = "";
+    let isValid = true; // Initially assume input is valid
+    if (name === "firstname" || name === "lastname") {
+      if (/\d/.test(value)) {
+        errorMessage = "Name should not contain numbers";
+        isValid = false; // Set isValid to false if validation fails
+      } else if (value.length <= 3) {
+        errorMessage = "Name should be more than 3 characters";
+        isValid = false; // Set isValid to false if validation fails
+      }
+    } 
     setFormData({
       ...formData,
       [name]: value,
+      [`${name}Error`]: errorMessage,
     });
+    setIsValid(isValid); // Update isValid state
   };
 
   const handleUpdateUserInfo = async () => {
@@ -218,7 +235,9 @@ function Header({ children }) {
             onChange={handleChange}
             fullWidth
             margin="normal"
-          />
+          />{formData.firstnameError && (
+            <p style={{ color: "red" }}>{formData.firstnameError}</p>
+          )}
           <TextField
             label="Last Name"
             name="lastname"
@@ -226,7 +245,9 @@ function Header({ children }) {
             onChange={handleChange}
             fullWidth
             margin="normal"
-          />
+          />{formData.lastnameError && (
+            <p style={{ color: "red" }}>{formData.lastnameError}</p>
+          )}
           <TextField
             label="Speciality"
             name="speciality"
@@ -238,9 +259,8 @@ function Header({ children }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditDialogClose}>Cancel</Button>
-          <Button onClick={handleUpdateUserInfo} color="primary">
-            Save
-          </Button>
+          <Button onClick={handleUpdateUserInfo} color="primary" disabled={!isValid}>Save</Button>
+
         </DialogActions>
       </Dialog>
     </MDBox>
