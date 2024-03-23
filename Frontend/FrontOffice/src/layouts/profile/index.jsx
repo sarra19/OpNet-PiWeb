@@ -291,12 +291,104 @@ const languageOptions = [
   "Turkmen",
   "Cebuano",
 ];
+const skillsOptions = [
+  // Programming Languages and Technologies
+  "JavaScript",
+  "React",
+  "Node.js",
+  "HTML",
+  "CSS",
+  "Python",
+  "Java",
+  "C++",
+  "C#",
+  "SQL",
+  "Angular",
+  "Vue.js",
+  "TypeScript",
+  "PHP",
+  "ASP.NET",
+  "Ruby",
+  "Swift",
+  "Objective-C",
+  "Kotlin",
+  "Django",
+  "Flask",
+  "Spring",
+  "Hibernate",
+  "jQuery",
+  "Bootstrap",
+  "Sass",
+  "Less",
+  "TensorFlow",
+  "PyTorch",
+  "Keras",
+  // Artisan Skills
+  "Woodworking",
+  "Metalworking",
+  "Pottery",
+  "Glassblowing",
+  "Sculpting",
+  "Painting",
+  "Drawing",
+  "Calligraphy",
+  "Jewelry Making",
+  "Knitting",
+  "Crocheting",
+  // Computer Science Skills
+  "Data Structures",
+  "Algorithms",
+  "Software Engineering",
+  "Networking",
+  "Cybersecurity",
+  "Artificial Intelligence",
+  "Machine Learning",
+  "Computer Vision",
+  "Natural Language Processing",
+  "Big Data",
+  "Data Science",
+  "Data Analysis",
+  "Data Visualization",
+  "Blockchain",
+  "Cloud Computing",
+  "DevOps",
+  "Web Development",
+  "Mobile App Development",
+  // Healthcare Skills
+  "Medical Terminology",
+  "Patient Care",
+  "Medical Coding",
+  "Nursing",
+  "Pharmacy",
+  "Medical Imaging",
+  "Health Informatics",
+  "Physical Therapy",
+  "Occupational Therapy",
+  "Speech Therapy",
+  "Emergency Medicine",
+  "Anesthesiology",
+  "Cardiology",
+  "Dermatology",
+  "Endocrinology",
+  // Add more skills as needed
+];
 
 function Overview() {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [SelectedCountries, setSelectedCountries] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
+
+  const handleSkillsChange = (event, newSkills) => {
+    setSelectedSkills(newSkills);
+    setFormData({
+      ...formData,
+      skills: newSkills.join(", "),
+    });
+  };
+
   const handleOpenDialog = (section) => {
     setEditingSection(section);
     setOpenDialog(true);
@@ -525,24 +617,34 @@ function Overview() {
             </div>
             {/* Dialogue pour modifier les informations de contact */}
             {/* Dialog for editing sections */}
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-              <DialogTitle>Edit {editingSection}</DialogTitle>
-              <DialogContent>
-                <TextField
-                  name={editingSection}
-                  label={editingSection}
-                  value={formData[editingSection]}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
-              </DialogContent>
-              
-              <DialogActions>
-                <Button onClick={handleCloseDialog}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
-              </DialogActions>
-            </Dialog>
+<Dialog open={openDialog} onClose={handleCloseDialog}>
+  <DialogTitle>Edit {editingSection}</DialogTitle>
+  <DialogContent>
+    {editingSection === "skills" && (
+      <Autocomplete
+        multiple
+        options={skillsOptions}
+        value={selectedSkills}
+        onChange={handleSkillsChange}
+        renderInput={(params) => <TextField {...params} label="Skills" />}
+      />
+    )}
+    {editingSection !== "skills" && (
+      <TextField
+        name={editingSection}
+        label={editingSection}
+        value={formData[editingSection]}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+      />
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog}>Cancel</Button>
+    <Button onClick={handleUpdateUser} color="primary">Save</Button>
+  </DialogActions>
+</Dialog>
 
  {/* Dialogue pour modifier les informations de contact */}
  <Dialog open={openContactDialog} onClose={handleCloseDialog}>
