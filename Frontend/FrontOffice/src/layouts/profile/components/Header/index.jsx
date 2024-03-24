@@ -14,7 +14,7 @@ import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
 import backgroundImage from "assets/images/bg-pofile.jpg";
 import EditIcon from "@mui/icons-material/Edit";
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Autocomplete } from "@mui/material";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
@@ -24,13 +24,33 @@ function Header({ children }) {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
+    institution: "", 
+
     speciality: "",
     firstnameError: "",
     lastnameError: "",
   });
+  const institutionOptions = [
+    "test5",
+    "tt",
+    "uu "];
   const [avatarImage, setAvatarImage] = useState(null);
   const [isValid, setIsValid] = useState(true); // State variable for form validation
   const inputRef = useRef(null);
+  const [selectedInst, setSelectedInst] = useState([]);
+  const [InstOptions, setInstOptions] = useState([...institutionOptions]);
+
+  const handleAddInst = () => {
+    // Open a dialog or prompt for users to enter the new education option
+    const newInstOption = prompt("Enter the new institution option:");
+    if (newInstOption) {
+      // Add the new education option to the existing options
+      const updatedInstOptions = [...institutionOptions, newInstOption];
+      setInstOptions(updatedInstOptions);
+  
+      // Select the newly added education option
+      setSelectedInst([...selectedInst, newInstOption]);
+    }}
 
   useEffect(() => {
     function handleTabsOrientation() {
@@ -59,6 +79,7 @@ function Header({ children }) {
           firstname: response.data.firstname,
           lastname: response.data.lastname,
           speciality: response.data.speciality,
+          institution: response.data.institution,
         });
         if (response.data.profileImage) {
           setAvatarImage(response.data.profileImage);
@@ -189,6 +210,9 @@ function Header({ children }) {
               <MDTypography variant="button" color="text" fontWeight="regular">
                 {userInfo.speciality}
               </MDTypography>
+              <MDTypography variant="button" color="text" fontWeight="regular">
+              {formData.institution ? ` à ${formData.institution}` : ''}
+              </MDTypography>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
@@ -256,6 +280,15 @@ function Header({ children }) {
             fullWidth
             margin="normal"
           />
+        <Autocomplete
+    options={institutionOptions} // Provide options for institutions
+    value={formData.institution} // Value from state
+    onChange={(event, newValue) => {
+      setFormData({ ...formData, institution: newValue });
+    }}
+    renderInput={(params) => <TextField {...params} label="Institution" />}
+  />
+  <Button onClick={handleAddInst}>Add New</Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditDialogClose}>Cancel</Button>

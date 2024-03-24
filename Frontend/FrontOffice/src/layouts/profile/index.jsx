@@ -291,17 +291,17 @@ const languageOptions = [
   "Turkmen",
   "Cebuano",
 ];
-const initialExperienceOptions  = [
+const initialExperienceOptions = [
   "test5",
   "tt",
   "uu "];
-  const initialCertifOptions   = [
-    "ttyu",
-    "tt",
-    "uu "];
-  
+const initialCertifOptions = [
+  "ttyu",
+  "tt",
+  "uu "];
 
-const initialEducationOptions  = [
+
+const initialEducationOptions = [
   "École Nationale d'Ingénieurs de Sousse",
   "École Nationale d'Ingénieurs de Bizerte",
   "École Nationale d'Ingénieurs de Monastir",
@@ -431,13 +431,25 @@ function Overview() {
   const [editingSection, setEditingSection] = useState(null);
   const [openExperienceDialog, setOpenExperienceDialog] = useState(false);
 
-// // Créez une fonction pour ouvrir le dialogue de l'expérience
-// const handleOpenExperienceDialog = () => {
-//   setOpenExperienceDialog(true);
-// };
+  const [selectedDateOfBirth, setSelectedDateOfBirth] = useState(null); // State for Date of Birth
+  const [imageData, setImageData] = useState(null);
 
-// Créez un nouvel état pour stocker les options de l'expérience
-const [selectedExperience, setSelectedExperience] = useState([]);
+  // Function to handle changes in Date of Birth
+  const handleDateOfBirthChange = (date) => {
+    setSelectedDateOfBirth(date);
+    setFormData({
+      ...formData,
+      dateOfBirth: date, // Update the formData state with the selected date
+    });
+  };
+
+  // // Créez une fonction pour ouvrir le dialogue de l'expérience
+  // const handleOpenExperienceDialog = () => {
+  //   setOpenExperienceDialog(true);
+  // };
+
+  // Créez un nouvel état pour stocker les options de l'expérience
+  const [selectedExperience, setSelectedExperience] = useState([]);
   const handleAddEducation = () => {
     // Open a dialog or prompt for users to enter the new education option
     const newEducationOption = prompt("Enter the new education option:");
@@ -445,7 +457,7 @@ const [selectedExperience, setSelectedExperience] = useState([]);
       // Add the new education option to the existing options
       const updatedEducationOptions = [...EducationOptions, newEducationOption];
       setEducationOptions(updatedEducationOptions);
-  
+
       // Select the newly added education option
       setSelectedEducation([...selectedEducation, newEducationOption]);
     }
@@ -455,23 +467,31 @@ const [selectedExperience, setSelectedExperience] = useState([]);
     const newCertifOptions = prompt("Enter the new certificate option:");
     if (newCertifOptions) {
       // Add the new education option to the existing options
-      const updatedEducationOptions = [...CertifOptions, newCertifOptions];
+      const updatedCertifOptions = [...CertifOptions, newCertifOptions];
       setCertifOptions(updatedCertifOptions);
-  
+
       // Select the newly added education option
       setSelectedCertif([...selectedCertif, newCertifOptions]);
     }
   };
   // Ajoutez une fonction pour gérer l'ajout d'une nouvelle option d'expérience
-const handleAddExperience = () => {
-  const newExperienceOption = prompt("Enter the new experience option:");
-  if (newExperienceOption) {
-    const updatedExperienceOptions = [...experienceOptions, newExperienceOption];
-    setExperienceOptions(updatedExperienceOptions);
-    setSelectedExperience([...selectedExperience, newExperienceOption]);
-  }
-};
-  
+  const handleAddExperience = () => {
+    const newExperienceOption = prompt("Enter the new experience option:");
+    if (newExperienceOption) {
+      const updatedExperienceOptions = [...experienceOptions, newExperienceOption];
+      setExperienceOptions(updatedExperienceOptions);
+      setSelectedExperience([...selectedExperience, newExperienceOption]);
+    }
+  };
+  const handleAddSkills = () => {
+    const newSkillsOption = prompt("Enter the new skills option:");
+    if (newSkillsOption) {
+      const updatedSkillsOptions = [...skillsOptions, newSkillsOption];
+      setSelectedSkills(updatedSkillsOptions);
+      setSelectedSkills([...selectedSkills, newSkillsOption]);
+    }
+  };
+
   const handleSkillsChange = (event, newSkills) => {
     setSelectedSkills(newSkills);
     setFormData({
@@ -493,8 +513,8 @@ const handleAddExperience = () => {
       certificates: newCertif.join(", "),
     });
   };
-  
-  
+
+
   const handleOpenDialog = (section) => {
     setEditingSection(section);
     setOpenDialog(true);
@@ -505,7 +525,7 @@ const handleAddExperience = () => {
     });
   };
 
- 
+
 
   const handleUpdateUser = async () => {
     try {
@@ -523,7 +543,7 @@ const handleAddExperience = () => {
       console.error("Error updating user:", error);
     }
   };
-  
+
 
   const handleLanguagesChange = (event, newLanguages) => {
     setSelectedLanguages(newLanguages);
@@ -547,6 +567,7 @@ const handleAddExperience = () => {
   const [openContactDialog, setOpenContactDialog] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const userId = sessionStorage.getItem("userId");
+  const [openDialogCv, setOpenDialogCv] = useState(false);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -646,6 +667,46 @@ const handleAddExperience = () => {
 
 
 
+  const handleFileChange = (event) => {
+    // Récupérer le fichier téléchargé
+    const file = event.target.files[0];
+    // Lire le contenu du fichier en tant que données binaires
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // Stocker les données de l'image
+      setImageData(reader.result);
+    };
+    // Lire le contenu du fichier en tant que données binaires
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    const fileInput = event.target.querySelector('input[type="file"]');
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      formData.append('cV', file);
+  
+      try {
+        const userId = sessionStorage.getItem("userId");
+        const response = await axios.put(`http://localhost:5000/user/uploadCV/${userId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('File uploaded successfully:', response.data);
+        // Update state with the uploaded image data
+        setImageData(response.data.imageUrl);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    } else {
+      console.error('No file selected');
+    }
+  };
+  
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -655,7 +716,7 @@ const handleAddExperience = () => {
           <>
             <div style={containerStyle}>
               <div style={columnStyle}>
-              <div style={sectionStyle}>
+                <div style={sectionStyle}>
                   <h3 style={headingStyle}>
                     Contact
                     <EditIcon style={editIconStyle} color="primary" onClick={handleOpenContactDialog} />
@@ -669,7 +730,7 @@ const handleAddExperience = () => {
                 </div>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Profile Information
-                  <EditIcon style={editIconStyle} color="primary" onClick={handleOpenProfileDialog} />
+                    <EditIcon style={editIconStyle} color="primary" onClick={handleOpenProfileDialog} />
                   </h3>
                   <div style={contactContainer}>
                     <p><strong>Date of Birth:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
@@ -680,6 +741,12 @@ const handleAddExperience = () => {
                   <div style={contactContainer}>
                     <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                   </div>
+                </div>
+                <div>
+                  <h2>My CV</h2>
+                  
+                  <img src={userInfo.cV} alt="Uploaded" onClick={() => setOpenDialogCv(true)} />
+
                 </div>
               </div>
 
@@ -694,7 +761,7 @@ const handleAddExperience = () => {
                 </div>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Experience
-                    <EditIcon color="primary" onClick={() => setOpenExperienceDialog(true)}  />
+                    <EditIcon color="primary" onClick={() => setOpenExperienceDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
 
@@ -723,7 +790,7 @@ const handleAddExperience = () => {
 
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Certificates
-                  <EditIcon color="primary" onClick={() => setOpenCertifDialog(true)} />
+                    <EditIcon color="primary" onClick={() => setOpenCertifDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
 
@@ -735,37 +802,41 @@ const handleAddExperience = () => {
             </div>
             {/* Dialogue pour modifier les informations de contact */}
             {/* Dialog for editing sections */}
-<Dialog open={openDialog} onClose={handleCloseDialog}>
-  <DialogTitle>Edit {editingSection}</DialogTitle>
-  <DialogContent>
-    {editingSection === "skills" && (
-      <Autocomplete
-        multiple
-        options={skillsOptions}
-        value={selectedSkills}
-        onChange={handleSkillsChange}
-        renderInput={(params) => <TextField {...params} label="Skills" />}
-      />
-    )}
-    {editingSection !== "skills" && (
-      <TextField
-        name={editingSection}
-        label={editingSection}
-        value={formData[editingSection]}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-    )}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseDialog}>Cancel</Button>
-    <Button onClick={handleUpdateUser} color="primary">Save</Button>
-  </DialogActions>
-</Dialog>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+              <DialogTitle>Edit {editingSection}</DialogTitle>
+              <DialogContent>
+                {editingSection === "skills" && (
+                  <Autocomplete
+                    multiple
+                    options={skillsOptions}
+                    value={selectedSkills}
+                    onChange={handleSkillsChange}
+                    renderInput={(params) => <TextField {...params} label="Skills" />}
+                  />
 
- {/* Dialogue pour modifier les informations de contact */}
- <Dialog open={openContactDialog} onClose={handleCloseDialog}>
+
+                )}
+                {editingSection !== "skills" && (
+                  <TextField
+                    name={editingSection}
+                    label={editingSection}
+                    value={formData[editingSection]}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                  />
+
+                )}
+                <Button onClick={handleAddSkills}>Add New</Button>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog}>Cancel</Button>
+                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+              </DialogActions>
+            </Dialog>
+
+            {/* Dialogue pour modifier les informations de contact */}
+            <Dialog open={openContactDialog} onClose={handleCloseDialog}>
               <DialogTitle>Modify Contact Information</DialogTitle>
               <DialogContent>
                 <TextField
@@ -801,27 +872,30 @@ const handleAddExperience = () => {
               <DialogTitle>Modify Profile Information</DialogTitle>
               <DialogContent>
                 <TextField
-                  name="dateOfBirth"
+                  type="date"
                   label="Date of Birth"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
+                  value={selectedDateOfBirth}
+                  onChange={(e) => handleDateOfBirthChange(e.target.value)}
                   fullWidth
                   margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
-        <Autocomplete
-  multiple
-  options={countryOptions}
-  value={SelectedCountries}
-  onChange={handleCountriesChange}
-  renderInput={(params) => <TextField {...params} label="Countries" />}
-/>
-              <Autocomplete
-          multiple
-          options={languageOptions}
-          value={selectedLanguages}
-          onChange={handleLanguagesChange}
-          renderInput={(params) => <TextField {...params} label="Languages" />}
-        />
+                <Autocomplete
+                  multiple
+                  options={countryOptions}
+                  value={SelectedCountries}
+                  onChange={handleCountriesChange}
+                  renderInput={(params) => <TextField {...params} label="Countries" />}
+                />
+                <Autocomplete
+                  multiple
+                  options={languageOptions}
+                  value={selectedLanguages}
+                  onChange={handleLanguagesChange}
+                  renderInput={(params) => <TextField {...params} label="Languages" />}
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseDialog}>Cancel</Button>
@@ -829,58 +903,66 @@ const handleAddExperience = () => {
               </DialogActions>
             </Dialog>
             <Dialog open={openEducationDialog} onClose={() => setOpenEducationDialog(false)}>
-  <DialogTitle>Edit Education</DialogTitle>
-  <DialogContent>
-    <Autocomplete
-      multiple
-      options={EducationOptions}
-      value={selectedEducation}
-      onChange={handleEducationChange}
-      renderInput={(params) => <TextField {...params} label="Education" />}
-    />
-    <Button onClick={handleAddEducation}>Add New</Button> {/* Add this button */}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setOpenEducationDialog(false)}>Cancel</Button>
-    <Button onClick={handleUpdateUser} color="primary">Save</Button>
-  </DialogActions>
-</Dialog>
+              <DialogTitle>Edit Education</DialogTitle>
+              <DialogContent>
+                <Autocomplete
+                  multiple
+                  options={EducationOptions}
+                  value={selectedEducation}
+                  onChange={handleEducationChange}
+                  renderInput={(params) => <TextField {...params} label="Education" />}
+                />
+                <Button onClick={handleAddEducation}>Add New</Button> {/* Add this button */}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenEducationDialog(false)}>Cancel</Button>
+                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+              </DialogActions>
+            </Dialog>
 
-<Dialog open={openCertifDialog} onClose={() => setOpenCertifDialog(false)}>
-  <DialogTitle>Edit certificates</DialogTitle>
-  <DialogContent>
-    <Autocomplete
-      multiple
-      options={CertifOptions}
-      value={selectedCertif}
-      onChange={handleCertifChange}
-      renderInput={(params) => <TextField {...params} label="certificates" />}
-    />
-    <Button onClick={handleAddCertif}>Add New</Button> {/* Add this button */}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setOpenCertifDialog(false)}>Cancel</Button>
-    <Button onClick={handleUpdateUser} color="primary">Save</Button>
-  </DialogActions>
-</Dialog>
-<Dialog open={openExperienceDialog} onClose={() => setOpenExperienceDialog(false)}>
-  <DialogTitle>Edit Experience</DialogTitle>
-  <DialogContent>
-    <Autocomplete
-      multiple
-      options={experienceOptions}
-      value={selectedExperience}
-      onChange={handleOpenExperienceChange} // Utiliser la nouvelle fonction pour gérer les changements
-      renderInput={(params) => <TextField {...params} label="Experience" />}
-    />
-    <Button onClick={handleAddExperience}>Add New</Button> {/* Ajouter ce bouton */}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setOpenExperienceDialog(false)}>Cancel</Button>
-    <Button onClick={handleUpdateUser} color="primary">Save</Button>
-  </DialogActions>
-</Dialog>
-
+            <Dialog open={openCertifDialog} onClose={() => setOpenCertifDialog(false)}>
+              <DialogTitle>Edit certificates</DialogTitle>
+              <DialogContent>
+                <Autocomplete
+                  multiple
+                  options={CertifOptions}
+                  value={selectedCertif}
+                  onChange={handleCertifChange}
+                  renderInput={(params) => <TextField {...params} label="certificates" />}
+                />
+                <Button onClick={handleAddCertif}>Add New</Button> {/* Add this button */}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenCertifDialog(false)}>Cancel</Button>
+                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={openExperienceDialog} onClose={() => setOpenExperienceDialog(false)}>
+              <DialogTitle>Edit Experience</DialogTitle>
+              <DialogContent>
+                <Autocomplete
+                  multiple
+                  options={experienceOptions}
+                  value={selectedExperience}
+                  onChange={handleOpenExperienceChange} // Utiliser la nouvelle fonction pour gérer les changements
+                  renderInput={(params) => <TextField {...params} label="Experience" />}
+                />
+                <Button onClick={handleAddExperience}>Add New</Button> {/* Ajouter ce bouton */}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenExperienceDialog(false)}>Cancel</Button>
+                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={openDialogCv} onClose={() => setOpenDialogCv(false)}>
+        <DialogTitle>Upload Image</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
+                    <input type="file" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png" onChange={handleFileChange} />
+                    <button type="submit">Upload</button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
           </>
         )}

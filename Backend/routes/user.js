@@ -39,6 +39,35 @@ router.put("/uploadAvatar", upload.single("avatar"), async (req, res) => {
   }
 });
 
+const cvStorage = multer.diskStorage({
+	destination: function (req, file, cb) {
+	  cb(null, "images/"); // Spécifiez le répertoire de destination où les CV seront stockés
+	},
+	filename: function (req, file, cb) {
+	  cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname)); // Générez un nom de fichier unique avec extension
+	},
+  });
+  
+  const uploadCV = multer({ storage: cvStorage });
+  
+  // Route pour télécharger et stocker le CV
+  router.put("/uploadCV/:userId", uploadCV.single("cV"), async (req, res) => {
+	try {
+		const userId = req.params.userId; // Récupérer l'ID de l'utilisateur à partir des paramètres de chemin
+		const cvPath = req.file.path;
+		console.log(userId); // Affiche l'ID de l'utilisateur récupéré
+		console.log(cvPath)
+	  // Enregistrer le chemin du CV dans la base de données pour l'utilisateur avec l'ID correspondant
+	  await User.findByIdAndUpdate(userId, { cV: cvPath });
+  
+	  res.status(200).send("CV uploaded successfully");
+	} catch (error) {
+	  console.error("Error uploading CV:", error);
+	  res.status(500).send("An error occurred while uploading CV");
+	}
+  });
+  
+  // Ajoutez d'autres routes et fonctions de contrôleur ici...
   
 router.get('/images/:imageName', (req, res) => {
 	const imageName = req.params.imageName;
