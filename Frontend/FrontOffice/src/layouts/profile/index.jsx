@@ -291,6 +291,45 @@ const languageOptions = [
   "Turkmen",
   "Cebuano",
 ];
+const initialExperienceOptions  = [
+  "test5",
+  "tt",
+  "uu "];
+  const initialCertifOptions   = [
+    "ttyu",
+    "tt",
+    "uu "];
+  
+
+const initialEducationOptions  = [
+  "École Nationale d'Ingénieurs de Sousse",
+  "École Nationale d'Ingénieurs de Bizerte",
+  "École Nationale d'Ingénieurs de Monastir",
+  "École Nationale d'Ingénieurs de Gabès",
+  "Institut Supérieur de Biotechnologie de Monastir",
+  "Institut Supérieur d'Informatique de Monastir",
+  "Institut Supérieur des Arts Multimédia de la Manouba",
+  "Institut Supérieur de Musique de Tunis",
+  "Institut Supérieur d'Histoire du Mouvement National",
+  "Institut Supérieur des Langues Appliquées et Informatique de Béja",
+  "Institut Supérieur de Commerce et d'Administration des Entreprises de Nabeul",
+  "Institut Supérieur de Gestion de Sousse",
+  "Institut Supérieur de Gestion de Tunis",
+  "Institut Supérieur de Gestion de Sfax",
+  "Institut Supérieur de l'Éducation et de la Formation Continue de la Manouba",
+  "Institut Supérieur des Sciences et Techniques du Sport de Tunis",
+  "Institut Supérieur des Sciences Humaines de Tunis",
+  "Institut Supérieur des Sciences et Technologies de l'Information et de la Communication de Tunis",
+  "Institut Supérieur des Sciences Appliquées et de Technologie de Sousse",
+  "Institut Supérieur des Sciences et des Technologies de l'Environnement de l'Ariana",
+  "Institut Supérieur des Sciences et Technologies de l'Eau de Gabès",
+  "Institut Supérieur des Sciences et Technologies de l'Environnement de Borj Cédria",
+  "Institut Supérieur des Études Historiques de Tunis",
+  "Institut Supérieur des Études Technologiques de Radès",
+  "Institut Supérieur des Études Appliquées en Humanités de Zaghouan",
+  "Institut Supérieur des Langues de Tunis"
+];
+
 const skillsOptions = [
   // Programming Languages and Technologies
   "JavaScript",
@@ -377,10 +416,62 @@ function Overview() {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [SelectedCountries, setSelectedCountries] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedEducation, setSelectedEducation] = useState([]);
+  const [selectedCertif, setSelectedCertif] = useState([]);
+
+  const [EducationOptions, setEducationOptions] = useState([...initialEducationOptions]);
+  const [experienceOptions, setExperienceOptions] = useState([...initialExperienceOptions]);
+  const [CertifOptions, setCertifOptions] = useState([...initialCertifOptions]);
+
+  const [openEducationDialog, setOpenEducationDialog] = useState(false); // New state for education dialog
+  const [openCertifDialog, setOpenCertifDialog] = useState(false); // New state for education dialog
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingSection, setEditingSection] = useState(null);
 
+  const [editingSection, setEditingSection] = useState(null);
+  const [openExperienceDialog, setOpenExperienceDialog] = useState(false);
+
+// // Créez une fonction pour ouvrir le dialogue de l'expérience
+// const handleOpenExperienceDialog = () => {
+//   setOpenExperienceDialog(true);
+// };
+
+// Créez un nouvel état pour stocker les options de l'expérience
+const [selectedExperience, setSelectedExperience] = useState([]);
+  const handleAddEducation = () => {
+    // Open a dialog or prompt for users to enter the new education option
+    const newEducationOption = prompt("Enter the new education option:");
+    if (newEducationOption) {
+      // Add the new education option to the existing options
+      const updatedEducationOptions = [...EducationOptions, newEducationOption];
+      setEducationOptions(updatedEducationOptions);
+  
+      // Select the newly added education option
+      setSelectedEducation([...selectedEducation, newEducationOption]);
+    }
+  };
+  const handleAddCertif = () => {
+    // Open a dialog or prompt for users to enter the new education option
+    const newCertifOptions = prompt("Enter the new certificate option:");
+    if (newCertifOptions) {
+      // Add the new education option to the existing options
+      const updatedEducationOptions = [...CertifOptions, newCertifOptions];
+      setCertifOptions(updatedCertifOptions);
+  
+      // Select the newly added education option
+      setSelectedCertif([...selectedCertif, newCertifOptions]);
+    }
+  };
+  // Ajoutez une fonction pour gérer l'ajout d'une nouvelle option d'expérience
+const handleAddExperience = () => {
+  const newExperienceOption = prompt("Enter the new experience option:");
+  if (newExperienceOption) {
+    const updatedExperienceOptions = [...experienceOptions, newExperienceOption];
+    setExperienceOptions(updatedExperienceOptions);
+    setSelectedExperience([...selectedExperience, newExperienceOption]);
+  }
+};
+  
   const handleSkillsChange = (event, newSkills) => {
     setSelectedSkills(newSkills);
     setFormData({
@@ -388,7 +479,22 @@ function Overview() {
       skills: newSkills.join(", "),
     });
   };
-
+  const handleEducationChange = (event, newEducation) => {
+    setSelectedEducation(newEducation);
+    setFormData({
+      ...formData,
+      formation: newEducation.join(", "),
+    });
+  };
+  const handleCertifChange = (event, newCertif) => {
+    setSelectedCertif(newCertif);
+    setFormData({
+      ...formData,
+      certificates: newCertif.join(", "),
+    });
+  };
+  
+  
   const handleOpenDialog = (section) => {
     setEditingSection(section);
     setOpenDialog(true);
@@ -409,10 +515,15 @@ function Overview() {
       setUserInfo(formData);
       setOpenContactDialog(false);
       setOpenProfileDialog(false);
+      setOpenEducationDialog(false); // Fermer le dialogue de l'éducation après la mise à jour
+      setOpenCertifDialog(false); // Fermer le dialogue de l'éducation après la mise à jour
+
+      setOpenExperienceDialog(false);
     } catch (error) {
       console.error("Error updating user:", error);
     }
   };
+  
 
   const handleLanguagesChange = (event, newLanguages) => {
     setSelectedLanguages(newLanguages);
@@ -515,6 +626,14 @@ function Overview() {
       languages: userInfo.languages
     });
   };
+  // Ajoutez une fonction pour gérer les changements dans les options de l'expérience
+  const handleOpenExperienceChange = (event, newExperience) => {
+    setSelectedExperience(newExperience);
+    setFormData({
+      ...formData,
+      experience: newExperience.join(", "), // Mettre à jour l'état formData avec les options sélectionnées
+    });
+  };
 
   const handleCloseDialog = () => {
     setOpenContactDialog(false);
@@ -575,7 +694,7 @@ function Overview() {
                 </div>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Experience
-                    <EditIcon color="primary" onClick={() => handleOpenDialog("experience")} />
+                    <EditIcon color="primary" onClick={() => setOpenExperienceDialog(true)}  />
                   </h3>
                   <div style={contactContainer}>
 
@@ -586,12 +705,11 @@ function Overview() {
 
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Education
-                    <EditIcon color="primary" onClick={() => handleOpenDialog("formation")} />
+                    <EditIcon color="primary" onClick={() => setOpenEducationDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
                     <p style={textStyle}>{userInfo.formation}</p>
                   </div>
-
                 </div>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Skills
@@ -605,7 +723,7 @@ function Overview() {
 
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Certificates
-                    <EditIcon color="primary" onClick={() => handleOpenDialog("certificates")} />
+                  <EditIcon color="primary" onClick={() => setOpenCertifDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
 
@@ -710,7 +828,58 @@ function Overview() {
                 <Button onClick={handleUpdateUser} color="primary">Save</Button>
               </DialogActions>
             </Dialog>
+            <Dialog open={openEducationDialog} onClose={() => setOpenEducationDialog(false)}>
+  <DialogTitle>Edit Education</DialogTitle>
+  <DialogContent>
+    <Autocomplete
+      multiple
+      options={EducationOptions}
+      value={selectedEducation}
+      onChange={handleEducationChange}
+      renderInput={(params) => <TextField {...params} label="Education" />}
+    />
+    <Button onClick={handleAddEducation}>Add New</Button> {/* Add this button */}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setOpenEducationDialog(false)}>Cancel</Button>
+    <Button onClick={handleUpdateUser} color="primary">Save</Button>
+  </DialogActions>
+</Dialog>
 
+<Dialog open={openCertifDialog} onClose={() => setOpenCertifDialog(false)}>
+  <DialogTitle>Edit certificates</DialogTitle>
+  <DialogContent>
+    <Autocomplete
+      multiple
+      options={CertifOptions}
+      value={selectedCertif}
+      onChange={handleCertifChange}
+      renderInput={(params) => <TextField {...params} label="certificates" />}
+    />
+    <Button onClick={handleAddCertif}>Add New</Button> {/* Add this button */}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setOpenCertifDialog(false)}>Cancel</Button>
+    <Button onClick={handleUpdateUser} color="primary">Save</Button>
+  </DialogActions>
+</Dialog>
+<Dialog open={openExperienceDialog} onClose={() => setOpenExperienceDialog(false)}>
+  <DialogTitle>Edit Experience</DialogTitle>
+  <DialogContent>
+    <Autocomplete
+      multiple
+      options={experienceOptions}
+      value={selectedExperience}
+      onChange={handleOpenExperienceChange} // Utiliser la nouvelle fonction pour gérer les changements
+      renderInput={(params) => <TextField {...params} label="Experience" />}
+    />
+    <Button onClick={handleAddExperience}>Add New</Button> {/* Ajouter ce bouton */}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setOpenExperienceDialog(false)}>Cancel</Button>
+    <Button onClick={handleUpdateUser} color="primary">Save</Button>
+  </DialogActions>
+</Dialog>
 
 
           </>
