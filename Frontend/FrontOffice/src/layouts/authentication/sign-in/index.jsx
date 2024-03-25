@@ -101,8 +101,8 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
-          </MDTypography>
+          Se connecter         
+           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
               <MDTypography component={MuiLink} href="#" variant="body1" color="white">
@@ -123,14 +123,14 @@ function Basic() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
          {/* <MDBox component="form" role="form" action="http://localhost:5000/auth/google"> */}
-         <MDBox component="form" role="form" action={`${API_URLS}/auth/google`} method="post">
+         <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
 
             <MDBox mb={2}>
-              <MDTypography variant="body1" mb={1}>Email address</MDTypography>
+              <MDTypography variant="body1" mb={1}>addresse Email </MDTypography>
               <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />
             </MDBox>
             <MDBox mb={2}>
-              <MDTypography variant="body1" mb={1}>Password</MDTypography>
+              <MDTypography variant="body1" mb={1}>Mot de passe</MDTypography>
               <MDInput type="password" fullWidth onChange={handlePasswordChange} value={password} />
             </MDBox>
             <MDBox display="flex" alignItems="center" mb={2}>
@@ -146,12 +146,12 @@ function Basic() {
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
-                Sign in
+              Se connecter
               </MDButton>
             </MDBox>
             <MDBox mb={2} textAlign="center">
               <MDTypography variant="body2" color="text">
-                Don't have an account?{" "}
+              Vous n'avez pas de compte ?{" "}
                 <MDTypography
                   component={Link}
                   to="/dashboard"
@@ -160,12 +160,13 @@ function Basic() {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign up
+                  S'inscrire
                 </MDTypography>
               </MDTypography>
             </MDBox>
+            
             <Link to="/forgot-password" style={{ alignSelf: "flex-start" }}>
-							<p style={{ padding: "0 15px" }}>Forgot Password ?</p>
+							<p style={{ padding: "0 15px" }}>Mot de passe oublié ?</p>
 						</Link>
             <MDBox textAlign="center">
               <Button
@@ -175,7 +176,7 @@ function Basic() {
                 w={"100%"}
                 type="submit"
               >
-                Connect with Google
+                Connecter avec Google
               </Button>
             </MDBox>
           </MDBox>

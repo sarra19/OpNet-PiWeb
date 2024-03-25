@@ -119,7 +119,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
         {!isMini && (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
             <MDBox pr={1}>
-              <MDInput label="Search here" />
+              <MDInput label="Rechercher" />
             </MDBox>
             <MDBox>
               {["Admin", "Subadmin", "Company", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
@@ -131,11 +131,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     variant="outlined" 
                     style={{ backgroundColor: '#E82227', color: '#fff' }}
                   >
-                    Admin View
+                    Administration
                   </Button>
                 </Link>
               )}
-              <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Logout</Button>
+              <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Se déconnecter</Button>
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">

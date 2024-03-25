@@ -187,13 +187,13 @@ const handleDelete = async (chatId) => {
 
       {/* Dialog for adding a new chat */}
       <Dialog open={addChatDialogOpen} onClose={handleCloseAddChatDialog}>
-        <DialogTitle>Add New Chat</DialogTitle>
+        <DialogTitle>ajouter nouvelle conversation</DialogTitle>
         <DialogContent>
           {/* Form fields for adding a new chat */}
           {/* Select input for choosing receiver */}
           <TextField
             select
-            label="Select Receiver"
+            label="Sélectionnez le destinataire"
             value={newChatData.receiverId}
             onChange={(e) => setNewChatData({ ...newChatData, receiverId: e.target.value })}
             fullWidth
@@ -206,7 +206,7 @@ const handleDelete = async (chatId) => {
             ))}
           </TextField>
           <Button variant="contained" color="primary" onClick={handleAddNewChat}>
-            Add Chat
+            Ajouter conversation
           </Button>
         </DialogContent>
       </Dialog>

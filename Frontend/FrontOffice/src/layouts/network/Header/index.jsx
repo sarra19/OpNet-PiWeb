@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -92,6 +94,9 @@ function Header({ children }) {
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
                 {userInfo.speciality}
+              </MDTypography>
+              <MDTypography variant="button" color="text" fontWeight="regular">
+              {userInfo.institution ? ` à ${userInfo.institution}` : ''}
               </MDTypography>
             </MDBox>
           </Grid>

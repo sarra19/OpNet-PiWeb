@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +12,7 @@ import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
+import queryString from "query-string";
 import {
   useMaterialUIController,
   setTransparentNavbar,
@@ -32,22 +33,30 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const getUserRole = () => sessionStorage.getItem("userRole"); // Use sessionStorage instead of localStorage
-// Analyser l'URL actuelle pour obtenir les paramètres de requête
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
+ // const { userId } = useParams();
+// // Analyser l'URL actuelle pour obtenir les paramètres de requête
+// const queryString = window.location.search;
+// const urlParams = new URLSearchParams(queryString);
 
 // Extraire la valeur du paramètre "userRole"
-const userRole = urlParams.get('userRole');
-const userId = urlParams.get('userId');
+// const userRole = urlParams.get('userRole');
+// const userId = urlParams.get('userId');
 
 // Utiliser la valeur de userRole comme nécessaire
-console.log(userRole);
-console.log(userId);
+//console.log(userRole);
+
+
+const location = useLocation();
+  const queryParams = queryString.parse(location.search);
+  const { userRole, userId } = queryParams;
+
+  // Utilisez userRole et userId comme nécessaire
+  console.log(userRole);
+  console.log(userId);
 
   useEffect(() => {
     // Clear userRole from sessionStorage when component mounts
-    sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
+    //sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
   
     // Handle navbar type and transparency
     if (fixedNavbar) {
@@ -72,7 +81,7 @@ console.log(userId);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
   const handleLogout = () => {
-    sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
+    //sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
 
     // Remove the user role from sessionStorage
   };
@@ -119,15 +128,15 @@ console.log(userId);
         {!isMini && (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
             <MDBox pr={1}>
-              <MDInput label="Search here" />
+              <MDInput label="Chercher" />
             </MDBox>
             <MDBox>
               <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard/${userRole}`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
-                User View
+                Utilsateur Interface
               </Button>
 
             </MDBox>
-            <Button onClick={handleLogout} component={Link} to="http://localhost:3000/authentication/sign-in">Logout</Button>
+            <Button onClick={handleLogout} component={Link} to="http://localhost:3000/authentication/sign-in">Se déconnecter</Button>
 
             <MDBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">

@@ -15,7 +15,7 @@ import axios from "axios"; // Import axios for making HTTP requests
 import API_URLS from "../../../apiUrls";
 
 function Cover() {
-  const roles = ["Student", "Teacher", "Alumni", "Admin", "Subadmin", "Company"]; // List of roles
+  const roles = ["Etudiant", "Professeure", "Alumni", "Admin", "Subadmin", "Entreprise"]; // List of roles
   const [capVal, setCapVal] = useState(null);
   const [formData, setFormData] = useState({
     firstname: "",
@@ -114,10 +114,9 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
-          </MDTypography>
+          Rejoignez-nous !!          </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your details to register
+          Entrez vos coordonnées pour vous inscrire
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -126,7 +125,7 @@ function Cover() {
               <MDInput
                 type="text"
                 name="firstname"
-                label="First Name"
+                label="Prénom"
                 variant="standard"
                 fullWidth
                 value={formData.firstname}
@@ -142,7 +141,7 @@ function Cover() {
               <MDInput
                 type="text"
                 name="lastname"
-                label="Last Name"
+                label="Nom"
                 variant="standard"
                 fullWidth
                 value={formData.lastname}
@@ -174,7 +173,7 @@ function Cover() {
               <MDInput
                 type="password"
                 name="password"
-                label="Password"
+                label="Mot de passe"
                 variant="standard"
                 fullWidth
                 value={formData.password}
@@ -190,7 +189,7 @@ function Cover() {
               <MDInput
                 type="password"
                 name="confirmPassword"
-                label="Confirm Password"
+                label="Confirmer Votre Mot de passe"
                 variant="standard"
                 fullWidth
                 value={formData.confirmPassword}
@@ -220,7 +219,7 @@ function Cover() {
                 onChange={(val) => setCapVal(val)}
               />
               <MDButton disabled={!capVal} type="submit" variant="gradient" color="info" fullWidth>
-                Sign up
+              S'inscrire
               </MDButton>
             </MDBox>
           </form>

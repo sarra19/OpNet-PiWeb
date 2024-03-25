@@ -8,8 +8,9 @@ import InputEmoji from 'react-input-emoji';
 import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 const isImageUrl = (url) => {
-  return /\.(jpeg|jpg|gif|png|pdf|docx|txt)$/.test(url);
+  return /\.(jpeg|jpg|gif|png)$/.test(url);
 };
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete }) => {
@@ -161,30 +162,26 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
               />
             </div>
             <div className="chat-body">
-            {messages.map((message) => (
-  <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
-    {isImageUrl(message.text) ? (
-      <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
-    ) : (
-      <span>{message.text}</span>
-    )}
-    <span>{formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}</span>
-  </div>
-))}
-
-
-
+  {messages.map((message) => (
+    <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
+      {isImageUrl(message.text) ? (
+        <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+      ) : (
+        <span>{message.text}</span>
+      )}
+      <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
+    </div>
+  ))}
 </div>
-
             <div className="chat-sender">
               <div onClick={handleImageUpload}>+</div>
-              <InputEmoji value={newMessage} onChange={handleChange} />
-              <div className="send-button button" onClick={handleSend}>Send</div>
+              <InputEmoji placeholder="Ecrire un message" value={newMessage} onChange={handleChange} />
+              <div className="send-button button" onClick={handleSend}>Envoyer</div>
               <input type="file" name="file" id="file" style={{ display: "none" }} ref={imageRef} onChange={handleFileChange} />
             </div>
           </>
         ) : (
-          <span className="chatbox-empty-message">Tap on a chat to start conversation...</span>
+          <span className="chatbox-empty-message">Appuyez sur une discussion pour commencer la conversation...</span>
         )}
       </div>
     </>

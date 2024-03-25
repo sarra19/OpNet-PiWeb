@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const validRoles = ["admin", "subadmin", "teacher", "student", "alumni", "compagny"];
+const validRoles = ["admin", "subadmin", "professeure", "etudiant", "alumni", "entreprise"];
 
 const Role = new Schema({
     role: {

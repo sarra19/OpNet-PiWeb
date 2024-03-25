@@ -23,7 +23,7 @@ import API_URLS from "apiUrls";
 import { Link } from "react-router-dom";
 
 function Ajout() {
-  const roles = ["Student", "Teacher", "Alumni", "Admin", "Subadmin", "Company"]; // List of roles
+  const roles = ["Etudiant", "Professeure", "Alumni", "Admin", "Subadmin", "Entreprise"]; // List of roles
   const [capVal, setCapVal] = useState(null);
   const [formData, setFormData] = useState({
     firstname: "",
@@ -127,10 +127,10 @@ function Ajout() {
           style={{ marginTop: "20px" }}
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
+          Rejoignez-nous !!
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your details to register
+          Entrez vos coordonnées pour vous inscrire
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -139,7 +139,7 @@ function Ajout() {
               <MDInput
                 type="text"
                 name="firstname"
-                label="First Name"
+                label="Prénom"
                 variant="standard"
                 fullWidth
                 value={formData.firstname}
@@ -155,7 +155,7 @@ function Ajout() {
               <MDInput
                 type="text"
                 name="lastname"
-                label="Last Name"
+                label="Nom"
                 variant="standard"
                 fullWidth
                 value={formData.lastname}
@@ -187,7 +187,7 @@ function Ajout() {
               <MDInput
                 type="password"
                 name="password"
-                label="Password"
+                label="Mot de passe"
                 variant="standard"
                 fullWidth
                 value={formData.password}
@@ -203,7 +203,7 @@ function Ajout() {
               <MDInput
                 type="password"
                 name="confirmPassword"
-                label="Confirm Password"
+                label="Confirmer Votre Mot de passe"
                 variant="standard"
                 fullWidth
                 value={formData.confirmPassword}
@@ -233,13 +233,13 @@ function Ajout() {
                 onChange={(val) => setCapVal(val)}
               />
               <MDButton disabled={!capVal} type="submit" variant="gradient" color="info" fullWidth>
-                Sign up
+              Ajouter
               </MDButton>
             </MDBox>
           </form>
           <Link to="/userManagement">
           <MDButton variant="contained" color="error" size="small">
-            Back
+            Retour
           </MDButton>
         </Link>
         </MDBox>

@@ -59,6 +59,8 @@ import EmailVerify from "layouts/authentication/EmailVerify";
 import Basic from "layouts/authentication/sign-in";
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
+  const userRole = sessionStorage.getItem("userRole");
+
   const {
     miniSidenav,
     direction,
@@ -171,8 +173,8 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
           <Route path="/user/:id/verify/:token" element={<EmailVerify />} />
+          <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} />
 
          
         </Routes>
@@ -198,7 +200,10 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        
+        <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
+        <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} />
+
       </Routes>
     </ThemeProvider>
   );

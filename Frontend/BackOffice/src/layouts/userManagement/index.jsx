@@ -86,13 +86,13 @@ function UserManagement() {
           <table style={tableStyles}>
             <thead>
               <tr>
-                <th style={headerStyles}>First Name</th>
-                <th style={headerStyles}>Last Name</th>
+                <th style={headerStyles}>Prénom</th>
+                <th style={headerStyles}>Nom</th>
                 <th style={headerStyles}>Email</th>
                 <th style={headerStyles}>Role</th>
-                <th style={headerStyles}>City</th>
-                <th style={headerStyles}>Phone</th>
-                <th style={headerStyles}>Speciality</th>
+                <th style={headerStyles}>Pays</th>
+                <th style={headerStyles}>Téléfone</th>
+                <th style={headerStyles}>Specialité</th>
                 <th style={headerStyles}>Actions</th>
               </tr>
             </thead>
@@ -108,10 +108,10 @@ function UserManagement() {
                   <td style={cellStyles}>{user.speciality}</td>
                   <td style={{ ...cellStyles, ...buttonContainerStyles }}>
                     <Button size="small" variant="contained" color="primary" style={buttonStyles}>
-                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Details</Link>
+                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Détails</Link>
                     </Button>
                     <Button size="small" variant="contained" style={{ backgroundColor: '#E82227', color: '#fff', cursor: "pointer" ,marginRight: "5px" }}
-  onClick={() => handleDeleteUser(user._id)}>Delete</Button>
+  onClick={() => handleDeleteUser(user._id)}>Suprimer</Button>
 
                   </td>
                 </tr>

@@ -13,294 +13,309 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Alert from "@mui/material/Alert";
 
 const countryOptions = [
-  "United States",
-  "United Kingdom",
+  "États-Unis",
+  "Royaume-Uni",
   "Canada",
-  "Australia",
+  "Australie",
   "Afghanistan",
-  "Albania",
-  "Algeria",
-  "Andorra",
+  "Albanie",
+  "Algérie",
+  "Andorre",
   "Angola",
-  "Antigua and Barbuda",
-  "Argentina",
-  "Armenia",
-  "Austria",
-  "Azerbaijan",
+  "Antigua-et-Barbuda",
+  "Argentine",
+  "Arménie",
+  "Autriche",
+  "Azerbaïdjan",
   "Bahamas",
-  "Bahrain",
+  "Bahreïn",
   "Bangladesh",
-  "Barbados",
-  "Belarus",
-  "Belgium",
+  "Barbade",
+  "Biélorussie",
+  "Belgique",
   "Belize",
-  "Benin",
-  "Bhutan",
-  "Bolivia",
-  "Bosnia and Herzegovina",
+  "Bénin",
+  "Bhoutan",
+  "Bolivie",
+  "Bosnie-Herzégovine",
   "Botswana",
-  "Brazil",
+  "Brésil",
   "Brunei",
-  "Bulgaria",
+  "Bulgarie",
   "Burkina Faso",
   "Burundi",
-  "Cabo Verde",
-  "Cambodia",
-  "Cameroon",
-  "Central African Republic",
-  "Chad",
-  "Chile",
-  "China",
-  "Colombia",
-  "Comoros",
-  "Congo, Democratic Republic of the",
-  "Congo, Republic of the",
+  "Cap-Vert",
+  "Cambodge",
+  "Cameroun",
+  "République centrafricaine",
+  "Tchad",
+  "Chili",
+  "Chine",
+  "Colombie",
+  "Comores",
+  "République démocratique du Congo",
+  "République du Congo",
   "Costa Rica",
-  "Croatia",
+  "Croatie",
   "Cuba",
-  "Cyprus",
-  "Czech Republic",
-  "Denmark",
+  "Chypre",
+  "République tchèque",
+  "Danemark",
   "Djibouti",
-  "Dominica",
-  "Dominican Republic",
-  "East Timor (Timor-Leste)",
-  "Ecuador",
-  "Egypt",
-  "El Salvador",
-  "Equatorial Guinea",
-  "Eritrea",
-  "Estonia",
+  "Dominique",
+  "République dominicaine",
+  "Timor oriental",
+  "Équateur",
+  "Égypte",
+  "Salvador",
+  "Guinée équatoriale",
+  "Érythrée",
+  "Estonie",
   "Eswatini",
-  "Ethiopia",
-  "Fiji",
-  "Finland",
+  "Éthiopie",
+  "Fidji",
+  "Finlande",
   "France",
   "Gabon",
-  "Gambia",
-  "Georgia",
-  "Germany",
+  "Gambie",
+  "Géorgie",
+  "Allemagne",
   "Ghana",
-  "Greece",
-  "Grenada",
+  "Grèce",
+  "Grenade",
   "Guatemala",
-  "Guinea",
-  "Guinea-Bissau",
-  "Guyana",
-  "Haiti",
+  "Guinée",
+  "Guinée-Bissau",
+  "Guyane",
+  "Haïti",
   "Honduras",
-  "Hungary",
-  "Iceland",
-  "India",
-  "Indonesia",
+  "Hongrie",
+  "Islande",
+  "Inde",
+  "Indonésie",
   "Iran",
   "Iraq",
-  "Ireland",
-  "Israel",
-  "Italy",
-  "Jamaica",
-  "Japan",
-  "Jordan",
+  "Irlande",
+  "Israël",
+  "Italie",
+  "Jamaïque",
+  "Japon",
+  "Jordanie",
   "Kazakhstan",
   "Kenya",
   "Kiribati",
-  "Korea, North",
-  "Korea, South",
+  "Corée du Nord",
+  "Corée du Sud",
   "Kosovo",
-  "Kuwait",
-  "Kyrgyzstan",
+  "Koweït",
+  "Kirghizistan",
   "Laos",
-  "Latvia",
-  "Lebanon",
+  "Lettonie",
+  "Liban",
   "Lesotho",
-  "Liberia",
-  "Libya",
+  "Libéria",
+  "Libye",
   "Liechtenstein",
-  "Lithuania",
+  "Lituanie",
   "Luxembourg",
   "Madagascar",
   "Malawi",
-  "Malaysia",
+  "Malaisie",
   "Maldives",
   "Mali",
-  "Malta",
-  "Marshall Islands",
-  "Mauritania",
-  "Mauritius",
-  "Mexico",
-  "Micronesia",
-  "Moldova",
+  "Malte",
+  "Îles Marshall",
+  "Mauritanie",
+  "Maurice",
+  "Mexique",
+  "Micronésie",
+  "Moldavie",
   "Monaco",
-  "Mongolia",
-  "Montenegro",
-  "Morocco",
+  "Mongolie",
+  "Monténégro",
+  "Maroc",
   "Mozambique",
-  "Myanmar (Burma)",
-  "Namibia",
+  "Myanmar (Birmanie)",
+  "Namibie",
   "Nauru",
-  "Nepal",
-  "Netherlands",
-  "New Zealand",
+  "Népal",
+  "Pays-Bas",
+  "Nouvelle-Zélande",
   "Nicaragua",
   "Niger",
   "Nigeria",
-  "North Macedonia",
-  "Norway",
+  "Macédoine du Nord",
+  "Norvège",
   "Oman",
   "Pakistan",
-  "Palau",
+  "Palaos",
   "Palestine",
   "Panama",
-  "Papua New Guinea",
+  "Papouasie-Nouvelle-Guinée",
   "Paraguay",
-  "Peru",
+  "Pérou",
   "Philippines",
-  "Poland",
+  "Pologne",
   "Portugal",
   "Qatar",
-  "Romania",
-  "Russia",
+  "Roumanie",
+  "Russie",
   "Rwanda",
-  "Saint Kitts and Nevis",
-  "Saint Lucia",
-  "Saint Vincent and the Grenadines",
+  "Saint-Christophe-et-Niévès",
+  "Sainte-Lucie",
+  "Saint-Vincent-et-les-Grenadines",
   "Samoa",
-  "San Marino",
-  "Sao Tome and Principe",
-  "Saudi Arabia",
-  "Senegal",
-  "Serbia",
+  "Saint-Marin",
+  "Sao Tomé-et-Principe",
+  "Arabie saoudite",
+  "Sénégal",
+  "Serbie",
   "Seychelles",
   "Sierra Leone",
-  "Singapore",
-  "Slovakia",
-  "Slovenia",
-  "Solomon Islands",
-  "Somalia",
-  "South Africa",
-  "South Sudan",
-  "Spain",
+  "Singapour",
+  "Slovaquie",
+  "Slovénie",
+  "Îles Salomon",
+  "Somalie",
+  "Afrique du Sud",
+  "Soudan du Sud",
+  "Espagne",
   "Sri Lanka",
-  "Sudan",
+  "Soudan",
   "Suriname",
-  "Sweden",
-  "Switzerland",
-  "Syria",
-  "Taiwan",
-  "Tajikistan",
-  "Tanzania",
-  "Thailand",
+  "Suède",
+  "Suisse",
+  "Syrie",
+  "Taïwan",
+  "Tadjikistan",
+  "Tanzanie",
+  "Thaïlande",
   "Togo",
   "Tonga",
-  "Trinidad and Tobago",
-  "Tunisia",
-  "Turkey",
-  "Turkmenistan",
+  "Trinité-et-Tobago",
+  "Tunisie",
+  "Turquie",
+  "Turkménistan",
   "Tuvalu",
-  "Uganda",
+  "Ouganda",
   "Ukraine",
-  "United Arab Emirates",
+  "Émirats arabes unis",
   "Uruguay",
-  "Uzbekistan",
+  "Ouzbékistan",
   "Vanuatu",
-  "Vatican City",
+  "Cité du Vatican",
   "Venezuela",
-  "Vietnam",
-  "Yemen",
-  "Zambia",
+  "Viêt Nam",
+  "Yémen",
+  "Zambie",
   "Zimbabwe"
 ];
 
+
 // Définir la liste des langues
+
 const languageOptions = [
-  "English",
-  "French",
-  "Spanish",
-  "German",
-  "Chinese (Mandarin)",
+  "Anglais",
+  "Français",
+  "Espagnol",
+  "Allemand",
+  "Chinois (mandarin)",
   "Hindi",
-  "Arabic",
+  "Arabe",
   "Bengali",
-  "Portuguese",
-  "Russian",
-  "Japanese",
-  "Punjabi",
-  "Turkish",
-  "Korean",
-  "Italian",
-  "Vietnamese",
-  "Tamil",
-  "Urdu",
+  "Portugais",
+  "Russe",
+  "Japonais",
+  "Pendjabi",
+  "Turc",
+  "Coréen",
+  "Italien",
+  "Vietnamien",
+  "Tamoul",
+  "Ourdou",
   "Gujarati",
-  "Polish",
-  "Persian",
+  "Polonais",
+  "Persan",
   "Malayalam",
-  "Telugu",
-  "Thai",
-  "Javanese",
+  "Télougou",
+  "Thaï",
+  "Javanais",
   "Kannada",
-  "Burmese",
+  "Birman",
   "Odia",
-  "Sunda",
+  "Soundanais",
   "Sindhi",
-  "Romanian",
-  "Dutch",
-  "Greek",
-  "Swedish",
-  "Czech",
-  "Danish",
-  "Finnish",
-  "Hungarian",
-  "Norwegian",
-  "Slovak",
-  "Bulgarian",
+  "Roumain",
+  "Néerlandais",
+  "Grec",
+  "Suédois",
+  "Tchèque",
+  "Danois",
+  "Finnois",
+  "Hongrois",
+  "Norvégien",
+  "Slovaque",
+  "Bulgare",
   "Catalan",
-  "Hebrew",
-  "Indonesian",
-  "Malay",
+  "Hébreu",
+  "Indonésien",
+  "Malais",
   "Swahili",
-  "Ukrainian",
-  "Lithuanian",
-  "Filipino",
-  "Slovenian",
-  "Latvian",
-  "Estonian",
-  "Icelandic",
-  "Vietnamese",
+  "Ukrainien",
+  "Lituanien",
+  "Philippin",
+  "Slovène",
+  "Letton",
+  "Estonien",
+  "Islandais",
   "Yoruba",
-  "Zulu",
+  "Zoulou",
   "Marathi",
-  "Swedish",
+  "Suédois",
   "Tagalog",
-  "Hausa",
-  "Serbian",
-  "Albanian",
-  "Azerbaijani",
+  "Haoussa",
+  "Serbe",
+  "Albanais",
+  "Azéri",
   "Igbo",
-  "Amharic",
-  "Farsi",
-  "Pashto",
-  "Tajik",
+  "Amharique",
+  "Persan",
+  "Pachto",
+  "Tadjik",
   "Somali",
-  "Kurdish",
+  "Kurde",
   "Tigrinya",
-  "Malagasy",
+  "Malgache",
   "Hmong",
-  "Uzbek",
+  "Ouzbek",
   "Kinyarwanda",
-  "Sinhala",
+  "Cinghalais",
   "Bhojpuri",
-  "Turkmen",
+  "Turkmène",
   "Cebuano",
 ];
+
 const initialExperienceOptions = [
-  "test5",
-  "tt",
-  "uu "];
+  "Stage en entreprise",
+  "Projet scolaire",
+  "Formation en ligne",
+  "Cours universitaire",
+  "Projet personnel",
+  "Volontariat",
+  "Formation professionnelle",
+];
+
 const initialCertifOptions = [
-  "ttyu",
-  "tt",
-  "uu "];
+  "Certificat de langue",
+  "Certificat professionnel",
+  "Certificat de formation en ligne",
+  "Certificat de compétence",
+  "Certificat de participation",
+  "Certificat de secourisme",
+  "Certificat de premier secours",
+  "Certificat de sauveteur aquatique",
+];
+
 
 
 const initialEducationOptions = [
@@ -736,7 +751,7 @@ function Overview() {
                     <EditIcon style={editIconStyle} color="primary" onClick={handleOpenContactDialog} />
                   </h3>
                   <div style={contactContainer}>
-                    <p><strong>Phone:</strong> <span style={textStyle}>{userInfo.phone}</span></p>
+                    <p><strong>Téléphone:</strong> <span style={textStyle}>{userInfo.phone}</span></p>
                   </div>
                   <div style={contactContainer}>
                     <p><strong>Email:</strong> <span style={textStyle}>{userInfo.email}</span></p>
@@ -747,18 +762,18 @@ function Overview() {
                     <EditIcon style={editIconStyle} color="primary" onClick={handleOpenProfileDialog} />
                   </h3>
                   <div style={contactContainer}>
-                    <p><strong>Date of Birth:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
+                    <p><strong>Date de naissance:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
                   </div>
                   <div style={contactContainer}>
-                    <p><strong>Country:</strong> <span style={textStyle}>{userInfo.country}</span></p>
+                    <p><strong>Pays:</strong> <span style={textStyle}>{userInfo.country}</span></p>
                   </div>
                   <div style={contactContainer}>
-                    <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
+                    <p><strong>Langues:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                   </div>
                   
                 </div>
                 <div>
-                  <h2>My CV</h2>
+                  <h2>Mon CV</h2>
                   
                   <img src={userInfo.cV} alt="Uploaded" onClick={() => setOpenDialogCv(true)} />
 
@@ -767,7 +782,7 @@ function Overview() {
 
               <div style={columnStyle}>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>About Me
+                  <h3 style={headingStyle}>À propos
                     <EditIcon color="primary" onClick={() => handleOpenDialog("description")} />
                   </h3>
                   <div style={contactContainer}>
@@ -775,7 +790,7 @@ function Overview() {
                   </div>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Experience
+                  <h3 style={headingStyle}>Éxperience
                     <EditIcon color="primary" onClick={() => setOpenExperienceDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
@@ -786,7 +801,7 @@ function Overview() {
                 </div>
 
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Education
+                  <h3 style={headingStyle}>Éducation
                     <EditIcon color="primary" onClick={() => setOpenEducationDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
@@ -794,7 +809,7 @@ function Overview() {
                   </div>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Skills
+                  <h3 style={headingStyle}>Compétences
                     <EditIcon color="primary" onClick={() => handleOpenDialog("skills")} />
                   </h3>
                   <div style={contactContainer}>
@@ -804,7 +819,7 @@ function Overview() {
                 </div>
 
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Certificates
+                  <h3 style={headingStyle}>Certificats
                     <EditIcon color="primary" onClick={() => setOpenCertifDialog(true)} />
                   </h3>
                   <div style={contactContainer}>
@@ -818,7 +833,7 @@ function Overview() {
             {/* Dialogue pour modifier les informations de contact */}
             {/* Dialog for editing sections */}
             <Dialog open={openDialog} onClose={handleCloseDialog}>
-              <DialogTitle>Edit {editingSection}</DialogTitle>
+              <DialogTitle>Modifier {editingSection}</DialogTitle>
               <DialogContent>
                 {editingSection === "skills" && (
                   <Autocomplete
@@ -826,7 +841,7 @@ function Overview() {
                     options={skillsOptions}
                     value={selectedSkills}
                     onChange={handleSkillsChange}
-                    renderInput={(params) => <TextField {...params} label="Skills" />}
+                    renderInput={(params) => <TextField {...params} label="Compétences" />}
                   />
 
 
@@ -842,11 +857,11 @@ function Overview() {
                   />
 
                 )}
-                <Button onClick={handleAddSkills}>Add New</Button>
+                <Button onClick={handleAddSkills}>Ajouter </Button>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDialog}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={handleCloseDialog}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary">Enregistrer</Button>
               </DialogActions>
             </Dialog>
 
@@ -856,7 +871,7 @@ function Overview() {
               <DialogContent>
                 <TextField
                   name="phone"
-                  label="Phone"
+                  label="Téléphone"
                   value={formData.phone}
                   onChange={handleChange}
                   fullWidth
@@ -877,8 +892,8 @@ function Overview() {
                 )}
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDialog}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary" disabled={!isValid}>Save</Button>
+                <Button onClick={handleCloseDialog}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary" disabled={!isValid}>Enregistrer</Button>
               </DialogActions>
             </Dialog>
 
@@ -888,7 +903,7 @@ function Overview() {
               <DialogContent>
                 <TextField
                   type="date"
-                  label="Date of Birth"
+                  label="Date de naissance"
                   value={selectedDateOfBirth}
                   onChange={(e) => handleDateOfBirthChange(e.target.value)}
                   fullWidth
@@ -902,71 +917,71 @@ function Overview() {
                   options={countryOptions}
                   value={SelectedCountries}
                   onChange={handleCountriesChange}
-                  renderInput={(params) => <TextField {...params} label="Countries" />}
+                  renderInput={(params) => <TextField {...params} label="Pays" />}
                 />
                 <Autocomplete
                   multiple
                   options={languageOptions}
                   value={selectedLanguages}
                   onChange={handleLanguagesChange}
-                  renderInput={(params) => <TextField {...params} label="Languages" />}
+                  renderInput={(params) => <TextField {...params} label="Langues" />}
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDialog}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={handleCloseDialog}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary">Enregistrer</Button>
               </DialogActions>
             </Dialog>
             <Dialog open={openEducationDialog} onClose={() => setOpenEducationDialog(false)}>
-              <DialogTitle>Edit Education</DialogTitle>
+              <DialogTitle>Modifier Éducation</DialogTitle>
               <DialogContent>
                 <Autocomplete
                   multiple
                   options={EducationOptions}
                   value={selectedEducation}
                   onChange={handleEducationChange}
-                  renderInput={(params) => <TextField {...params} label="Education" />}
+                  renderInput={(params) => <TextField {...params} label="Éducation" />}
                 />
-                <Button onClick={handleAddEducation}>Add New</Button> {/* Add this button */}
+                <Button onClick={handleAddEducation}>Ajouter </Button> {/* Add this button */}
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setOpenEducationDialog(false)}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={() => setOpenEducationDialog(false)}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary">Enregistrer</Button>
               </DialogActions>
             </Dialog>
 
             <Dialog open={openCertifDialog} onClose={() => setOpenCertifDialog(false)}>
-              <DialogTitle>Edit certificates</DialogTitle>
+              <DialogTitle>Modifier Certificats</DialogTitle>
               <DialogContent>
                 <Autocomplete
                   multiple
                   options={CertifOptions}
                   value={selectedCertif}
                   onChange={handleCertifChange}
-                  renderInput={(params) => <TextField {...params} label="certificates" />}
+                  renderInput={(params) => <TextField {...params} label="Certificats" />}
                 />
-                <Button onClick={handleAddCertif}>Add New</Button> {/* Add this button */}
+                <Button onClick={handleAddCertif}>Ajouter </Button> {/* Add this button */}
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setOpenCertifDialog(false)}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={() => setOpenCertifDialog(false)}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary">Enregistrer</Button>
               </DialogActions>
             </Dialog>
             <Dialog open={openExperienceDialog} onClose={() => setOpenExperienceDialog(false)}>
-              <DialogTitle>Edit Experience</DialogTitle>
+              <DialogTitle>Modifier Éxperience</DialogTitle>
               <DialogContent>
                 <Autocomplete
                   multiple
                   options={experienceOptions}
                   value={selectedExperience}
                   onChange={handleOpenExperienceChange} // Utiliser la nouvelle fonction pour gérer les changements
-                  renderInput={(params) => <TextField {...params} label="Experience" />}
+                  renderInput={(params) => <TextField {...params} label="Éxperience" />}
                 />
-                <Button onClick={handleAddExperience}>Add New</Button> {/* Ajouter ce bouton */}
+                <Button onClick={handleAddExperience}>Ajouter </Button> {/* Ajouter ce bouton */}
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setOpenExperienceDialog(false)}>Cancel</Button>
-                <Button onClick={handleUpdateUser} color="primary">Save</Button>
+                <Button onClick={() => setOpenExperienceDialog(false)}>Annuler</Button>
+                <Button onClick={handleUpdateUser} color="primary">Enregistrer</Button>
               </DialogActions>
             </Dialog>
             <Dialog open={openDialogCv} onClose={() => setOpenDialogCv(false)}>

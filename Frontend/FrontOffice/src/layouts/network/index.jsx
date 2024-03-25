@@ -87,13 +87,13 @@ function Network() {
                 <div className={classes.userContainer}>
                   <Avatar src={user.profileImage} alt="Profile" className={classes.profileImage} />
                   <Typography variant="subtitle2" className={classes.userName}>{user.firstname} {user.lastname}</Typography>
-                  <Typography variant="body2"><strong>Speciality:</strong> {user.speciality}</Typography>
+                  <Typography variant="body2"><strong>Specialité:</strong> {user.speciality}</Typography>
                   <div className={classes.buttonContainer}>
                     <Button size="small" variant="contained" color="primary">
-                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>View Profile</Link>
+                      <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Voir Profile</Link>
                     </Button>
                     <Button size="small" component={Link} to={`/Chat`} onClick={() => handleContact(user._id)} variant="contained" color="secondary" style={{ marginLeft: 8 }}>
-                      Contact
+                      Contacter
                     </Button>
                   </div>
                 </div>

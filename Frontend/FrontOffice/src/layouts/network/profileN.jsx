@@ -40,17 +40,17 @@ function ProfileN() {
               <div style={columnStyle}>
                 <div style={sectionStyle}>
                   <h3 style={headingStyle}>Contact</h3>
-                  <p><strong>Phone:</strong> <span style={textStyle}>{userInfo.phone}</span></p>
+                  <p><strong>Téléphone:</strong> <span style={textStyle}>{userInfo.phone}</span></p>
                   <p><strong>Email:</strong> <span style={textStyle}>{userInfo.email}</span></p>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Profile Information</h3>
-                  <p><strong>Date of Birth:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
-                  <p><strong>Country:</strong> <span style={textStyle}>{userInfo.country}</span></p>
-                  <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
+                  <h3 style={headingStyle}>Information de Profile</h3>
+                  <p><strong>Date de naissance:</strong> <span style={textStyle}>{userInfo.dateOfBirth}</span></p>
+                  <p><strong>Pays:</strong> <span style={textStyle}>{userInfo.country}</span></p>
+                  <p><strong>Langues:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                 </div>
                 <div>
-                  <h2>My CV</h2>
+                  <h2>Mon CV</h2>
                   
                   <img src={userInfo.cV}  />
 
@@ -58,23 +58,23 @@ function ProfileN() {
               </div>
               <div style={columnStyle}>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>About Me</h3>
+                  <h3 style={headingStyle}>À propos</h3>
                   <p style={textStyle}>{userInfo.description}</p>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Experience</h3>
+                  <h3 style={headingStyle}>Éxperience</h3>
                   <p style={textStyle}>{userInfo.experience}</p>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Education</h3>
+                  <h3 style={headingStyle}>Éducation</h3>
                   <p style={textStyle}>{userInfo.formation}</p>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Skills</h3>
+                  <h3 style={headingStyle}>Compétences</h3>
                   <p style={textStyle}>{userInfo.skills}</p>
                 </div>
                 <div style={sectionStyle}>
-                  <h3 style={headingStyle}>Certificates</h3>
+                  <h3 style={headingStyle}>Certificats</h3>
                   <p style={textStyle}>{userInfo.certificates}</p>
                 </div>
               </div>
@@ -83,7 +83,7 @@ function ProfileN() {
         )}
          <Link to="/Network">
           <Button variant="contained" color="error" size="small">
-            Back
+            Retour
           </Button>
         </Link>
       </Header>

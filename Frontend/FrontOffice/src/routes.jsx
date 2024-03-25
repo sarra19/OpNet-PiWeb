@@ -51,7 +51,6 @@ import PasswordReset from "layouts/authentication/PasswordReset";
 import Network from "layouts/network";
 import ProfileN from "layouts/network/profileN";
 import ChatManagement from "layouts/Chat/Chat";
-const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
   {
@@ -75,7 +74,7 @@ const routes = [
     name: "Home",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: `/dashboard/${getUserRole()}`,
+    route: `/dashboard/:userRole`,
     component: <Dashboard />,
   },
   {

@@ -31,9 +31,28 @@ function Header({ children }) {
     lastnameError: "",
   });
   const institutionOptions = [
-    "test5",
-    "tt",
-    "uu "];
+    "Université de Paris",
+    "Université de Montréal",
+    "Université de New York",
+    "Université de Tokyo",
+    "Institut de technologie du Massachusetts (MIT)",
+    "Université de Stanford",
+    "Université de Cambridge",
+    "Université de Harvard",
+    "Université de Pékin",
+    "Université nationale autonome du Mexique (UNAM)",
+    "Université de Sydney",
+    "Université de Cape Town",
+    "Université de Buenos Aires",
+    "Université de Sao Paulo",
+    "Université de Moscou",
+    "Université de Delhi",
+    "Université de Kyoto",
+    "Université de Toronto",
+    "Université de Zurich",
+    "Université de Melbourne",
+  ];
+  
   const [avatarImage, setAvatarImage] = useState(null);
   const [isValid, setIsValid] = useState(true); // State variable for form validation
   const inputRef = useRef(null);
@@ -253,7 +272,7 @@ function Header({ children }) {
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
           <TextField
-            label="First Name"
+            label="Prénom"
             name="firstname"
             value={formData.firstname}
             onChange={handleChange}
@@ -263,7 +282,7 @@ function Header({ children }) {
             <p style={{ color: "red" }}>{formData.firstnameError}</p>
           )}
           <TextField
-            label="Last Name"
+            label="Nom"
             name="lastname"
             value={formData.lastname}
             onChange={handleChange}
@@ -273,7 +292,7 @@ function Header({ children }) {
             <p style={{ color: "red" }}>{formData.lastnameError}</p>
           )}
           <TextField
-            label="Speciality"
+            label="Specialité"
             name="speciality"
             value={formData.speciality}
             onChange={handleChange}
@@ -291,8 +310,8 @@ function Header({ children }) {
   <Button onClick={handleAddInst}>Add New</Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditDialogClose}>Cancel</Button>
-          <Button onClick={handleUpdateUserInfo} color="primary" disabled={!isValid}>Save</Button>
+          <Button onClick={handleEditDialogClose}>Annuler</Button>
+          <Button onClick={handleUpdateUserInfo} color="primary" disabled={!isValid}>Enregistrer</Button>
 
         </DialogActions>
       </Dialog>
