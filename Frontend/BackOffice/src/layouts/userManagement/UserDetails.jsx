@@ -135,6 +135,12 @@ function UserDetails() {
                   <div style={contactContainer}>
                     <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                   </div>
+                  <div>
+                  <h2>My CV</h2>
+                  
+                  <img src={userInfo.cV} />
+
+                </div>
                 </div>
               </div>
               <div style={columnStyle}>

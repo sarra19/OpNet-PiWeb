@@ -8,6 +8,9 @@ import InputEmoji from 'react-input-emoji';
 import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { formatDistanceToNow } from 'date-fns';
+const isImageUrl = (url) => {
+  return /\.(jpeg|jpg|gif|png|pdf|docx|txt)$/.test(url);
+};
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete }) => {
   const [userData, setUserData] = useState(null);
@@ -27,11 +30,12 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('avatar', file);
+    formData.append('file', file);
 
     try {
       const response = await axios.post("http://localhost:5000/messages/upload", formData);
-      const avatarPath = response.data.avatarPath;
+      console.log(response.data)
+      const avatarPath = response.data;
       setNewMessage(avatarPath);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -157,23 +161,26 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
               />
             </div>
             <div className="chat-body">
-  {messages.map((message) => (
-    <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
-      {message.text.startsWith("http://") || message.text.startsWith("https://") ? (
-        <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
-      ) : (
-        <span>{message.text}</span>
-      )}
-      <span>{formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}</span>
-    </div>
-  ))}
+            {messages.map((message) => (
+  <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
+    {isImageUrl(message.text) ? (
+      <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+    ) : (
+      <span>{message.text}</span>
+    )}
+    <span>{formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}</span>
+  </div>
+))}
+
+
+
 </div>
 
             <div className="chat-sender">
               <div onClick={handleImageUpload}>+</div>
               <InputEmoji value={newMessage} onChange={handleChange} />
               <div className="send-button button" onClick={handleSend}>Send</div>
-              <input type="file" name="avatar" id="avatar" style={{ display: "none" }} ref={imageRef} onChange={handleFileChange} />
+              <input type="file" name="file" id="file" style={{ display: "none" }} ref={imageRef} onChange={handleFileChange} />
             </div>
           </>
         ) : (
