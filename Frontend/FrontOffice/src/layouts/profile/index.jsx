@@ -10,6 +10,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import MDBox from "components/MDBox";
 import { isValid } from "date-fns";
 import Autocomplete from "@mui/material/Autocomplete";
+import Alert from "@mui/material/Alert";
+
 const countryOptions = [
   "United States",
   "United Kingdom",
@@ -433,6 +435,7 @@ function Overview() {
 
   const [selectedDateOfBirth, setSelectedDateOfBirth] = useState(null); // State for Date of Birth
   const [imageData, setImageData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Function to handle changes in Date of Birth
   const handleDateOfBirthChange = (date) => {
@@ -532,11 +535,14 @@ function Overview() {
       const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
       console.log(response.data);
       setOpenDialog(false);
+      setOpenDialogCv(false);
+
       setUserInfo(formData);
       setOpenContactDialog(false);
       setOpenProfileDialog(false);
       setOpenEducationDialog(false); // Fermer le dialogue de l'éducation après la mise à jour
       setOpenCertifDialog(false); // Fermer le dialogue de l'éducation après la mise à jour
+      setShowAlert(true); // Show the alert
 
       setOpenExperienceDialog(false);
     } catch (error) {
@@ -705,7 +711,10 @@ function Overview() {
       console.error('No file selected');
     }
   };
-  
+  const handleUploadAndClose = () => {
+    handleUpdateUser(); // Appel de la fonction pour mettre à jour l'utilisateur
+    setOpenDialogCv(false); // Fermer la boîte de dialogue d'envoi de CV
+  };
 
   return (
     <DashboardLayout>
@@ -714,6 +723,11 @@ function Overview() {
       <Header>
         {userInfo && (
           <>
+          {showAlert && (
+  <Alert severity="success" onClose={() => setShowAlert(false)}>
+    User details updated successfully!
+  </Alert>
+)}
             <div style={containerStyle}>
               <div style={columnStyle}>
                 <div style={sectionStyle}>
@@ -741,6 +755,7 @@ function Overview() {
                   <div style={contactContainer}>
                     <p><strong>Languages:</strong> <span style={textStyle}>{userInfo.languages}</span></p>
                   </div>
+                  
                 </div>
                 <div>
                   <h2>My CV</h2>
@@ -959,7 +974,7 @@ function Overview() {
         <DialogContent>
           <form onSubmit={handleSubmit}>
                     <input type="file" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png" onChange={handleFileChange} />
-                    <button type="submit">Upload</button>
+                    <button type="submit" onClick={handleUploadAndClose}  >Upload</button>
           </form>
         </DialogContent>
       </Dialog>
