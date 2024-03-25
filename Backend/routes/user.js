@@ -90,7 +90,20 @@ router.get('/:FirstName/:LastName/:Email', function(req,res){
     }).save();
     res.send("hello user");
 });
+router.post('/checkEmail', async (req, res) => {
+	try {
+	  const { email } = req.body;
+	  const existingUser = await User.findOne({ email });
+	  // Si existingUser est null, cela signifie que l'e-mail n'existe pas dans la base de données
+	  res.json({ exists: !!existingUser }); // Retourne true si l'e-mail existe, sinon false
+	} catch (error) {
+	  console.error("Error checking email existence:", error);
+	  res.status(500).json({ message: "An error occurred while checking email existence." });
+	}
+  });
+  
 
+  
 //postman
 // router.post("/add",userController.add);
 router.post("/login", userController.login)

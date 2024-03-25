@@ -37,28 +37,54 @@ function Cover() {
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
     if (name === "firstname" || name === "lastname") {
       if (/\d/.test(value)) {
-        errorMessage = "Name should not contain numbers";
+        errorMessage = "Le prénom et le nom ne devraient pas contenir de chiffres";
       } else if (value.length <= 3) {
-        errorMessage = "Name should be more than 3 characters";
+        errorMessage = "Le prénom et le nom doivent contenir plus de 3 caractères";
       }
-    } else if (name === "email") {
+    
+    
+    }else if (name === "email") {
       if (!/\S+@\S+\.\S{2,}/.test(value)) {
-        errorMessage = "Invalid email format";
+        errorMessage = "Format d'email invalide";
+      } else {
+        try {
+          const emailExistsRes = await axios.post(API_URLS.checkEmail, { email: value });
+          if (emailExistsRes.data.exists) {
+            errorMessage = "Cet email est déjà utilisé. Veuillez en utiliser un autre.";
+          }
+        } catch (error) {
+          if (error.response) {
+            // Gérer les erreurs de réponse HTTP
+            if (error.response.status === 409) {
+              errorMessage = "Cet email est déjà utilisé. Veuillez en utiliser un autre.";
+            } else {
+              errorMessage = "Erreur lors de la vérification de l'existence de l'email.";
+            }
+          } else if (error.request) {
+            // Gérer les erreurs de requête
+            errorMessage = "Erreur de réseau. Veuillez vérifier votre connexion Internet.";
+          } else {
+            // Gérer les erreurs inattendues
+            errorMessage = "Une erreur s'est produite lors de la vérification de l'email. Veuillez réessayer.";
+          }
+        }
       }
+      
     } else if (name === "password") {
-      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(value)) {
-        errorMessage = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character";
+      if (!/(?=.*\d)(?=.*[a-zÀ-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!@#$%^&*]).{8,}/.test(value)) {
+        errorMessage = "Au moins 8 caractères,un chiffre,une minuscule, une majuscule et un caractère spécial";
       }
     } else if (name === "confirmPassword") {
       if (value !== formData.password) {
-        errorMessage = "Passwords do not match";
+        errorMessage = "Les mots de passe ne correspondent pas";
       }
     }
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -132,7 +158,7 @@ function Cover() {
                 onChange={handleChange}
               />
               {formData.firstnameError && (
-                <MDTypography variant="body2" color="error">
+                <MDTypography variant="body2" color="error" style={{ fontSize: "12px" }}>
                   {formData.firstnameError}
                 </MDTypography>
               )}
@@ -148,7 +174,7 @@ function Cover() {
                 onChange={handleChange}
               />
               {formData.lastnameError && (
-                <MDTypography variant="body2" color="error">
+                <MDTypography variant="body2" color="error" style={{ fontSize: "12px" }}>
                   {formData.lastnameError}
                 </MDTypography>
               )}
@@ -164,7 +190,7 @@ function Cover() {
                 onChange={handleChange}
               />
               {formData.emailError && (
-                <MDTypography variant="body2" color="error">
+                <MDTypography variant="body2" color="error" style={{ fontSize: "12px" }}>
                   {formData.emailError}
                 </MDTypography>
               )}
@@ -180,7 +206,7 @@ function Cover() {
                 onChange={handleChange}
               />
               {formData.passwordError && (
-                <MDTypography variant="body2" color="error">
+                <MDTypography variant="body2" color="error" style={{ fontSize: "12px" }}>
                   {formData.passwordError}
                 </MDTypography>
               )}
@@ -196,7 +222,7 @@ function Cover() {
                 onChange={handleChange}
               />
               {formData.confirmPasswordError && (
-                <MDTypography variant="body2" color="error">
+                <MDTypography variant="body2" color="error" style={{ fontSize: "12px" }}>
                   {formData.confirmPasswordError}
                 </MDTypography>
               )}
@@ -225,7 +251,9 @@ function Cover() {
           </form>
         </MDBox>
       </Card>
+      
     </CoverLayout>
+
   );
 }
 
