@@ -95,7 +95,54 @@ router.post('/checkEmail', async (req, res) => {
   });
   
 
+  router.post("/search", async (req, res) => {
+	try {
+	  const filters = req.body; // Assuming the client sends filters in the request body
   
+	  // Build the query object based on the received filters
+	  const query = {};
+  
+	  // Check if any of the fields (firstname, lastname, speciality) exist in the filters
+	  if (filters.firstname || filters.lastname || filters.speciality || filters.email || filters.institution) {
+		// Construct a $or condition to search on any of the specified fields
+		const orConditions = [];
+  
+		if (filters.firstname) {
+		  orConditions.push({ firstname: { $regex: new RegExp(filters.firstname, "i") } });
+		}
+  
+		if (filters.lastname) {
+		  orConditions.push({ lastname: { $regex: new RegExp(filters.lastname, "i") } });
+		}
+  
+		if (filters.speciality) {
+		  orConditions.push({ speciality: { $regex: new RegExp(filters.speciality, "i") } });
+		}
+		
+		if (filters.email) {
+			orConditions.push({ email: { $regex: new RegExp(filters.email, "i") } });
+		  }
+		  if (filters.institution) {
+			orConditions.push({ institution: { $regex: new RegExp(filters.institution, "i") } });
+		  }
+	
+  
+		// Add the $or condition to the query
+		query.$or = orConditions;
+	  }
+  
+	  // Execute the search query using the built query object
+	  const users = await User.find(query);
+  
+	  res.json(users);
+	} catch (error) {
+	  console.error("Error searching users:", error);
+	  res.status(500).send("An error occurred while searching users");
+	}
+  });
+
+  
+
 //postman
 // router.post("/add",userController.add);
 router.post("/login", userController.login)

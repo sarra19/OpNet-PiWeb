@@ -11,6 +11,7 @@ import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
+import { TextField } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   userContainer: {
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
+    },
+    searchButton: {
+      marginBottom: theme.spacing(2),
     },
   },
   profileImage: {
@@ -46,6 +50,7 @@ function Network() {
   const classes = useStyles();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -75,12 +80,52 @@ function Network() {
       console.error("Error creating chat:", error);
     }
   };
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/user/search", {
+        firstname: searchQuery, // Search by firstname
+        lastname: searchQuery, // Search by lastname
+        speciality: searchQuery, // Search by speciality
+        email: searchQuery, // Search by speciality
+        institution: searchQuery, // Search by speciality
+
+
+      });
+  
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setError("An error occurred while searching users");
+    }
+  };
+  
+  
 
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
+        <Grid container spacing={2}>
+  <Grid item xs={12} sm={6} md={4}>
+    <TextField
+      label="Rechercher"
+      variant="outlined"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+
+    <Button
+      className={classes.searchButton}
+      variant="contained"
+      style={{ marginLeft: '10px', backgroundColor: '#E82227'  ,color: 'white' }} // Ajoutez cette ligne pour définir la couleur de fond
+      onClick={handleSearch}
+      
+    >
+      Rechercher
+    </Button>
+  </Grid>
+</Grid>
           <Grid container spacing={2}>
             {users.map((user, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
@@ -92,7 +137,7 @@ function Network() {
                     <Button size="small" variant="contained" color="primary">
                       <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Voir Profile</Link>
                     </Button>
-                    <Button size="small" component={Link} to={`/Chat`} onClick={() => handleContact(user._id)} variant="contained" color="secondary" style={{ marginLeft: 8 }}>
+                    <Button size="small" component={Link} to={`/Chat`} onClick={() => handleContact(user._id)} variant="contained"  style={{ marginLeft: 8 ,backgroundColor: '#E82227', color: 'white' }}>
                       Contacter
                     </Button>
                   </div>

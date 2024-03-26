@@ -82,7 +82,8 @@ function ProfileN() {
           </>
         )}
          <Link to="/Network">
-          <Button variant="contained" color="error" size="small">
+          <Button variant="contained"  size="small"   style={{ marginLeft: '10px', backgroundColor: '#E82227', color: 'white' }} 
+>
             Retour
           </Button>
         </Link>
