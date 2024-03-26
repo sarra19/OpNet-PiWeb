@@ -11,7 +11,7 @@ import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
-import { TextField } from "@mui/material";
+import { Autocomplete, MenuItem, TextField } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   userContainer: {
@@ -51,7 +51,23 @@ function Network() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
+  const [sortBy, setSortBy] = useState(""); // State pour stocker le critère de tri
+  const [sortOrder, setSortOrder] = useState(""); // State pour stocker l'ordre de tri
 
+  // Fonction pour gérer le tri des utilisateurs
+  const handleSort = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/user/sort", {
+        sortBy,
+        sortOrder,
+      });
+
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error sorting users:", error);
+      setError("An error occurred while sorting users");
+    }
+  };
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -106,26 +122,80 @@ function Network() {
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
-        <Grid container spacing={2}>
+  {/* Champ de recherche */}
+ 
+  {/* Menu déroulant pour trier */}
+  <Grid container spacing={2} alignItems="center">
+  {/* Champ de recherche */}
   <Grid item xs={12} sm={6} md={4}>
     <TextField
       label="Rechercher"
       variant="outlined"
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
+      fullWidth
     />
-
+  </Grid>
+  {/* Menu déroulant pour trier */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Autocomplete
+      options={['firstname', 'lastname', 'speciality', 'institution']}
+      value={sortBy}
+      onChange={(event, newValue) => {
+        setSortBy(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Trier par"
+          variant="outlined"
+          fullWidth
+        />
+      )}
+    />
+  </Grid>
+  {/* Menu déroulant pour l'ordre de tri */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Autocomplete
+      options={['asc', 'desc']}
+      value={sortOrder}
+      onChange={(event, newValue) => {
+        setSortOrder(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Ordre"
+          variant="outlined"
+          fullWidth
+        />
+      )}
+    />
+  </Grid>
+  {/* Bouton de recherche */}
+  <Grid item xs={12} sm={6} md={4}>
     <Button
-      className={classes.searchButton}
       variant="contained"
-      style={{ marginLeft: '10px', backgroundColor: '#E82227'  ,color: 'white' }} // Ajoutez cette ligne pour définir la couleur de fond
+      style={{ backgroundColor: '#E82227', color: 'white' }}
       onClick={handleSearch}
-      
+      fullWidth
     >
       Rechercher
     </Button>
   </Grid>
+  {/* Bouton de tri */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#E82227', color: 'white' }}
+      onClick={handleSort}
+      fullWidth
+    >
+      Trier
+    </Button>
+  </Grid>
 </Grid>
+
           <Grid container spacing={2}>
             {users.map((user, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>

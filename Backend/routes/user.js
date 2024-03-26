@@ -157,6 +157,11 @@ router.get('/getbyname/:name' ,userController.getbyname);
 router.put('/updateUser/:id', userController.UpdateUser);
 
 router.delete('/deleteUser/:id',userController.deleteUser);
+
+// Ajoutez cette route pour trier les utilisateurs
+router.post("/sort", userController.sortUsers);
+
+
 router.post("/", async (req, res) => {
 	try {
 		

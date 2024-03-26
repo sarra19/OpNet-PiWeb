@@ -145,6 +145,21 @@ async function profile(req, res) {
     }
 }
 
+const sortUsers = async (req, res) => {
+    try {
+        const { sortBy, sortOrder } = req.body;
+
+        let users = await User.find().sort({ [sortBy]: sortOrder });
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error sorting users:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+};
+
+
+
 
 // async function add(req, res) {
 //     try {
@@ -247,4 +262,4 @@ async function deleteUser (req, res) {
 }
 
 
-module.exports={getall ,googlelogin,storeUserRole, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}
+module.exports={getall ,googlelogin,storeUserRole,sortUsers, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}
