@@ -32,7 +32,7 @@ const Conversation = ({ data, currentUser, online, onDelete }) => {
           <Avatar src={userData?.profileImage} alt="Profile" className="followerImage" style={{ width: "50px", height: "50px" }} />
           <div className="name" style={{ fontSize: '0.8rem' }}>
             <span>{userData?.firstname} {userData?.lastname}</span>
-            <span style={{ color: online ? "#51e200" : "" }}>{online ? "Online" : "Offline"}</span>
+            <span style={{ color: online ? "#51e200" : "#E82227" }}>{online ? " En ligne " : " Deconnecté"}</span>
           </div>
         
         </div>

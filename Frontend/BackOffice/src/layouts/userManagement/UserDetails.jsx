@@ -10,8 +10,9 @@ import MDBox from "components/MDBox";
 import { isValid } from "date-fns";
 import Autocomplete from "@mui/material/Autocomplete";
 import Alert from "@mui/material/Alert";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "./components/Header";
+import MDButton from "components/MDButton";
 
 const countryOptions = [
   "États-Unis",
@@ -829,8 +830,15 @@ function Overview() {
                   </div>
 
                 </div>
+                
               </div>
+             
             </div>
+            <Link to="/userManagement">
+          <MDButton variant="contained" color="error" size="small">
+            Retour
+          </MDButton>
+        </Link>
             {/* Dialogue pour modifier les informations de contact */}
             {/* Dialog for editing sections */}
             <Dialog open={openDialog} onClose={handleCloseDialog}>

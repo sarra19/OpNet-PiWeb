@@ -141,7 +141,7 @@ function Basic() {
                 onClick={handleSetRememberMe}
                 sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
               >
-                Remember me
+                Rappeler moi
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>

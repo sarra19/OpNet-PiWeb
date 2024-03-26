@@ -109,30 +109,30 @@ function Ajout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData); // Ajoutez cette ligne pour afficher les valeurs des champs de formulaire
     try {
       const res = await axios.post(API_URLS.signup, formData);
-      setMsg(res.data.message);
-      window.alert('Add successful!');
+      setMsg(res.data.message); // Accéder directement à la propriété 'data' de la réponse
+      window.alert('Inscription réussie !');
 
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         setError(error.response.data.message);
       } else if (error.response && error.response.status === 401) {
-        setError("Unauthorized: Please log in again.");
+        setError("Non autorisé : Veuillez vous reconnecter.");
       } else if (error.response && error.response.status === 404) {
-        setError("Resource not found.");
+        setError("Ressource non trouvée.");
       } else if (error.response && error.response.status === 503) {
-        setError("Service unavailable. Please try again later.");
+        setError("Service indisponible. Veuillez réessayer plus tard.");
       } else if (error.request) {
-        setError("Network error. Please check your internet connection.");
+        setError("Erreur réseau. Veuillez vérifier votre connexion internet.");
       } else {
-        setError("An error occurred while processing your request. Please try again later.");
+        setError("Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.");
       }
-      window.alert('Add failed. Please try again.');
+      window.alert('Échec de l inscription. Veuillez réessayer.');
 
     }
   };
+
   
   
   return (

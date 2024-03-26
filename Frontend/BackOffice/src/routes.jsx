@@ -145,7 +145,7 @@ const routes = [
     name: "Sign In",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
+    route: "http://localhost:3000/authentication/sign-in",
     component: <SignIn />,
   },
   {
@@ -153,7 +153,7 @@ const routes = [
     name: "Sign Up",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
+    route: "http://localhost:3000/authentication/sign-up",
     component: <SignUp />,
   },
 ];
