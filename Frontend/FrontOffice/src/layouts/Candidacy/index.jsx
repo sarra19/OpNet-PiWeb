@@ -8,6 +8,8 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import Header from "layouts/profile/components/Header";
 import MDBox from "components/MDBox";
+import { Card } from "@mui/material";
+import MDTypography from "components/MDTypography";
 
 function Candidacy() {
   const [nom, setNom] = useState("");
@@ -17,7 +19,10 @@ function Candidacy() {
   const [cv, setCv] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const buttonStyles = {
+    cursor: "pointer",
+    marginRight: "5px",
+  };
   const handleCvChange = (e) => {
     setCv(e.target.files[0]);
   };
@@ -60,23 +65,25 @@ function Candidacy() {
 
   return (
     <DashboardLayout>
-      <Header />
-      <div className="add-candidature-container">
-        <MDBox
-          variant="gradient"
-          bgColor="info"
-          borderRadius="lg"
-          coloredShadow="success"
-          mx={2}
-          mt={-3}
-          p={3}
-          mb={1}
-          textAlign="center"
-        >
-          <h2>Ajouter une Candidature</h2>
-        </MDBox>
-        <MDBox pt={4} pb={3} px={3}>
-          <form onSubmit={handleSubmit} className="add-candidature-form">
+    <MDBox mb={2} />
+     <Card>
+      <MDBox
+            variant="gradient"
+            bgColor="info"
+            borderRadius="lg"
+            coloredShadow="success"
+            mx={2}
+            mt={1}
+            p={3}
+            mb={1}
+            textAlign="center"
+          >
+            <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+              Postuler 
+            </MDTypography>
+          </MDBox>
+          <MDBox pt={4} pb={3} px={3}>
+            <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
               <MDInput
                 type="text"
@@ -121,7 +128,7 @@ function Candidacy() {
               />
             </MDBox>
             <MDBox mb={2}>
-              <label htmlFor="lettreMotivation">Upload Lettre Motivation </label>
+              <label htmlFor="lettreMotivation">Upload Lettre  Motivation </label>
               <input
                 id="lettreMotivation"
                 type="file"
@@ -137,16 +144,17 @@ function Candidacy() {
                 color="info"
                 type="submit"
                 disabled={loading}
-                style={{ padding: "6px 16px", fontSize: "14px" }} // Réduire la taille du bouton
+                style={buttonStyles} // Réduire la taille du bouton
               >
                 {loading ? "Envoi en cours..." : "Ajouter Candidature"}
               </MDButton>
+              
               <MDButton
                 variant="gradient"
                 color="info"
                 component={Link}
                 to="/quiz/home"
-                style={{ marginTop: "10px", padding: "6px 16px", fontSize: "14px" }} // Réduire la taille du bouton
+                style={buttonStyles} // Réduire la taille du bouton
               >
                 Passer le Quiz
               </MDButton>
@@ -155,19 +163,19 @@ function Candidacy() {
                 color="info"
                 component={Link}
                 to="/tables"
-                style={{ marginTop: "10px", padding: "6px 16px", fontSize: "14px" }} // Réduire la taille du bouton
+                style={buttonStyles} // Réduire la taille du bouton
               >
                 Retour à la liste des candidatures
               </MDButton>
             </MDBox>
             {errorMessage && (
-              <MDBox mt={2} style={{ color: "red" }}>
+              <MDBox mt={2} style={buttonStyles}>
                 {errorMessage}
               </MDBox>
             )}
-          </form>
+            </MDBox>
         </MDBox>
-      </div>
+      </Card>
       <Footer />
     </DashboardLayout>
   );

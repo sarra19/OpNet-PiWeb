@@ -8,16 +8,25 @@ import MDButton from "components/MDButton";
 import Header from "layouts/profile/components/Header";
 import MDBox from "components/MDBox";
 import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import MDTypography from "components/MDTypography";
+
 
 function AddQuestionForm() {
   const [text, setText] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctOption, setCorrectOption] = useState(0);
+  const [thematique, setThematique] = useState("");
+  const [niveau, setNiveau] = useState("");
+
 
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...options];
     updatedOptions[index] = value;
     setOptions(updatedOptions);
+  };const buttonStyles = {
+    cursor: "pointer",
+    marginRight: "5px",
   };
 
   const handleSubmit = async (event) => {
@@ -26,13 +35,17 @@ function AddQuestionForm() {
       const response = await axios.post('http://localhost:5000/question/add', {
         text,
         options,
-        correctOption
+        correctOption,
+        thematique,
+        niveau
       });
       console.log(response.data);
       // Reset form after successful submission
       setText('');
       setOptions(['', '', '', '']);
       setCorrectOption(0);
+      setThematique('');
+      setNiveau('');
       alert('Question added successfully!');
     } catch (error) {
       console.error('Error adding question:', error);
@@ -42,23 +55,25 @@ function AddQuestionForm() {
 
   return (
     <DashboardLayout>
-      <Header />
-      <div className="add-question-container">
+    <MDBox mb={2} />
+      <Card>
         <MDBox
           variant="gradient"
           bgColor="info"
           borderRadius="lg"
           coloredShadow="success"
           mx={2}
-          mt={-3}
+          mt={1}
           p={3}
           mb={1}
           textAlign="center"
         >
-          <h2>Add Question</h2>
+          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+          Add Question
+          </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <form onSubmit={handleSubmit} className="add-question-form">
+            <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
               <MDInput
                 type="text"
@@ -97,13 +112,33 @@ function AddQuestionForm() {
                 ))}
               </MDInput>
             </MDBox>
+            <MDBox mb={2}>
+              <MDInput
+                type="thematique"
+                label="Thematique"
+                variant="standard"
+                fullWidth
+                value={text}
+                onChange={(e) => setThematique(e.target.value)}
+              />
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput
+                type="niveau"
+                label="Niveau"
+                variant="standard"
+                fullWidth
+                value={text}
+                onChange={(e) => setNiveau(e.target.value)}
+              />
+            </MDBox>
             <MDBox mt={4} mb={1} display="flex" justifyContent="space-evenly" alignItems="center">
               <MDButton
                 variant="gradient"
                 color="info"
                 fullWidth
                 type="submit"
-                style={{ padding: "4px 12px", fontSize: "12px" }} // Réduire la taille du bouton
+                style={buttonStyles} // Réduire la taille du bouton
               >
                 Add Question
               </MDButton>
@@ -113,14 +148,14 @@ function AddQuestionForm() {
                 color="info"
                 component={Link} 
                 to="/Question" 
-                style={{ padding: "4px 12px", fontSize: "12px" }} // Réduire la taille du bouton
+                style={buttonStyles} // Réduire la taille du bouton
               >
-                Retour à la liste des questions
+                Retour 
               </MDButton>
             </MDBox>
-          </form>
-        </MDBox>
-      </div>
+            </MDBox>
+          </MDBox>
+        </Card>
       <Footer />
     </DashboardLayout>
   );

@@ -1,14 +1,22 @@
 const express=require("express");
 const cors = require("cors");
-
+const dotenv = require("dotenv");
 const http =require("http");
 const config=require ("./config/dbconnection.json");
-const mongo = require ("mongoose");
+const mongoose = require ("mongoose");
 const bodyParser =require('body-parser')
 
-mongo.connect(config.url, {useNewUrlParser:true , useUnifiedTopology: true}).then(()=> console.log("database connected")).catch(()=>console.log("database not connected"))
-//mongo.connect(config.url).then(()=>console.log("database connected")).catch(()=>console.log("database not connected"));
-//mongo.connect(config.url,{useNewUrlParser:true,useUnifiedTopology:true})
+dotenv.config();
+const { Connect } = require("./config/connect.js");
+
+// Connect to MongoDB
+Connect()
+  .then(() => {
+    console.log("Database connected");
+    mongoose.connect(process.env.MONGO_URI);
+  })
+  .catch((err) => console.error("Database connection error:", err));
+
 const questionRouter = require("./routes/question");
 const candRouter = require("./routes/candidature")
 const app=express();

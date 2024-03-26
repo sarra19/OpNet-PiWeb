@@ -64,7 +64,7 @@ function CandidatureList() {
             </tbody>
           </table>
           {candidatures.length === 0 && <p>Aucune candidature disponible pour le moment.</p>}
-          <MDBox mt={4}>
+          <MDBox mt={4} mb={1} display="flex" justifyContent="space-evenly" alignItems="center">
             <MDButton
               variant="gradient"
               color="info"

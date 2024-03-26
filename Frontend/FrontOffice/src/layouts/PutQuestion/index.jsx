@@ -80,7 +80,7 @@ function ModifierQuestionForm() {
   return (
     <DashboardLayout>
       <MDBox mb={2} />
-      <Header>
+      <Header />
         <Card>
           <MDBox
             variant="gradient"
@@ -147,7 +147,6 @@ function ModifierQuestionForm() {
             </MDBox>
           </MDBox>
         </Card>
-      </Header>
       <Footer />
     </DashboardLayout>
   );
