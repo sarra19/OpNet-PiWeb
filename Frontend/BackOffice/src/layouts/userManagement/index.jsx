@@ -7,6 +7,7 @@ import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
+import { Autocomplete, Grid, TextField } from "@mui/material";
 
 // CSS Styles
 const tableStyles = {
@@ -46,7 +47,24 @@ const buttonStyles = {
 function UserManagement() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null); // State for error handling
+  const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
+  const [sortBy, setSortBy] = useState(""); // State pour stocker le critère de tri
+  const [sortOrder, setSortOrder] = useState(""); // State pour stocker l'ordre de tri
 
+  // Fonction pour gérer le tri des utilisateurs
+  const handleSort = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/user/sort", {
+        sortBy,
+        sortOrder,
+      });
+
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error sorting users:", error);
+      setError("An error occurred while sorting users");
+    }
+  };
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -70,11 +88,106 @@ function UserManagement() {
     }
   };
   
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/user/search", {
+        firstname: searchQuery, // Search by firstname
+        lastname: searchQuery, // Search by lastname
+        speciality: searchQuery, // Search by speciality
+        email: searchQuery, // Search by speciality
+        institution: searchQuery, // Search by speciality
+
+
+      });
+  
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setError("An error occurred while searching users");
+    }
+  };
+  
+  
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
+        <Grid container spacing={2} alignItems="center">
+  {/* Champ de recherche */}
+  <Grid item xs={12} sm={6} md={4}>
+    <TextField
+      label="Rechercher"
+      variant="outlined"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      fullWidth
+      size="small" // Réduction de la taille
+    />
+  </Grid>
+  {/* Bouton de recherche */}
+  <Grid item xs={12} sm={6} md={2}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#E82227', color: 'white' }}
+      onClick={handleSearch}
+      fullWidth
+    >
+      Rechercher
+    </Button>
+  </Grid>
+  {/* Menu déroulant pour trier */}
+  <Grid item xs={12} sm={6} md={3}>
+    <Autocomplete
+      options={['firstname', 'lastname', 'speciality', 'institution']}
+      value={sortBy}
+      onChange={(event, newValue) => {
+        setSortBy(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Trier par"
+          variant="outlined"
+          fullWidth
+          size="small" // Réduction de la taille
+        />
+      )}
+    />
+  </Grid>
+  {/* Menu déroulant pour l'ordre de tri */}
+  <Grid item xs={12} sm={6} md={2}>
+    <Autocomplete
+      options={['asc', 'desc']}
+      value={sortOrder}
+      onChange={(event, newValue) => {
+        setSortOrder(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Ordre"
+          variant="outlined"
+          fullWidth
+          size="small" // Réduction de la taille
+        />
+      )}
+    />
+  </Grid>
+  {/* Bouton de tri */}
+  <Grid item xs={12} sm={6} md={1}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#E82227', color: 'white' }}
+      onClick={handleSort}
+      fullWidth
+    >
+      Trier
+    </Button>
+  </Grid>
+</Grid>
+
           <tr>
             <td colSpan="8" style={cellStyles}>
               <Button variant="contained" style={{ backgroundColor: '#E82227', color: '#fff' }}>

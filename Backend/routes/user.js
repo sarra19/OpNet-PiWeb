@@ -160,8 +160,31 @@ router.delete('/deleteUser/:id',userController.deleteUser);
 
 // Ajoutez cette route pour trier les utilisateurs
 router.post("/sort", userController.sortUsers);
+// Assuming you have a route to fetch user role statistics
+router.get("/userRoleStatistics", async (req, res) => {
+	try {
+	  const roleStatistics = await User.aggregate([
+		{ $match: { verified: true } }, // Filter verified users
+		{ $group: { _id: "$role", count: { $sum: 1 } } },
+	  ]);
+	  res.json(roleStatistics);
+	} catch (error) {
+	  console.error("Error fetching user role statistics:", error);
+	  res.status(500).send("An error occurred while fetching user role statistics");
+	}
+  });
 
-
+  router.get("/totalUsers", async (req, res) => {
+	try {
+	  // Count the total number of users where verified is true
+	  const totalUsers = await User.countDocuments({ verified: true });
+	  res.json({ totalUsers });
+	} catch (error) {
+	  console.error("Error fetching total users:", error);
+	  res.status(500).send("An error occurred while fetching total users");
+	}
+  });
+	
 router.post("/", async (req, res) => {
 	try {
 		

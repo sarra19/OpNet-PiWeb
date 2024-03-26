@@ -1,36 +1,103 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
+/* eslint-disable */
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
+// Import MUI components
 import Grid from "@mui/material/Grid";
 
-// Material Dashboard 2 React components
+// Import Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-/* eslint-disable */
+import { Chart } from "chart.js";
 
 function Statistics() {
+  // State to store role statistics
+  const [roleStatistics, setRoleStatistics] = useState([]);
+  // State to store total number of users
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  // Function to fetch role statistics and total number of users from the server
+  const fetchData = async () => {
+    try {
+      // Fetch role statistics
+      const roleStatsResponse = await axios.get("http://localhost:5000/user/userRoleStatistics");
+      setRoleStatistics(roleStatsResponse.data);
+
+      // Fetch total number of users
+      const totalUsersResponse = await axios.get("http://localhost:5000/user/totalUsers");
+      setTotalUsers(totalUsersResponse.data.totalUsers);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Effect to fetch role statistics and total number of users when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Effect to render the charts when role statistics or total number of users change
+  useEffect(() => {
+    renderCharts();
+  }, [roleStatistics, totalUsers]);
+
+  // Function to render both pie and bar charts
+  const renderCharts = () => {
+    renderBarChart();
+  };
+
+ 
+
+  // Function to render the role statistics bar chart
+  const renderBarChart = () => {
+    const ctx = document.getElementById("roleBarChart");
+
+    if (ctx) {
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: roleStatistics.map((stat) => stat._id),
+          datasets: [
+            {
+              label: 'Role Count',
+              data: roleStatistics.map((stat) => stat.count),
+              backgroundColor: [
+                "#FF5733", // Vivid Red
+                "#E82227", // Dark Red
+                "#FFAF9F", // Rose
+                "#F99999", // Coral Red
+                "#FA8072", // Light Salmon
+                "#F08080", // Light Coral
+              ],
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+              },
+            }],
+          },
+        },
+      });
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
-        <MDBox mb={3}> </MDBox>
+        <MDBox mb={3} className="graph-container">
+          <h2>User Role Statistics</h2>
+          <p>Total Users: {totalUsers}</p>
+          <div className="graph-wrapper">
+            <canvas id="roleBarChart"></canvas> {/* New canvas for the bar chart */}
+          </div>
+        </MDBox>
       </MDBox>
       <Footer />
     </DashboardLayout>
@@ -38,6 +105,3 @@ function Statistics() {
 }
 
 export default Statistics;
-
-
-

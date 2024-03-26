@@ -122,10 +122,7 @@ function Network() {
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
-  {/* Champ de recherche */}
- 
-  {/* Menu déroulant pour trier */}
-  <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} alignItems="center">
   {/* Champ de recherche */}
   <Grid item xs={12} sm={6} md={4}>
     <TextField
@@ -134,10 +131,22 @@ function Network() {
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       fullWidth
+      size="small" // Réduction de la taille
     />
   </Grid>
+  {/* Bouton de recherche */}
+  <Grid item xs={12} sm={6} md={2}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#E82227', color: 'white' }}
+      onClick={handleSearch}
+      fullWidth
+    >
+      Rechercher
+    </Button>
+  </Grid>
   {/* Menu déroulant pour trier */}
-  <Grid item xs={12} sm={6} md={4}>
+  <Grid item xs={12} sm={6} md={3}>
     <Autocomplete
       options={['firstname', 'lastname', 'speciality', 'institution']}
       value={sortBy}
@@ -150,12 +159,13 @@ function Network() {
           label="Trier par"
           variant="outlined"
           fullWidth
+          size="small" // Réduction de la taille
         />
       )}
     />
   </Grid>
   {/* Menu déroulant pour l'ordre de tri */}
-  <Grid item xs={12} sm={6} md={4}>
+  <Grid item xs={12} sm={6} md={2}>
     <Autocomplete
       options={['asc', 'desc']}
       value={sortOrder}
@@ -168,23 +178,13 @@ function Network() {
           label="Ordre"
           variant="outlined"
           fullWidth
+          size="small" // Réduction de la taille
         />
       )}
     />
   </Grid>
-  {/* Bouton de recherche */}
-  <Grid item xs={12} sm={6} md={4}>
-    <Button
-      variant="contained"
-      style={{ backgroundColor: '#E82227', color: 'white' }}
-      onClick={handleSearch}
-      fullWidth
-    >
-      Rechercher
-    </Button>
-  </Grid>
   {/* Bouton de tri */}
-  <Grid item xs={12} sm={6} md={4}>
+  <Grid item xs={12} sm={6} md={1}>
     <Button
       variant="contained"
       style={{ backgroundColor: '#E82227', color: 'white' }}
@@ -195,6 +195,7 @@ function Network() {
     </Button>
   </Grid>
 </Grid>
+
 
           <Grid container spacing={2}>
             {users.map((user, index) => (
