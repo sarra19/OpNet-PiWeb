@@ -242,11 +242,11 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
         count={pageCount}
         page={currentPage}
         onChange={handlePageChange}
-        boundaryCount={2}
         siblingCount={0}
         defaultPage={1}
         showFirstButton
         showLastButton
+
       />
     </div>     
       <Footer />

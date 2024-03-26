@@ -12,6 +12,7 @@ const userRouter=require("./routes/user")
 const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const interviewRouter = require("./routes/interview")
+const feedbackRouter = require("./routes/feedback")
 const app=express();
 
 // Connect to MongoDB
@@ -38,6 +39,7 @@ app.use('/user', userRouter)
 app.use('/chat', chatRoomRouter) 
 app.use('/messages', messageRouter) 
 app.use('/interviews', interviewRouter) 
+app.use('/feedbacks', feedbackRouter )
 
 // Server setup
 const server = http.createServer(app);

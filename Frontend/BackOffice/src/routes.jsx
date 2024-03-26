@@ -52,7 +52,8 @@ import OfferManagement from "layouts/offerManagement";
 import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import Calendrier from "layouts/interviewManagement/calendrier";
-import Forminput from "layouts/interviewManagement/forminput";
+import FeedBackManagement from "layouts/feedbackManagement";
+import FeedBack from "layouts/feedbackManagement/feedback_ai";
 
 const routes = [
   {
@@ -116,6 +117,24 @@ const routes = [
   //   route: "/calendrier", 
   //   component: <Calendrier />, 
   // },
+  {
+    type: "collapse",
+    name: "Feedback_Management",
+    key: "Feedback_Management",
+    icon: <Icon fontSize="small">assignment_ind_outlined</Icon>,
+    route: "/feedback",
+    component: <FeedBackManagement />,
+
+  },
+
+  {
+    type: "route",
+    name: "enregistreur_vocale", 
+    key: "enregistreur_vocale", 
+    route: "/enregistreur_vocale", 
+    component: <FeedBack />, 
+  },
+
   {
     type: "collapse",
     name: "Condidacy Management",
