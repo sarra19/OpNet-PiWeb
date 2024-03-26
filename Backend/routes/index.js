@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const passport = require("passport");
+const User= require("../models/user");
 Router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -11,16 +12,24 @@ Router.get(
   passport.authenticate("google", {
     failureRedirect: "http://localhost:3000/authentication/sign-in",
   }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    console.log(req);
-    const userRole = req.user.userRole; // Supposons que le rôle de l'utilisateur est stocké dans req.user.userRole
-    res.redirect(
-      `http://localhost:3000/dashboard/${userRole}`
-            // `http://localhost:3000?email=${req.user.email}&firstname=${req.user.firstname}&secret=${req.user.secret}`
-
-    );
+  async function (req, res) {
+    // Successful authentication, retrieve user by email
+    try {
+      const user = await User.findOne({ email: req.user.email });
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const userRole = user.role;
+      const userId = user._id;
+      // Redirect based on user role
+      res.redirect(`http://localhost:3000/dashboard/${userRole}?userId=${userId}`);
+    } catch (error) {
+      console.error("Error retrieving user:", error);
+      // Handle error redirection or display error message
+      res.status(500).send("Internal Server Error");
+    }
   }
 );
+
 
 module.exports = Router;

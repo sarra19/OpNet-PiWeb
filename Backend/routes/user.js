@@ -81,15 +81,7 @@ router.get('/images/:imageName', (req, res) => {
 //     res.send("hello user");
 // });
 
-router.get('/:FirstName/:LastName/:Email', function(req,res){
-    //instanciation
-    new User ({
-        firstname: req.params.firstName ,
-        lastname: req.params.lastName ,
-        email : req.params.email
-    }).save();
-    res.send("hello user");
-});
+
 router.post('/checkEmail', async (req, res) => {
 	try {
 	  const { email } = req.body;
@@ -150,23 +142,36 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id/verify/:token/", async (req, res) => {
-	try {
-		const user = await User.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link" });
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(400).send({ message: "User not found" });
+        }
 
-		const token = await Token.findOne({
-			userId: user._id,
-			token: req.params.token,
-		});
-		if (!token) return res.status(400).send({ message: "Invalid link" });
+        const token = await Token.findOne({
+            userId: user._id,
+            token: req.params.token,
+        });
+        if (!token) {
+            return res.status(400).send({ message: "Invalid or expired token" });
+        }
 
-		await User.updateOne({ _id: user._id, verified: true });
-		await token.remove();
+        if (user.verified) {
+            return res.status(400).send({ message: "User already verified" });
+        }
 
-		res.status(200).send({ message: "Email verified successfully" });
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+        await User.updateOne({ _id: user._id }, { verified: true });
+        // Remove the token from database (if needed)
+        // await token.remove();
+
+        // Redirect to the specified URL after successful verification
+        res.redirect("http://localhost:3000/authentication/sign-in");
+    } catch (error) {
+        console.error("Error verifying email:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
 });
+
+
   
 module.exports = router ;

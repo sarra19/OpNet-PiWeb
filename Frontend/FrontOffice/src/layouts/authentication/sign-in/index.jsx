@@ -126,7 +126,7 @@ function Basic() {
          <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
 
             <MDBox mb={2}>
-              <MDTypography variant="body1" mb={1}>addresse Email </MDTypography>
+              <MDTypography variant="body1" mb={1}>Email </MDTypography>
               <MDInput type="email" fullWidth onChange={handleEmailChange} value={email} />
             </MDBox>
             <MDBox mb={2}>
@@ -165,9 +165,13 @@ function Basic() {
               </MDTypography>
             </MDBox>
             
-            <Link to="/forgot-password" style={{ alignSelf: "flex-start" }}>
-							<p style={{ padding: "0 15px" }}>Mot de passe oublié ?</p>
-						</Link>
+            <MDBox mb={2} textAlign="center">
+              <Link to="/forgot-password" style={{ alignSelf: "flex-start" }}>
+                <MDTypography variant="body2" color="#E82227">
+                  Mot de passe oublié ?
+                </MDTypography>
+              </Link>
+            </MDBox>
             <MDBox textAlign="center">
               <Button
                 leftIcon={<AiFillGoogleCircle />}

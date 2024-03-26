@@ -174,7 +174,7 @@ export default function App() {
         <Routes>
           {getRoutes(routes)}
           <Route path="/user/:id/verify/:token" element={<EmailVerify />} />
-          <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} />
+          <Route path="/auth/google" element={<Navigate to={`/dashboard/:userRole`} />} />
 
          
         </Routes>
@@ -202,7 +202,9 @@ export default function App() {
         {getRoutes(routes)}
         
         <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
-        <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} />
+        {/* <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} /> */}
+        
+        <Route path="/user/:id/verify/:token/" element={<Navigate to={`/authentication/sign-in`} />} />
 
       </Routes>
     </ThemeProvider>

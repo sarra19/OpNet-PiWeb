@@ -1,12 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+/* eslint-disable */
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import MDBox from "components/MDBox";
-/* eslint-disable */
 
 function Homepage() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const userId = searchParams.get("userId");
+    if (userId) {
+      sessionStorage.setItem("userId", userId);
+    }
+  }, [location]);
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -29,3 +39,4 @@ function Homepage() {
 }
 
 export default Homepage;
+
