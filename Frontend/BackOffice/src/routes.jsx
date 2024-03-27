@@ -67,8 +67,6 @@ const routes = [
     route: "/user/:userId", // Make sure it matches the backend route
     component: <UserDetails />, // Composant UserDetailsPage à afficher lorsque cette route est visitée
   },
-
-
   {
     type: "route",
     name: "Add User",

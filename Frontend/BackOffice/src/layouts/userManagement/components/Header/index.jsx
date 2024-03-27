@@ -16,7 +16,7 @@ import backgroundImage from "assets/images/bg-pofile.jpg";
 import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Autocomplete } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { PDFDocument ,rgb} from "pdf-lib";
+import { PDFDocument, rgb, drawImage } from "pdf-lib";
 
 function Header({ children }) {
   const { userId } = useParams();
@@ -27,10 +27,22 @@ function Header({ children }) {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
-    institution: "", 
+    institution: "",
     speciality: "",
+    profileImage: "",
     firstnameError: "",
     lastnameError: "",
+    dateOfBirth: "",
+    country: "",
+    phone: "",
+
+    languages: "",
+
+    description: "",
+    skills: "",
+    experience: "",
+    formation: "",
+    certificates: "",
   });
   const institutionOptions = [
     "Université de Paris",
@@ -54,7 +66,7 @@ function Header({ children }) {
     "Université de Zurich",
     "Université de Melbourne",
   ];
-  
+
   const [avatarImage, setAvatarImage] = useState(null);
   const [isValid, setIsValid] = useState(true); // State variable for form validation
   const inputRef = useRef(null);
@@ -68,10 +80,11 @@ function Header({ children }) {
       // Add the new education option to the existing options
       const updatedInstOptions = [...institutionOptions, newInstOption];
       setInstOptions(updatedInstOptions);
-  
+
       // Select the newly added education option
       setSelectedInst([...selectedInst, newInstOption]);
-    }}
+    }
+  }
 
   useEffect(() => {
     function handleTabsOrientation() {
@@ -103,6 +116,15 @@ function Header({ children }) {
           lastname: response.data.lastname,
           speciality: response.data.speciality,
           institution: response.data.institution,
+          dateOfBirth: response.data.dateOfBirth,
+          country: response.data.country,
+          phone: response.data.phone,
+          languages: response.data.languages,
+          description: response.data.description,
+          skills: response.data.skills,
+          experience: response.data.experience,
+          formation: response.data.formation,
+          certificates: response.data.certificates,
         });
         if (response.data.profileImage) {
           setAvatarImage(response.data.profileImage);
@@ -125,7 +147,7 @@ function Header({ children }) {
     setOpenEditDialog(false);
   };
 
- 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
@@ -138,7 +160,7 @@ function Header({ children }) {
         errorMessage = "Name should be more than 3 characters";
         isValid = false; // Set isValid to false if validation fails
       }
-    } 
+    }
     setFormData({
       ...formData,
       [name]: value,
@@ -181,22 +203,113 @@ function Header({ children }) {
   const handleDownloadPDF = async () => {
     try {
       const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([400, 400]);
-  
-      const redColor = rgb(232/255, 34/255, 39/255); // Créez un objet Color avec la couleur spécifiée
-  
-      page.drawText(`Informations de l'utilisateur:
-        Prénom: ${formData.firstname}
-        Nom: ${formData.lastname}
-        Spécialité: ${formData.speciality}
-        Institution: ${formData.institution}
-         cV: ${formData.cV}`, {
+      const page = pdfDoc.addPage([400, 600]); // Augmentez la hauteur pour inclure l'image du CV
+
+      const redColor = rgb(232 / 255, 34 / 255, 39 / 255);
+
+      // Récupérer et dessiner l'image de profil
+      const profileImageUrl = `http://localhost:5000/user/${formData.profileImage}`;
+      const profileImageResponse = await fetch(profileImageUrl);
+
+      if (!profileImageResponse.ok) {
+        throw new Error('Failed to fetch profile image');
+      }
+
+      const profileImageBytes = await profileImageResponse.arrayBuffer();
+      const profileImageEmbedded = await loadImage(profileImageBytes, pdfDoc);
+
+      const { width: profileWidth, height: profileHeight } = profileImageEmbedded;
+
+      // Taille souhaitée pour l'image de profil et le CV (réduite)
+      const desiredWidth = 150;
+      const desiredHeight = 150;
+
+      // Calculer les proportions pour maintenir l'aspect ratio
+      const profileAspectRatio = profileWidth / profileHeight;
+      const scaledWidth = desiredWidth;
+      const scaledHeight = scaledWidth / profileAspectRatio;
+
+      // Dessiner l'image de profil
+      page.drawImage(profileImageEmbedded, {
         x: 50,
-        y: 350,
-        size: 12,
-        color: redColor, // Utilisez l'objet Color
+        y: 400, // Position de l'image de profil
+        width: scaledWidth,
+        height: scaledHeight,
       });
-  
+
+      // Récupérer et dessiner l'image du CV
+      const cvImageUrl = `http://localhost:5000/user/${formData.cV}`;
+      const cvImageResponse = await fetch(cvImageUrl);
+
+      if (!cvImageResponse.ok) {
+        throw new Error('Failed to fetch CV image');
+      }
+
+      const cvImageBytes = await cvImageResponse.arrayBuffer();
+      const cvImageEmbedded = await loadImage(cvImageBytes, pdfDoc);
+
+      // Dessiner l'image du CV avec les mêmes dimensions que l'image de profil
+      page.drawImage(cvImageEmbedded, {
+        x: 220,
+        y: 400, // Position de l'image du CV
+        width: scaledWidth,
+        height: scaledHeight,
+      });
+
+      // Dessiner les informations de l'utilisateur
+    // Split the description into words
+const descriptionWords = formData.description.split(/\s+/);
+
+// Insert line breaks after every 7 words
+const formattedDescription = descriptionWords.reduce((result, word, index) => {
+    if (index > 0 && index % 10 === 0) {
+        return `${result}\n${word}`;
+    } else {
+        return `${result} ${word}`;
+    }
+}, '');
+
+// page.drawText(`
+//     Spécialité: ${formData.speciality}
+//     Institution: ${formData.institution}
+//     Date de naissance: ${formData.dateOfBirth}
+//     Pays: ${formData.country}
+//     Téléphone: ${formData.phone}
+//     Langues: ${formData.languages}
+//     Compétences: ${formData.skills}
+//     Expérience: ${formData.experience}
+//     Formation: ${formData.formation}
+//     Certificats: ${formData.certificates}
+// `, {
+//     x: 50,
+//     y: 350, // Adjust Y position for the text
+//     size: 12,
+//     color: rgb(0, 0, 0),
+// });
+
+// Draw first name and last name in red
+page.drawText(formData.firstname, {
+    x: 150,
+    y: 350, // Adjust Y position for the text
+    size: 14,
+    color: redColor, // Use the defined red color
+});
+
+page.drawText(formData.lastname, {
+    x: 185,
+    y: 350, // Adjust Y position for the text
+    size: 14,
+    color: redColor, // Use the defined red color
+});
+page.drawText(formattedDescription, {
+  x: 70,
+    y: 320, // Adjust Y position for the text
+    size: 8,
+  color: rgb(0, 0, 0), // Use the defined color or change it as needed
+});
+
+
+      // Enregistrer et télécharger le PDF
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const link = document.createElement("a");
@@ -207,7 +320,40 @@ function Header({ children }) {
       console.error("Error generating PDF:", error);
     }
   };
-  
+
+
+
+  const loadImage = async (imageBytes, pdfDoc) => {
+    const contentType = getImageContentType(imageBytes);
+    if (contentType === 'image/png') {
+      return await pdfDoc.embedPng(imageBytes);
+    } else if (contentType === 'image/jpeg') {
+      return await pdfDoc.embedJpg(imageBytes);
+    } else if (contentType === 'image/jpg') {
+      return await pdfDoc.embedJpg(imageBytes);
+    } else {
+      throw new Error('Unsupported image format');
+    }
+  };
+
+  const getImageContentType = (imageBytes) => {
+    const uint = new Uint8Array(imageBytes);
+    let bytes = [];
+    uint.forEach((byte) => {
+      bytes.push(byte.toString(16));
+    });
+    const hex = bytes.join('').toUpperCase();
+    if (hex.startsWith('89504E47')) {
+      return 'image/png';
+    } else if (hex.startsWith('FFD8FF')) {
+      return 'image/jpeg';
+    } else if (hex.startsWith('FFD8FFE0')) {
+      return 'image/jpg';
+    } else {
+      throw new Error('Unsupported image format');
+    }
+  };
+
   return (
     <MDBox position="relative" mb={5}>
       <MDBox
@@ -244,7 +390,7 @@ function Header({ children }) {
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
-                       <MDAvatar
+            <MDAvatar
               src={avatarImage}
               alt={`${userInfo.firstname} ${userInfo.lastname}`}
               sx={{ width: 120, height: 120 }}
@@ -278,7 +424,7 @@ function Header({ children }) {
                     </Icon>
                   }
                 />
-               <Button onClick={handleDownloadPDF}>Télécharger PDF</Button>
+                <Button onClick={handleDownloadPDF}>Télécharger PDF</Button>
 
                 <Tab
                   label="Settings"

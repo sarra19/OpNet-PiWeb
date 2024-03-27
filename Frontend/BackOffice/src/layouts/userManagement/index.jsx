@@ -184,7 +184,17 @@ function UserManagement() {
               </Button>
             </Grid>
           </Grid>
+          <tbody>
+              <tr>
+                <td colSpan="8" style={cellStyles}>
+                  <Button variant="contained" style={{ backgroundColor: '#E82227', color: '#fff' }}>
+                    <Link to="/AddUser" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
           <table style={tableStyles}>
+            
             <thead>
               <tr>
                 <th style={headerStyles}>Prénom</th>
@@ -199,6 +209,7 @@ function UserManagement() {
             </thead>
             <tbody>
               {currentUsers.map((user, index) => (
+                
                 <tr key={index} style={index % 2 === 0 ? evenRowStyles : {}}>
                   <td style={cellStyles}>{user.firstname}</td>
                   <td style={cellStyles}>{user.lastname}</td>
