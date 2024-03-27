@@ -92,7 +92,7 @@ function Statistics() {
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3} className="graph-container">
-          <h2>User Role Statistics</h2>
+          <h2>User Statistics</h2>
           <p>Total Users: {totalUsers}</p>
           <div className="graph-wrapper">
             <canvas id="roleBarChart"></canvas> {/* New canvas for the bar chart */}

@@ -16,6 +16,7 @@ import backgroundImage from "assets/images/bg-pofile.jpg";
 import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Autocomplete } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { PDFDocument ,rgb} from "pdf-lib";
 
 function Header({ children }) {
   const { userId } = useParams();
@@ -95,6 +96,9 @@ function Header({ children }) {
         const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
         setUserInfo(response.data);
         setFormData({
+          profileImage: response.data.profileImage,
+          cV: response.data.cV,
+
           firstname: response.data.firstname,
           lastname: response.data.lastname,
           speciality: response.data.speciality,
@@ -174,7 +178,36 @@ function Header({ children }) {
         });
     }
   };
-
+  const handleDownloadPDF = async () => {
+    try {
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([400, 400]);
+  
+      const redColor = rgb(232/255, 34/255, 39/255); // Créez un objet Color avec la couleur spécifiée
+  
+      page.drawText(`Informations de l'utilisateur:
+        Prénom: ${formData.firstname}
+        Nom: ${formData.lastname}
+        Spécialité: ${formData.speciality}
+        Institution: ${formData.institution}
+         cV: ${formData.cV}`, {
+        x: 50,
+        y: 350,
+        size: 12,
+        color: redColor, // Utilisez l'objet Color
+      });
+  
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "informations_utilisateur.pdf";
+      link.click();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
+  
   return (
     <MDBox position="relative" mb={5}>
       <MDBox
@@ -245,14 +278,8 @@ function Header({ children }) {
                     </Icon>
                   }
                 />
-                <Tab
-                  label="Message"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      email
-                    </Icon>
-                  }
-                />
+               <Button onClick={handleDownloadPDF}>Télécharger PDF</Button>
+
                 <Tab
                   label="Settings"
                   icon={

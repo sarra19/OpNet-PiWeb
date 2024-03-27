@@ -8,8 +8,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
 import { Autocomplete, Grid, TextField } from "@mui/material";
-
-// CSS Styles
+import './styles.css';
 const tableStyles = {
   width: "100%",
   borderCollapse: "collapse",
@@ -17,9 +16,9 @@ const tableStyles = {
 
 const cellStyles = {
   padding: "8px",
-  textAlign: "center", // Center align cell content
+  textAlign: "center",
   borderBottom: "1px solid #ddd",
-  fontSize: "12px", // Adjust font size here
+  fontSize: "12px",
 };
 
 const evenRowStyles = {
@@ -28,14 +27,14 @@ const evenRowStyles = {
 
 const headerStyles = {
   ...cellStyles,
-  color: "red", // Add red color to column headers
-  textAlign: "center", // Center align column headers
+  color: "red",
+  textAlign: "center",
 };
 
 const buttonContainerStyles = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "center", // Center align button container
+  justifyContent: "center",
   marginBottom: "10px",
 };
 
@@ -46,25 +45,26 @@ const buttonStyles = {
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
-  const [error, setError] = useState(null); // State for error handling
-  const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
-  const [sortBy, setSortBy] = useState(""); // State pour stocker le critère de tri
-  const [sortOrder, setSortOrder] = useState(""); // State pour stocker l'ordre de tri
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); 
+  const usersPerPage = 5; 
 
-  // Fonction pour gérer le tri des utilisateurs
   const handleSort = async () => {
     try {
       const response = await axios.post("http://localhost:5000/user/sort", {
         sortBy,
         sortOrder,
       });
-
       setUsers(response.data);
     } catch (error) {
       console.error("Error sorting users:", error);
       setError("An error occurred while sorting users");
     }
   };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -72,130 +72,118 @@ function UserManagement() {
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
-        setError("Error fetching users. Please try again later."); // Set error state
+        setError("Error fetching users. Please try again later.");
       }
     };
-
     fetchUsers();
   }, []);
+
   const handleDeleteUser = async (userId) => {
     try {
       await axios.delete(`http://localhost:5000/user/deleteUser/${userId}`);
-      // Filter out the deleted user from the users array
       setUsers(users.filter(user => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
-  
 
   const handleSearch = async () => {
     try {
       const response = await axios.post("http://localhost:5000/user/search", {
-        firstname: searchQuery, // Search by firstname
-        lastname: searchQuery, // Search by lastname
-        speciality: searchQuery, // Search by speciality
-        email: searchQuery, // Search by speciality
-        institution: searchQuery, // Search by speciality
-
-
+        firstname: searchQuery,
+        lastname: searchQuery,
+        speciality: searchQuery,
+        email: searchQuery,
+        institution: searchQuery,
       });
-  
       setUsers(response.data);
     } catch (error) {
       console.error("Error searching users:", error);
       setError("An error occurred while searching users");
     }
   };
-  
-  
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
-        <Grid container spacing={2} alignItems="center">
-  {/* Champ de recherche */}
-  <Grid item xs={12} sm={6} md={4}>
-    <TextField
-      label="Rechercher"
-      variant="outlined"
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      fullWidth
-      size="small" // Réduction de la taille
-    />
-  </Grid>
-  {/* Bouton de recherche */}
-  <Grid item xs={12} sm={6} md={2}>
-    <Button
-      variant="contained"
-      style={{ backgroundColor: '#E82227', color: 'white' }}
-      onClick={handleSearch}
-      fullWidth
-    >
-      Rechercher
-    </Button>
-  </Grid>
-  {/* Menu déroulant pour trier */}
-  <Grid item xs={12} sm={6} md={3}>
-    <Autocomplete
-      options={['firstname', 'lastname', 'speciality', 'institution']}
-      value={sortBy}
-      onChange={(event, newValue) => {
-        setSortBy(newValue);
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Trier par"
-          variant="outlined"
-          fullWidth
-          size="small" // Réduction de la taille
-        />
-      )}
-    />
-  </Grid>
-  {/* Menu déroulant pour l'ordre de tri */}
-  <Grid item xs={12} sm={6} md={2}>
-    <Autocomplete
-      options={['asc', 'desc']}
-      value={sortOrder}
-      onChange={(event, newValue) => {
-        setSortOrder(newValue);
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Ordre"
-          variant="outlined"
-          fullWidth
-          size="small" // Réduction de la taille
-        />
-      )}
-    />
-  </Grid>
-  {/* Bouton de tri */}
-  <Grid item xs={12} sm={6} md={1}>
-    <Button
-      variant="contained"
-      style={{ backgroundColor: '#E82227', color: 'white' }}
-      onClick={handleSort}
-      fullWidth
-    >
-      Trier
-    </Button>
-  </Grid>
-</Grid>
-
-          <tr>
-            <td colSpan="8" style={cellStyles}>
-              <Button variant="contained" style={{ backgroundColor: '#E82227', color: '#fff' }}>
-                <Link to="/AddUser" style={{ textDecoration: "none", color: "white" }}>Ajouter Utilisateur</Link>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                label="Rechercher"
+                variant="outlined"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={2}>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: '#E82227', color: 'white' }}
+                onClick={handleSearch}
+                fullWidth
+              >
+                Rechercher
               </Button>
-            </td>
-          </tr>
-          {error && <div>Error: {error}</div>} {/* Display error message if error state is set */}
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Autocomplete
+                options={['firstname', 'lastname', 'speciality', 'institution']}
+                value={sortBy}
+                onChange={(event, newValue) => {
+                  setSortBy(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Trier par"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={2}>
+              <Autocomplete
+                options={['asc', 'desc']}
+                value={sortOrder}
+                onChange={(event, newValue) => {
+                  setSortOrder(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Ordre"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={1}>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: '#E82227', color: 'white' }}
+                onClick={handleSort}
+                fullWidth
+              >
+                Trier
+              </Button>
+            </Grid>
+          </Grid>
           <table style={tableStyles}>
             <thead>
               <tr>
@@ -210,7 +198,7 @@ function UserManagement() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {currentUsers.map((user, index) => (
                 <tr key={index} style={index % 2 === 0 ? evenRowStyles : {}}>
                   <td style={cellStyles}>{user.firstname}</td>
                   <td style={cellStyles}>{user.lastname}</td>
@@ -223,19 +211,48 @@ function UserManagement() {
                     <Button size="small" variant="contained" color="primary" style={buttonStyles}>
                       <Link to={`/user/${user._id}`} style={{ textDecoration: "none", color: "white" }}>Détails</Link>
                     </Button>
-                    <Button size="small" variant="contained" style={{ backgroundColor: '#E82227', color: '#fff', cursor: "pointer" ,marginRight: "5px" }}
-  onClick={() => handleDeleteUser(user._id)}>Suprimer</Button>
-
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </MDBox>
-      </MDBox>
-      <Footer />
-    </DashboardLayout>
-  );
-}
-
-export default UserManagement;
+                    <Button size="small" variant="contained" style={{ backgroundColor: '#E82227', color: '#fff', cursor: "pointer", marginRight: "5px" }}
+                      onClick={() => handleDeleteUser(user._id)}>Suprimer</Button>
+                      </td>
+                      </tr>
+                      ))}
+                      </tbody>
+                      </table>
+                      {/* Pagination */}
+                      <Pagination
+                               currentPage={currentPage}
+                               usersPerPage={usersPerPage}
+                               totalUsers={users.length}
+                               onPageChange={handlePageChange}
+                             />
+                      </MDBox>
+                      </MDBox>
+                      <Footer />
+                      </DashboardLayout>
+                      );
+                      }
+                      
+                      const Pagination = ({ currentPage, usersPerPage, totalUsers, onPageChange }) => {
+                        const pageNumbers = [];
+                      
+                        for (let i = 1; i <= Math.ceil(totalUsers / usersPerPage); i++) {
+                          pageNumbers.push(i);
+                        }
+                      
+                        return (
+                          <div style={{ marginTop: "20px", textAlign: "center" }}>
+                            <ul className="pagination">
+                              {pageNumbers.map((number) => (
+                                <li key={number} className={currentPage === number ? 'active' : ''}>
+                                  <button onClick={() => onPageChange(number)}>
+                                    {number}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      };
+                      
+                      
+                      export default UserManagement;

@@ -13,6 +13,7 @@ import Alert from "@mui/material/Alert";
 import { Link, useParams } from "react-router-dom";
 import Header from "./components/Header";
 import MDButton from "components/MDButton";
+import { PDFDocument, rgb } from "pdf-lib";
 
 const countryOptions = [
   "États-Unis",
