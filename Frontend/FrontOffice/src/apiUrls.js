@@ -22,6 +22,8 @@ uploadAvatar: `${BASE_URL}/user/uploadAvatar`,
 getUserById: (userId) => `${BASE_URL}/user/get/${userId}`, 
 updateUser: (userId) => `${BASE_URL}/user/updateUser/${userId}`,
 uploadCV: (userId) => `${BASE_URL}/user/uploadCV/${userId}`,
+reactToMessage: `${BASE_URL}/messages/reactToMessage`,
+unreactToMessage: `${BASE_URL}/messages/unreactToMessage`,
 
 };
 

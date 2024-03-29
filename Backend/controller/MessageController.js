@@ -103,6 +103,58 @@ async function addMessage  (req, res)  {
       res.status(500).json(error);
     }
   };
+  async function reactToMessage(req, res) {
+    try {
+        const messageId = req.params.messageId; // Assuming the message ID is passed in the request params
+        const reaction = req.body.reaction; // Assuming the reaction is passed in the request body
+
+        // Find the message by its ID
+        const message = await MessageModel.findById(messageId);
+
+        if (!message) {
+            return res.status(404).send("Message not found");
+        }
+
+        // Add the reaction to the message
+        message.reactions.push(reaction);
+
+        // Save the updated message
+        await message.save();
+
+        res.status(200).send("Message reacted successfully");
+    } catch (err) {
+        console.error('Error reacting to message:', err.message);
+        res.status(400).send({ error: err.message });
+    }
+}
+
+async function unreactToMessage(req, res) {
+    try {
+        const messageId = req.params.messageId; // Assuming the message ID is passed in the request params
+        const reaction = req.body.reaction; // Assuming the reaction is passed in the request body
+
+        // Find the message by its ID
+        const message = await MessageModel.findById(messageId);
+
+        if (!message) {
+            return res.status(404).send("Message not found");
+        }
+
+        // Remove the reaction from the message
+        const reactionIndex = message.reactions.indexOf(reaction);
+        if (reactionIndex !== -1) {
+            message.reactions.splice(reactionIndex, 1);
+        }
+
+        // Save the updated message
+        await message.save();
+
+        res.status(200).send("Message unreacted successfully");
+    } catch (err) {
+        console.error('Error unreacting to message:', err.message);
+        res.status(400).send({ error: err.message });
+    }
+}
 
 
 module.exports={getall , getidM, getbyDate, add ,getMessagesByChatId, getMessages,addMessage,UpdateMessage,deleteMessage}

@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import API_URLS from "apiUrls";
+
 const isImageUrl = (url) => {
   return /\.(jpeg|jpg|gif|png)$/.test(url);
 };
@@ -18,6 +19,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [reactions, setReactions] = useState({});
 
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
@@ -35,9 +37,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     formData.append('file', file);
 
     try {
-
       const response = await axios.post(API_URLS.upload, formData);
-      console.log(response.data)
       const avatarPath = response.data;
       setNewMessage(avatarPath);
     } catch (error) {
@@ -53,7 +53,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
       chatId: chat._id,
     };
 
-    // Check if the newMessage is an image URL or text
     if (newMessage.startsWith("http://") || newMessage.startsWith("https://")) {
       message.image = newMessage;
     } else {
@@ -72,16 +71,24 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     }
   };
 
-  const handleDeleteMessage = async (messageId) => {
+ let lastClickTime = 0;
+
+const handleDeleteMessage = async (messageId) => {
+  const now = new Date().getTime();
+  const timeDiff = now - lastClickTime;
+  lastClickTime = now;
+
+  if (timeDiff < 300) { // Adjust this value (in milliseconds) as needed for the double-click interval
     try {
       await axios.delete(API_URLS.deleteMessage(messageId));
       setMessages(messages.filter(message => message._id !== messageId));
       alert('Le message a été supprimé avec succès !');
-
     } catch (error) {
       console.log("Error:", error);
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== currentUser);
@@ -125,11 +132,19 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     try {
       await axios.delete(API_URLS.deleteChatRoom(chatId));
       onDelete(chatId);
-          alert('Le chat a été supprimé avec succès !');
+      alert('Le chat a été supprimé avec succès !');
 
     } catch (error) {
       console.log("Error:", error);
     }
+  };
+
+  const handleReact = (messageId, emoji) => {
+    setReactions({
+      ...reactions,
+      [messageId]: emoji
+    });
+    // You can send the reaction to the backend if needed
   };
 
   return (
@@ -141,10 +156,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
               <div className="follower">
                 <div>
                   <Avatar
-                    src={
-                      userData?.profileImage
-                        
-                    }
+                    src={userData?.profileImage}
                     alt="Profile"
                     className="followerImage"
                     style={{ width: "50px", height: "50px" }}
@@ -168,17 +180,28 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
               />
             </div>
             <div className="chat-body">
-  {messages.map((message) => (
-    <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
-      {isImageUrl(message.text) ? (
-        <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
-      ) : (
-        <span>{message.text}</span>
-      )}
-      <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
-    </div>
-  ))}
-</div>
+              {messages.map((message) => (
+                <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
+                  {isImageUrl(message.text) ? (
+                    <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+                  ) : (
+                    <span>{message.text}</span>
+                  )}
+                  <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
+                  {/* Reaction section */}
+                  <div className="reactions">
+                    {reactions[message._id] && (
+                      <span className="reaction">{reactions[message._id]}</span>
+                    )}
+                    <span className="react-emoji" onClick={() => handleReact(message._id, "👍")}>👍</span>
+                    <span className="react-emoji" onClick={() => handleReact(message._id, "❤️")}>❤️</span>
+                    <span className="react-emoji" onClick={() => handleReact(message._id, "😂")}>😂</span>
+                    {/* You can add more emojis for reactions */}
+                  </div>
+                </div>
+              ))}
+              <div ref={scroll}></div>
+            </div>
             <div className="chat-sender">
               <div onClick={handleImageUpload}>+</div>
               <InputEmoji placeholder="Ecrire un message" value={newMessage} onChange={handleChange} />
