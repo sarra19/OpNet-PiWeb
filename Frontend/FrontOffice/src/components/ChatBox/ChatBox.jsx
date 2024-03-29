@@ -71,23 +71,23 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     }
   };
 
- let lastClickTime = 0;
+  let lastClickTime = 0;
 
-const handleDeleteMessage = async (messageId) => {
-  const now = new Date().getTime();
-  const timeDiff = now - lastClickTime;
-  lastClickTime = now;
+  const handleDeleteMessage = async (messageId) => {
+    const now = new Date().getTime();
+    const timeDiff = now - lastClickTime;
+    lastClickTime = now;
 
-  if (timeDiff < 300) { // Adjust this value (in milliseconds) as needed for the double-click interval
-    try {
-      await axios.delete(API_URLS.deleteMessage(messageId));
-      setMessages(messages.filter(message => message._id !== messageId));
-      alert('Le message a été supprimé avec succès !');
-    } catch (error) {
-      console.log("Error:", error);
+    if (timeDiff < 300) { // Adjust this value (in milliseconds) as needed for the double-click interval
+      try {
+        await axios.delete(API_URLS.deleteMessage(messageId));
+        setMessages(messages.filter(message => message._id !== messageId));
+        alert('Le message a été supprimé avec succès !');
+      } catch (error) {
+        console.log("Error:", error);
+      }
     }
-  }
-};
+  };
 
 
   useEffect(() => {
@@ -189,15 +189,17 @@ const handleDeleteMessage = async (messageId) => {
                   )}
                   <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
                   {/* Reaction section */}
-                  <div className="reactions">
-                    {reactions[message._id] && (
-                      <span className="reaction">{reactions[message._id]}</span>
-                    )}
-                    <span className="react-emoji" onClick={() => handleReact(message._id, "👍")}>👍</span>
-                    <span className="react-emoji" onClick={() => handleReact(message._id, "❤️")}>❤️</span>
-                    <span className="react-emoji" onClick={() => handleReact(message._id, "😂")}>😂</span>
-                    {/* You can add more emojis for reactions */}
-                  </div>
+                  <div className="reactions" style={{ display: 'flex', alignItems: 'center' }}>
+  {reactions[message._id] && (
+    <span className="reaction">{reactions[message._id]}</span>
+  )}
+  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "👍")}>👍</span>
+  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "❤️")}>❤️</span>
+  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "😂")}>😂</span>
+  {/* You can add more emojis for reactions */}
+</div>
+
+
                 </div>
               ))}
               <div ref={scroll}></div>
