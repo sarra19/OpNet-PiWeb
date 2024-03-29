@@ -15,6 +15,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 import backgroundImage from "assets/images/bg-pofile.jpg";
 import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Autocomplete } from "@mui/material";
+import API_URLS from "apiUrls";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
@@ -92,7 +93,7 @@ function Header({ children }) {
           console.error("User ID not found in sessionStorage");
           return;
         }
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(API_URLS.getUserById(userId));
         setUserInfo(response.data);
         setFormData({
           firstname: response.data.firstname,
@@ -146,7 +147,7 @@ function Header({ children }) {
   const handleUpdateUserInfo = async () => {
     try {
       const userId = sessionStorage.getItem("userId");
-      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
+      const response = await axios.put(API_URLS.updateUser(userId), formData);
       console.log(response.data);
       setUserInfo(formData);
       handleEditDialogClose();
@@ -165,8 +166,8 @@ function Header({ children }) {
       const formData = new FormData();
       formData.append("avatar", file);
       formData.append("userId", sessionStorage.getItem("userId"));
-      axios.put("http://localhost:5000/user/uploadAvatar", formData)
-        .then(response => {
+      axios.put(API_URLS.uploadAvatar, formData)
+      .then(response => {
           console.log(response.data);
           setAvatarImage(URL.createObjectURL(file));
         })

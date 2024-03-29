@@ -10,7 +10,18 @@ const API_URLS = {
   google: `${BASE_URL}/auth/google`, 
   reset: `${BASE_URL}/password-reset`,
   checkEmail:`${BASE_URL}/user/checkEmail`, 
+  upload:`${BASE_URL}/messages/upload`,
 //  verifyUser: (param) => `${BASE_URL}/user/${param.id}/verify/${param.token}`,
+deleteChatRoom: (chatId) => `${BASE_URL}/chat/deleteChatRoom/${chatId}`,
+deleteMessage: (messageId) => `${BASE_URL}/messages/deleteMessage/${messageId}`,
+getAllUsers: `${BASE_URL}/user/getall`,
+createChat: `${BASE_URL}/chat/`,
+sortUsers: `${BASE_URL}/user/sort`,
+searchUsers: `${BASE_URL}/user/search`,
+uploadAvatar: `${BASE_URL}/user/uploadAvatar`,
+getUserById: (userId) => `${BASE_URL}/user/get/${userId}`, 
+updateUser: (userId) => `${BASE_URL}/user/updateUser/${userId}`,
+uploadCV: (userId) => `${BASE_URL}/user/uploadCV/${userId}`,
 
 };
 

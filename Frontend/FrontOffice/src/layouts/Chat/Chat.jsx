@@ -16,6 +16,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 import "./Chat.css";
 import { MenuItem } from "@mui/material";
+import API_URLS from "apiUrls";
 
 function ChatManagement() {
   const socket = useRef();
@@ -86,7 +87,7 @@ function ChatManagement() {
   // Function to fetch all users
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/user/getall");
+      const response = await axios.get(API_URLS.getAllUsers);
       setAllUsers(response.data);
     } catch (error) {
       console.log(error);
@@ -114,7 +115,7 @@ const handleAddNewChat = async () => {
     };
 
     // Logic to add a new chat
-    const response = await axios.post("http://localhost:5000/chat/", updatedChatData);
+    const response = await axios.post(API_URLS.createChat, updatedChatData);
     const newChat = response.data;
     setChats([...chats, newChat]); // Update chats state with the new chat
 
@@ -127,8 +128,8 @@ const handleAddNewChat = async () => {
 
 const handleDelete = async (chatId) => {
   try {
-    await axios.delete(`http://localhost:5000/chat/deleteChatRoom/${chatId}`);
     setChats(chats.filter((chat) => chat._id !== chatId));
+    // Afficher une alerte pour indiquer que le chat a été supprimé avec succès
   } catch (error) {
     console.log(error);
   }

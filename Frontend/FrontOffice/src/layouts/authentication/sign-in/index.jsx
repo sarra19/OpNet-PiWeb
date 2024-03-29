@@ -35,7 +35,6 @@ function Basic() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-    //  const url = "http://localhost:5000/auth";
       const formData = { email, password }; // Constructing the data object
       const { data: res } = await axios.post(API_URLS.auth,  formData); // Sending the formData as the second argument
 

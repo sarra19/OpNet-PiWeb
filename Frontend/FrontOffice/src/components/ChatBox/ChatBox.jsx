@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import API_URLS from "apiUrls";
 const isImageUrl = (url) => {
   return /\.(jpeg|jpg|gif|png)$/.test(url);
 };
@@ -34,7 +35,8 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     formData.append('file', file);
 
     try {
-      const response = await axios.post("http://localhost:5000/messages/upload", formData);
+
+      const response = await axios.post(API_URLS.upload, formData);
       console.log(response.data)
       const avatarPath = response.data;
       setNewMessage(avatarPath);
@@ -72,8 +74,10 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      await axios.delete(`http://localhost:5000/messages/deleteMessage/${messageId}`);
+      await axios.delete(API_URLS.deleteMessage(messageId));
       setMessages(messages.filter(message => message._id !== messageId));
+      alert('Le message a été supprimé avec succès !');
+
     } catch (error) {
       console.log("Error:", error);
     }
@@ -119,8 +123,10 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
 
   const handleDelete = async (chatId) => {
     try {
-      await axios.delete(`http://localhost:5000/chat/deleteChatRoom/${chatId}`);
+      await axios.delete(API_URLS.deleteChatRoom(chatId));
       onDelete(chatId);
+          alert('Le chat a été supprimé avec succès !');
+
     } catch (error) {
       console.log("Error:", error);
     }

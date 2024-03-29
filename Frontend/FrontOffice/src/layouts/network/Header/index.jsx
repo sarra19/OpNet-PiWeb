@@ -16,6 +16,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-pofile.jpg";
 import { useParams } from "react-router-dom";
+import API_URLS from "apiUrls";
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
@@ -43,7 +44,7 @@ function Header({ children }) {
           console.error("User ID not found in sessionStorage");
           return;
         }
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(API_URLS.getUserById(userId));
         setUserInfo(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -85,7 +86,7 @@ function Header({ children }) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
+            <MDAvatar src={userInfo.profileImage} alt="profile-image" size="xl" shadow="sm" />
           </Grid>
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>

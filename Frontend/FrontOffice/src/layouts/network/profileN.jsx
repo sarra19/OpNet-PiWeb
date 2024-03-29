@@ -9,6 +9,7 @@ import Footer from "examples/Footer";
 import Header from "layouts/network/Header/index";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
+import API_URLS from "apiUrls";
 
 function ProfileN() {
   const [userInfo, setUserInfo] = useState({});
@@ -17,7 +18,7 @@ function ProfileN() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(API_URLS.getUserById(userId));
         setUserInfo(response.data);
       } catch (error) {
         console.error("Error fetching user details:", error);
