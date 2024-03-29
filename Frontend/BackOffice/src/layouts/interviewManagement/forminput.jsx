@@ -27,10 +27,10 @@ function Forminput({ interviewId }) {
         if (interviewId) {
             axios.get(`http://localhost:5000/interviews/get/${interviewId}`)
                 .then(response => {
-                    const { title, descrInter, assignedStudentId, address, dateInterv, typeRencontre, typeIntrv } = response.data;
+                    const { title, descrInter, assignedStudentName, address, dateInterv, typeRencontre, typeIntrv } = response.data;
                     setTitle(title);
                     setDescription(descrInter);
-                    setCandidateName(assignedStudentId);
+                    setCandidateName(assignedStudentName);
                     setAddress(address);
                     setSelectedDate(formatDateForInput(dateInterv));
                     setSelectedTypeRencontre(typeRencontre);
@@ -73,7 +73,7 @@ function Forminput({ interviewId }) {
         const newInterview = {
             title,
             descrInter: description, 
-            assignedStudentId: candidateName, 
+            assignedStudentName: candidateName, 
             address,
             dateInterv: selectedDate,
             typeRencontre: selectedTypeRencontre,
@@ -101,7 +101,7 @@ function Forminput({ interviewId }) {
         const updatedInterview = {
             title,
             descrInter: description,
-            assignedStudentId: candidateName,
+            assignedStudentName: candidateName,
             address,
             dateInterv: selectedDate,
             typeRencontre: selectedTypeRencontre,
@@ -120,7 +120,6 @@ function Forminput({ interviewId }) {
 
     const formatDateForInput = (dateString) => {
         const date = new Date(dateString);
-        // Format the date as "YYYY-MM-DDTHH:MM" required by datetime-local input
         const formattedDate = date.toISOString().slice(0, 16);
         return formattedDate;
     };
@@ -163,7 +162,7 @@ function Forminput({ interviewId }) {
                             value={candidateName}
                             onChange={(e) => setCandidateName(e.target.value)}
                             onBlur={() => handleInputBlur('candidateName')}
-                            helperText={!candidateName && touchedFields.candidateName ? "Le nom du candidat est obligatoire" : ""}
+                            helperText={!candidateName && touchedFields.candidateName ? "c'est obligatoire d'entrer le nom d'un candidat" : ""}
                             error={!candidateName && touchedFields.candidateName}
                         />
                         <TextField
@@ -211,9 +210,9 @@ function Forminput({ interviewId }) {
                                 native: true,
                             }}
                         >
-                            <option value="RH" >Entretien avec le RH </option>
-                            <option value="technique">Entretien technique </option>
-                            <option value="psychologique">Entretien psychologique </option>
+                            <option value="Entretien avec le RH" >Entretien avec le RH </option>
+                            <option value="Entretien technique">Entretien technique </option>
+                            <option value="Entretien psychologique">Entretien psychologique </option>
                         </TextField>
                         {formError && <Typography style={{ fontWeight: "100" , fontSize: "12px" , marginLeft:"21%"}} color="error">{formError}</Typography>}
                     </div>

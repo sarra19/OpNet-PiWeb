@@ -16,6 +16,7 @@ const Interview = new Schema(
             type: Schema.Types.ObjectId,
             ref: "user", 
         },
+        assignedStudentName: String,
         address: String,
         typeRencontre: {
             type: String,
@@ -32,6 +33,14 @@ const Interview = new Schema(
             enum: statusIntrvEnum,
             default: "A venir"
         },
+        validated: { 
+            type: Boolean,
+            default: "false", 
+        },
+        feedbacks: [{ 
+            type: Schema.Types.ObjectId,
+            ref: "Feedback"
+        }],
     },
     {
         timestamps: true,

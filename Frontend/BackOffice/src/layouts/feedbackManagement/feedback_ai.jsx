@@ -11,6 +11,7 @@ import axios from 'axios';
 import Status from './Status';
 import Result from './Result';
 
+
 const assemblyApi = axios.create({
   baseURL: 'https://api.assemblyai.com/v2',
   headers: {
@@ -30,22 +31,25 @@ const initialState = {
   },
 }
 
-function FeedBack() {
+function FeedBack({ interviewId }) {
   const[audioDetails, setAudioDetails] = useState(initialState);
   const [transcript, setTranscript] = useState({id: ''});
   const [isLoading, setIsLoading] = useState(false);
+  const [transcription, setTranscription] = useState('');
+
 
   const saveTranscriptionToDatabase = async (text) => {
     try {
-      await axios.post('http://localhost:5000/feedbacks/save', { text: text });
+      await axios.post('http://localhost:5000/feedbacks/save', { text: text, interviewId: interviewId });
       console.log('Transcription enregistrée dans la base de données avec succès.');
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement de la transcription dans la base de données :', error);
     }
   };
 
+
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const fetchTranscription = async () => {
       if (transcript.id && transcript.status !== 'completed' && isLoading){
         try{
           const {data : transcriptData} = await assemblyApi.get(
@@ -60,13 +64,13 @@ function FeedBack() {
         }catch (err){
           console.error(err);
         }
-      }else {
-        setIsLoading(false);
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  } , [isLoading , transcript]); 
+    }
+};
+
+fetchTranscription();
+
+return () => {};
+}, [transcript, isLoading , interviewId]);
 
   const handleAudioStop = (data) => {
     setAudioDetails(data);
@@ -94,14 +98,13 @@ function FeedBack() {
   };
 
   return (
-      <Box textAlign="center" fontSize="xl" ml="25%" mt={8}>
-        <Grid  p={3}>
-          <Box >
+      <Box textAlign="center" fontSize="xl">
+        <Grid>
             <Box>
               {transcript.text && transcript.status === 'completed'
               ? (<Result transcript={transcript}/>) : (<Status isLoading={isLoading} status={transcript.status} /> )}
             </Box>
-            <Box width={1000} >
+            <Box width={400} style={{marginLeft:"20%"}}>
             <Recorder 
               record={true}
               audioURL={audioDetails.url}
@@ -110,7 +113,6 @@ function FeedBack() {
               handleReset = {handleReset}
             />
              </Box>
-          </Box>
         </Grid>
       </Box>
 

@@ -11,5 +11,7 @@ router.post('/save', feedBackController.save);
 router.get('/getall', feedBackController.getall);
 router.delete('/deleteTranscript/:id' , feedBackController.deleteTranscription)
 router.put('/update/:id' , feedBackController.update);
+router.get('/getfeedback/:interviewId', feedBackController.getFeedbackForInterview);
+
 
 module.exports = router ;

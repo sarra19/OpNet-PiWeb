@@ -49,7 +49,6 @@ import Statistics from "layouts/statistics";
 import UserManagement from "layouts/userManagement";
 import ChatManagement from "layouts/chatManagement";
 import OfferManagement from "layouts/offerManagement";
-import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import Calendrier from "layouts/interviewManagement/calendrier";
 import FeedBackManagement from "layouts/feedbackManagement";
@@ -119,7 +118,7 @@ const routes = [
   // },
   {
     type: "collapse",
-    name: "Feedback_Management",
+    name: "Feedback Management",
     key: "Feedback_Management",
     icon: <Icon fontSize="small">assignment_ind_outlined</Icon>,
     route: "/feedback",
@@ -134,7 +133,20 @@ const routes = [
     route: "/enregistreur_vocale", 
     component: <FeedBack />, 
   },
-
+  {
+    type: "route",
+    name: "feedback_Management", 
+    key: "feedback_Management", 
+    route: "/feedback_Management", 
+    component: <FeedBackManagement />, 
+  },
+{
+    type: "route",
+    name: "calendrier", 
+    key: "calendrier", 
+    route: "/calendrier", 
+    component: <Calendrier />, 
+  },
   {
     type: "collapse",
     name: "Condidacy Management",

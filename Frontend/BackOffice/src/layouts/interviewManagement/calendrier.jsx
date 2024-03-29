@@ -18,6 +18,7 @@ import 'moment/locale/fr';
 import { Link } from "react-router-dom";
 import Forminput from "./forminput";
 import { blue, grey, red } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 const localizer = momentLocalizer(moment);
 moment.locale('fr');
@@ -31,6 +32,8 @@ function Calendrier() {
   const [interviews, setInterviews] = useState([]);
   const [assignedStudent, setAssignedStudent] = useState(null);
   const [interviewId, setInterviewId] = useState(null);
+  
+  
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -197,6 +200,17 @@ function Calendrier() {
     setShowFormPopup(true); // Ouvrir le dialogue avec le formulaire rempli
   };
 
+  const navigate = useNavigate();
+
+  const handleFeedbackClick = () => {
+    if (selectedEvent) {
+      const { title, assignedStudentName, start , typeIntrv , assignedStudentId } = selectedEvent;
+      const formattedDate = moment(start).format("DD/MM/YY HH:mm");
+      const url = `/feedback_Management?title=${title}&candidate=${assignedStudentName}&date=${formattedDate}&typeIntrv=${typeIntrv}&assignedStudentId=${assignedStudentId}`;
+      navigate(url);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -283,7 +297,7 @@ function Calendrier() {
                   {selectedEvent && (
                     <div className="event-details">
                       <h3 className="red-text" style={{ marginBottom: "25px" }}>{selectedEvent.descrInter}</h3>
-                      {assignedStudent && (<p className="thin-text"><strong>Nom de l'étudiant :</strong> {assignedStudent.firstname} {assignedStudent.lastname}</p>)}
+                      <p className="thin-text"><strong>Nom du candidat :</strong> {selectedEvent.assignedStudentName}</p>
                       <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(selectedEvent.dateInterv)}</p>
                       <p className="thin-text"><strong>Adresse :</strong>{selectedEvent.address}</p>
                       <p className="thin-text"><strong>Type de rencontre :</strong>{selectedEvent.typeRencontre}</p>
@@ -301,6 +315,7 @@ function Calendrier() {
                           }} >
                             Modifier
                           </Button>
+                          
                     </div>
                 </DialogContent>
                 <Dialog open={confirmationOpen} onClose={() => handleConfirmationClose(false)}>
