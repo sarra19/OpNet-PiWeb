@@ -57,7 +57,8 @@ const location = useLocation();
   useEffect(() => {
     // Clear userRole from sessionStorage when component mounts
     //sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
-  
+    sessionStorage.setItem("userId", userId);
+    sessionStorage.setItem("userRole", userRole);
     // Handle navbar type and transparency
     if (fixedNavbar) {
       setNavbarType("sticky");
@@ -81,10 +82,10 @@ const location = useLocation();
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
   const handleLogout = () => {
-    //sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
-
-    // Remove the user role from sessionStorage
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("userRole");
   };
+  
   const renderMenu = () => (
     <Menu
       anchorEl={openMenu}

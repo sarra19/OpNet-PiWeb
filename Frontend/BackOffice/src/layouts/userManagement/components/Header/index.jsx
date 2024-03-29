@@ -17,6 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Autocomplete } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { PDFDocument, rgb, drawImage } from "pdf-lib";
+import API_URLS from "apiUrls";
 
 function Header({ children }) {
   const { userId } = useParams();
@@ -106,7 +107,7 @@ function Header({ children }) {
           console.error("User ID not found in URL parameters");
           return;
         }
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(API_URLS.getUserById(userId));
         setUserInfo(response.data);
         setFormData({
           profileImage: response.data.profileImage,
@@ -171,7 +172,7 @@ function Header({ children }) {
 
   const handleUpdateUserInfo = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
+      const response = await axios.put(API_URLS.updateUser(userId), formData);
       console.log(response.data);
       setUserInfo(formData);
       handleEditDialogClose();
@@ -190,7 +191,7 @@ function Header({ children }) {
       const formData = new FormData();
       formData.append("avatar", file);
       formData.append("userId", userId);
-      axios.put("http://localhost:5000/user/uploadAvatar", formData)
+      axios.put(API_URLS.uploadAvatar, formData)
         .then(response => {
           console.log(response.data);
           setAvatarImage(URL.createObjectURL(file));

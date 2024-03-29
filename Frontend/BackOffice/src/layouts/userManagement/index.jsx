@@ -9,6 +9,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
 import { Autocomplete, Grid, TextField } from "@mui/material";
 import './styles.css';
+import API_URLS from "apiUrls";
 const tableStyles = {
   width: "100%",
   borderCollapse: "collapse",
@@ -54,7 +55,7 @@ function UserManagement() {
 
   const handleSort = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/user/sort", {
+      const response = await axios.post(API_URLS.sortUsers, {
         sortBy,
         sortOrder,
       });
@@ -68,7 +69,7 @@ function UserManagement() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user/getall");
+        const response = await axios.get(API_URLS.getAllUsers);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -80,7 +81,7 @@ function UserManagement() {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/user/deleteUser/${userId}`);
+      await axios.delete(API_URLS.deleteUser(userId));
       setUsers(users.filter(user => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -89,7 +90,7 @@ function UserManagement() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/user/search", {
+      const response = await axios.post(API_URLS.searchUsers, {
         firstname: searchQuery,
         lastname: searchQuery,
         speciality: searchQuery,

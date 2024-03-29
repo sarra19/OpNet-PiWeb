@@ -52,7 +52,6 @@ import InterviewManagement from "layouts/interviewManagement";
 import CondidacyManagement from "layouts/condidacyManagement";
 import UserDetails from "layouts/userManagement/UserDetails";
 import Ajout from "layouts/userManagement/ajout";
-import ChatManagement from "layouts/chatManagement/Chat";
 const getUserRole = () => localStorage.getItem("userRole");
 
 const routes = [
@@ -104,14 +103,7 @@ const routes = [
     route: "/userManagement",
     component: <UserManagement />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Chat",
-  //   key: "Chat",
-  //   icon: <Icon fontSize="small">chat</Icon>,
-  //   route: "/Chat",
-  //   component: <ChatManagement />,
-  // },
+
   {
     type: "collapse",
     name: "Offer Management",

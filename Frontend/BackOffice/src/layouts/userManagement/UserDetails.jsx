@@ -14,6 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import Header from "./components/Header";
 import MDButton from "components/MDButton";
 import { PDFDocument, rgb } from "pdf-lib";
+import API_URLS from "apiUrls";
 
 const countryOptions = [
   "États-Unis",
@@ -550,7 +551,7 @@ function Overview() {
 
   const handleUpdateUser = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/user/updateUser/${userId}`, formData);
+      const response = await axios.put(API_URLS.updateUser(userId), formData);
       console.log(response.data);
       setOpenDialog(false);
       setOpenDialogCv(false);
@@ -634,7 +635,7 @@ function Overview() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(API_URLS.getUserById(userId));
         setUserInfo(response.data);
         // Pre-fill form data with user details
         setFormData(response.data);
@@ -714,7 +715,7 @@ function Overview() {
       formData.append('cV', file);
 
       try {
-        const response = await axios.put(`http://localhost:5000/user/uploadCV/${userId}`, formData, {
+        const response = await axios.put(API_URLS.uploadCV(userId), formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

@@ -11,6 +11,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import { Chart } from "chart.js";
+import API_URLS from "apiUrls";
 
 function Statistics() {
   // State to store role statistics
@@ -22,11 +23,11 @@ function Statistics() {
   const fetchData = async () => {
     try {
       // Fetch role statistics
-      const roleStatsResponse = await axios.get("http://localhost:5000/user/userRoleStatistics");
+      const roleStatsResponse = await axios.get(API_URLS.userRoleStatistics);
       setRoleStatistics(roleStatsResponse.data);
 
       // Fetch total number of users
-      const totalUsersResponse = await axios.get("http://localhost:5000/user/totalUsers");
+      const totalUsersResponse = await axios.get(API_URLS.totalUsers);
       setTotalUsers(totalUsersResponse.data.totalUsers);
     } catch (error) {
       console.error("Error fetching data:", error);
