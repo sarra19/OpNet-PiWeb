@@ -9,8 +9,16 @@ const sendEmail = require("../utils/sendEmail");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const path = require("path"); // Importer le module path
-////tetstttttt
+
 // Configuration de multer pour le stockage des fichiers
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/"); // Spécifiez le répertoire de destination où les fichiers seront stockés
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now()); // Générez un nom de fichier unique
+  },
+});
 
 // Initialiser l'upload avec multer
 const upload = multer({ storage: storage });
