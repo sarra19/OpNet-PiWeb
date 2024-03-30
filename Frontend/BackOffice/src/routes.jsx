@@ -34,29 +34,30 @@ Coded by www.creative-tim.com
   10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
   10. The `component` key is used to store the component of its route.
 */
-/* eslint-disable */
-// Material Dashboard 2 React layouts
-import Dashboard from "layouts/dashboard";
 
+// Material Dashboard 2 React layouts
+/*eslint-disable*/
+import Dashboard from "layouts/dashboard";
+//import Billing from "layouts/billing";
+//import Notifications from "layouts/notifications";
+import OfferManagement from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import ResetPassword from "layouts/authentication/reset-password";
+//offer backoffise
+import UpdateOffer from "layouts/profile/modifier";
+import Ajouter from "layouts/profile/ajouter";
+import Archive from "layouts/profile/archiver";
+//import Offers from "layouts/offers/offer";
 
+//import Candidacy from "layouts/candidacy";
+
+
+
+/*esplin-disabled*/
 // @mui icons
 import Icon from "@mui/material/Icon";
 
-import Statistics from "layouts/statistics";
-import UserManagement from "layouts/userManagement";
-import ChatManagement from "layouts/chatManagement";
-import OfferManagement from "layouts/offerManagement";
-import InterviewManagement from "layouts/interviewManagement";
-import CondidacyManagement from "layouts/condidacyManagement";
-
 const routes = [
-  {
-    route: "/authentication/rest-password",
-    component: <ResetPassword />,
-  },
   {
     type: "collapse",
     name: "Home",
@@ -66,56 +67,36 @@ const routes = [
     component: <Dashboard />,
   },
   {
-    type: "collapse",
-    name: "Statistics",
-    key: "Statistics",
-    icon: <Icon fontSize="small">bar_chart</Icon>,
-    route: "/statistics",
-    component: <Statistics />,
-
+    type: "route",
+    name: "archive",
+    key: "archive",
+    route: "/archive",
+    component: <Archive />,
+  },
+  {
+    type: "route",
+    name: "ajouter",
+    key: "",
+    route: "/offers/ajouter",
+    component: <Ajouter />,
+  },
+  {
+    type: "route",
+    name: "modifier",
+    key: "notifications",
+    route: "/offers/modifier/:id",
+    component: <UpdateOffer />,
   },
   {
     type: "collapse",
-    name: "User Management",
-    key: "User-Management",
-    icon: <Icon fontSize="small">work_outline</Icon>,
-    route: "/userManagement",
-    component: <UserManagement />,
-  },
-  {
-    type: "collapse",
-    name: "Chat Management",
-    key: "Chat-Management",
-    icon: <Icon fontSize="small">chat_bubble_outline</Icon>,
-    route: "/chaManagementt",
-    component: <ChatManagement />,
-  },
-  {
-    type: "collapse",
-    name: "Offer Management",
-    key: "Offer-Management",
-    icon: <Icon fontSize="small">people_outline</Icon>,
+    name: "OfferManagement",
+    key: "profile",
+    icon: <Icon fontSize="small">work</Icon>,
     route: "/offerManagement",
     component: <OfferManagement />,
   },
-  {
-    type: "collapse",
-    name: "Interview Management",
-    key: "interview-Management",
-    icon: <Icon fontSize="small">assignment_ind_outlined</Icon>,
-    route: "/interviewManagement",
-    component: <InterviewManagement />,
-
-  },
-  {
-    type: "collapse",
-    name: "Condidacy Management",
-    key: "condidacy-Management",
-    icon: <Icon fontSize="small">person_outline</Icon>,
-    route: "/condidacyManagement",
-    component: <CondidacyManagement />,
-
-  },
+  
+  
   {
     type: "collapse",
     name: "Sign In",

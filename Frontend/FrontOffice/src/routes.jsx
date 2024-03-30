@@ -36,14 +36,24 @@ Coded by www.creative-tim.com
 */
 
 // Material Dashboard 2 React layouts
+/*eslint-disable*/
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
+//import OfferManagement from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+//offer backoffise
+//import UpdateOffer from "layouts/profile/modifier";
+//import Ajouter from "layouts/profile/ajouter";
+//import Archive from "layouts/profile/archiver";
+import Offers from "layouts/offers/offer";
 
+//import Candidacy from "layouts/candidacy";
+
+
+
+/*esplin-disabled*/
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -55,47 +65,16 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
-  },
-  {
-    type: "collapse",
-    name: "Network",
-    key: "tables",
-    icon: <Icon fontSize="small">people</Icon>,
-    route: "/tables",
-    component: <Tables />,
-  },
+  }, 
   {
     type: "collapse",
     name: "Offers",
-    key: "billing",
+    key: "offers",
     icon: <Icon fontSize="small">work</Icon>,
-    route: "/billing",
-    component: <Billing />,
+    route: "/offers",
+    component: <Offers/>,
   },
-  {
-    type: "collapse",
-    name: "Chat",
-    key: "notifications",
-    icon: <Icon fontSize="small">chat</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
-  {
-    type: "collapse",
-    name: "Compagny",
-    key: "",
-    icon: <Icon fontSize="small">business</Icon>,
-    route: "",
-    //component: <Notifications />,
-  },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
+  
   {
     type: "collapse",
     name: "Sign In",
