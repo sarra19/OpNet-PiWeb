@@ -47,6 +47,7 @@ import Icon from "@mui/material/Icon";
 import Company from "layouts/company";
 import Interview from "layouts/interview";
 import Calendrier from "layouts/interview/calendrier";
+import Feedback from "layouts/feedback";
 
 const routes = [
   {
@@ -95,6 +96,14 @@ const routes = [
     key: "calendrier", 
     route: "/calendrier", 
     component: <Calendrier />, 
+  },
+  {
+    type: "collapse",
+    name: "Feedback",
+    key: "Feedback",
+    icon: <Icon fontSize="small">star_half</Icon>,
+    route: "/Feedback",
+    component: <Feedback />,
   },
   {
     type: "collapse",

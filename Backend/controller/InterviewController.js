@@ -39,11 +39,9 @@ async function getall(req,res){
 async function getallAsso(req, res) {
     try {
         const userId = req.params.id;
-        // Recherche des entretiens associés à l'entreprise
         const companyInterviews = await Interview.find({ assignedCompanyId: userId })
             .populate('assignedStudentId', 'firstname')
             .populate('assignedCompanyId');
-        // Recherche des entretiens associés à l'étudiant
         const studentInterviews = await Interview.find({ assignedStudentId: userId })
             .populate('assignedStudentId', 'firstname')
             .populate('assignedCompanyId'); 
@@ -55,11 +53,6 @@ async function getallAsso(req, res) {
     }
 }
 
-
-
-
-
-
 async function getbyid (req , res){
     try{
         const data = await Interview.findById(req.params.id);
@@ -68,7 +61,6 @@ async function getbyid (req , res){
         res.status(400).send(err);
     }
 }
-
 
 async function getbytitle(req,res){
     try{

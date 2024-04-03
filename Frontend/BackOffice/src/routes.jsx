@@ -53,6 +53,7 @@ import CondidacyManagement from "layouts/condidacyManagement";
 import Calendrier from "layouts/interviewManagement/calendrier";
 import FeedBackManagement from "layouts/feedbackManagement";
 import FeedBack from "layouts/feedbackManagement/feedback_ai";
+import Meet from "layouts/interviewManagement/meet";
 
 const routes = [
   {
@@ -125,7 +126,6 @@ const routes = [
     component: <FeedBackManagement />,
 
   },
-
   {
     type: "route",
     name: "enregistreur_vocale", 
@@ -140,7 +140,14 @@ const routes = [
     route: "/feedback_Management", 
     component: <FeedBackManagement />, 
   },
-{
+  {
+    type: "route",
+    name: "meet", 
+    key: "meet", 
+    route: "/meet", 
+    component: <Meet />, 
+  },
+  {
     type: "route",
     name: "calendrier", 
     key: "calendrier", 

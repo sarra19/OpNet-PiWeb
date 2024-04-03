@@ -17,7 +17,6 @@ async function save(req, res) {
         if (!text || !interviewId) {
             return res.status(400).send("Text and interviewId are required");
         }
-        
         // Vérifiez si un feedback existe déjà pour cette interview
         const existingFeedback = await FeedBack.findOne({ interview: interviewId });
         if (existingFeedback) {
@@ -38,7 +37,6 @@ async function save(req, res) {
         res.status(500).send('Internal Server Error');
     }
 }
-
 
 async function getall (req, res){
     try {

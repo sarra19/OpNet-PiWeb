@@ -195,9 +195,9 @@ function Calendrier() {
   };
 
   const handleOpenEditForm = (event) => {
-    setSelectedEvent(event); // Définir l'événement sélectionné
-    setDialogOpen(false); // Fermer le dialogue actuel
-    setShowFormPopup(true); // Ouvrir le dialogue avec le formulaire rempli
+    setSelectedEvent(event); 
+    setDialogOpen(false); 
+    setShowFormPopup(true);
   };
 
   const navigate = useNavigate();
@@ -239,9 +239,13 @@ function Calendrier() {
       </div>
       <Typography  mb={1.2} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
         Vos entretiens
-        <Button style={{marginTop:"10px", color: 'red', marginLeft: "560px", justifyContent: 'flex-end' }} onClick={handleOpenAddForm} >
-          <Icon style={{ marginRight: "10px" }} fontSize="small">add_to_photos</Icon>Ajouter entretien
+        <Button style={{marginTop:"10px", color: 'red', marginLeft: "430px", justifyContent: 'flex-end' }} onClick={handleOpenAddForm} >
+          <Icon style={{ marginRight: "10px" }} fontSize="small">add_to_photos</Icon>Ajouter entretien 
         </Button>
+        <Icon style={{ marginRight: "8px", marginTop:"18px" , color: 'red'}} fontSize="small">airplay</Icon>
+        <Link to="/meet" style={{ fontSize:"13px" , fontWeight:"440", marginTop:"21px", color: 'red', justifyContent: 'flex-end' }} >
+          DÉMARRER UNE RÉUNION
+        </Link>
       </Typography>
       {message && (
               <Alert style={{ textAlign: "center" , marginBottom: "15px" , marginLeft:"50px"}}>
