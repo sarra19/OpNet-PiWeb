@@ -139,14 +139,22 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     }
   };
 
-  const handleReact = (messageId, emoji) => {
+  const handleReact = async (messageId, emoji) => {
     setReactions({
       ...reactions,
       [messageId]: emoji
     });
-    // You can send the reaction to the backend if needed
+  
+    try {
+      // Send both message ID and emoji type in the request body
+      await axios.post(`http://localhost:5000/messages/reactToMessage/${messageId}`, { 
+        reaction: emoji 
+      });
+    } catch (error) {
+      console.error("Error reacting to message:", error);
+    }
   };
-
+  
   return (
     <>
       <div className="ChatBox-container">
@@ -193,10 +201,13 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   {reactions[message._id] && (
     <span className="reaction">{reactions[message._id]}</span>
   )}
-  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "👍")}>👍</span>
-  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "❤️")}>❤️</span>
-  <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "😂")}>😂</span>
-  {/* You can add more emojis for reactions */}
+  {!reactions[message._id] && (
+    <>
+      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "👍")}>👍</span>
+      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "❤️")}>❤️</span>
+      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "😂")}>😂</span>
+    </>
+  )}
 </div>
 
 
