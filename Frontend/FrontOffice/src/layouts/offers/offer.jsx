@@ -53,8 +53,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "1.5rem", // Réduisez la taille du titre pour correspondre au style de Facebook
     fontWeight: "bold",
-    color: theme.palette.primary.main,
-  },
+    color: "#DC143C", // Changer la couleur du titre en rouge brique
+},
+
   description: {
     fontSize: "1rem",
     color: theme.palette.primary.main,
@@ -62,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(1),
     verticalAlign: "middle",
+  },
+  detailsText: {
+    color: "black",
   },
 }));
 
@@ -111,7 +115,11 @@ function Offers() {
   const handleExpandOffer = (offer) => {
     setSelectedOffer(offer);
     setOpenModal(true);
+    if (!allComments[offer._id]) {
+      handleGetAllComments(offer);
+    }
   };
+  
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -265,16 +273,7 @@ function Offers() {
                       onKeyPress={(e) => handleCommentKeyPress(e, offer._id)}
                     />
                     <Grid container alignItems="center" spacing={2}>
-                      <Grid item>
-                        <Button
-                          startIcon={<FavoriteIcon />}
-                          onClick={() => handleLikeUnlike(offer._id)}
-                          color={likes[offer._id] ? "primary" : "secondary"}
-                        >
-                          J'adore {likes[offer._id] || 0}
-                        </Button>
-                      </Grid>
-                      <Grid item>
+                    <Grid item>
                         <Button
                           onClick={() => handleGetAllComments(offer._id)}
                           color="primary"
@@ -310,7 +309,7 @@ function Offers() {
                         <Divider />
                       </Box>
                     ))}
-                    <Button variant="outlined" color="primary" onClick={() => handleExpandOffer(offer)} style={{ color: '#2196F3' }}>
+                  <Button variant="outlined" color="primary" onClick={() => handleExpandOffer(offer)} style={{ color: '#2196F3' }}>
                       Plus de détails
                     </Button>
                   </CardContent>
@@ -323,36 +322,32 @@ function Offers() {
           <DialogContent>
             {selectedOffer && (
               <div>
-                <Typography className={classes.description}>{selectedOffer.description}</Typography>
-                <Typography>
-                  <EventIcon className={classes.icon} />
+                 <Typography className={classes.detailsText}>{selectedOffer.description}</Typography>
+                <Typography className={classes.detailsText}>
+                  <EventIcon className={classes.detailsText} />
                   Publication Date: {formatDate(selectedOffer.publicationDate)}
                 </Typography>
-                <Typography>
-                  <WorkIcon className={classes.icon} />
+                <Typography className={classes.detailsText}>
+                  <WorkIcon className={classes.detailsText} />
                   Type d'offre: {selectedOffer.offerType}
                 </Typography>
-                <Typography>
-                  <WorkIcon className={classes.icon} />
+                <Typography className={classes.detailsText}>
+                  <WorkIcon className={classes.detailsText} />
                   Salaire: {selectedOffer.salary}
                 </Typography>
-                <Typography>
-                  <WorkIcon className={classes.icon} />
+                <Typography className={classes.detailsText}>
+                  <WorkIcon className={classes.detailsText} />
                   Niveau d'expérience: {selectedOffer.experienceLevel}
                 </Typography>
-                <Typography>
-                  <WorkIcon className={classes.icon} />
+                <Typography className={classes.detailsText}>
+                  <WorkIcon className={classes.detailsText} />
                   Type de contrat: {selectedOffer.contractType}
                 </Typography>
-                <Typography>
-                  <WorkIcon className={classes.icon} />
+                <Typography className={classes.detailsText}>
+                  <WorkIcon className={classes.detailsText} />
                   Durée de stage: {selectedOffer.internshipDuration}
                 </Typography>
-                <Avatar
-                  src={avatarImage}
-                  sx={{ width: 120, height: 120 }}
-                  onClick={handleAvatarClick}
-                />
+                
               </div>
             )}
           </DialogContent>
