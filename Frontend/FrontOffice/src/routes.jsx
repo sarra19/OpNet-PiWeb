@@ -48,6 +48,7 @@ import Company from "layouts/company";
 import Interview from "layouts/interview";
 import Calendrier from "layouts/interview/calendrier";
 import Feedback from "layouts/feedback";
+import Meet from "layouts/interview/meet";
 
 const routes = [
   {
@@ -104,6 +105,13 @@ const routes = [
     icon: <Icon fontSize="small">star_half</Icon>,
     route: "/Feedback",
     component: <Feedback />,
+  },
+  {
+    type: "route",
+    name: "meet", 
+    key: "meet", 
+    route: "/meet", 
+    component: <Meet />, 
   },
   {
     type: "collapse",

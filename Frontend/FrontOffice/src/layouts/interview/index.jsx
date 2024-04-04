@@ -28,12 +28,15 @@ function Interview() {
 
   
   useEffect(() => {
-    getInterviews();
-  }, []);
-
-  const getInterviews = async () => {
-    try {
-        const response = await axios.get("http://localhost:5000/interviews/getall");
+    const fetchStudentInterviews = async () => {
+        try {
+            const userId  = sessionStorage.getItem('userId');
+            console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
+            if (!userId ) {
+                console.error("ID de user non trouvé dans le sessionStorage");
+                return;
+            }
+        const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
         const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
         const sortedInterviews = filteredInterviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         const reversedInterviews = sortedInterviews.reverse();
@@ -41,7 +44,9 @@ function Interview() {
     } catch (error) {
         console.error("Erreur lors de la récupération des entretiens:", error);
     }
-};
+  };
+  fetchStudentInterviews();
+  }, []);
 
 
   // const handleVoirPlusClick = () => {
@@ -89,7 +94,7 @@ function Interview() {
     axios
       .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
-        getInterviews();
+        fetchStudentInterviews();
       })
       .catch((error) => {
         console.error("Erreur lors de la suppression de l'entretien:", error);
@@ -169,12 +174,15 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
       <MDBox mt={1}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8}>
-            
-            <Typography variant="h2" mb={7} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography mb={1} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
               Vos entretiens
-              <Button style={{marginTop:"10px" , color: 'red' }}>
-                <Icon style={{ marginRight: "10px" }} fontSize="small">event_note</Icon><Link  style={{ color: 'inherit' }} to={`/calendrier`}>Voir calendrier</Link>
+              <Button style={{marginTop:"10px", color: 'red', marginLeft: "220px", justifyContent: 'flex-end' }}>
+                <Icon style={{ marginRight: "8px" }} fontSize="small">event_note</Icon><Link  style={{ color: 'inherit' }} to={`/calendrier`}>Voir calendrier</Link>
               </Button>
+              <Icon style={{marginRight: "8px", marginTop:"18px" , color: 'red'}}  fontSize="small">airplay</Icon>
+              <Link to="/meet" style={{ fontSize:"13px" , fontWeight:"440", marginTop:"21px", color: 'red', justifyContent: 'flex-end' }} >
+                DÉMARRER UNE RÉUNION
+              </Link>
             </Typography>
             {message && (
               <Alert style={{ textAlign: "center" , marginBottom: "15px"}}>
@@ -184,7 +192,7 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
             <Grid container spacing={2} >
 
             {currentInterviews.map((interview, index) => (
-              <Grid item key={interview.id || index } xs={12} sm={6} md={4}>
+              <Grid item key={interview.id || index } xs={12} sm={6} md={4} mt={5}>
                   <Card className={clsx({expiredInterview: isInterviewExpired(interview.dateInterv)})} style={{ height: '360px', width: '100%' }}>
                       <CardContent>
                           <Typography variant="h5">{interview.title}</Typography>

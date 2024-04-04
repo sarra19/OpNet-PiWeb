@@ -30,25 +30,33 @@ function Calendrier() {
 
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    const fetchStudentInterviews = async () => {
+        try {
+            const userId  = sessionStorage.getItem('userId');
+            console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
+            if (!userId ) {
+                console.error("ID de user non trouvé dans le sessionStorage");
+                return;
+            }
+            const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
+            const studentInterviews = response.data;
+            const filteredInterviews = studentInterviews.filter(interview => interview.statusInterv !== "Décliné");
+    
+            const formattedEvents = filteredInterviews.map(event => ({
+                ...event,
+                start: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
+                end: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
+            }));
+    
+            setEvents(formattedEvents);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des entretiens:", error);
+        }
+    };
 
-  const fetchEvents = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/interviews/getall");
-      const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
-  
-      const formattedEvents = filteredInterviews.map(event => ({
-        ...event,
-        start: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
-        end: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
-      }));
-  
-      setEvents(formattedEvents);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des entretiens:", error);
-    }
-  }
+    fetchStudentInterviews();
+}, []);
+
   
   
 
@@ -66,7 +74,7 @@ function Calendrier() {
     axios
       .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
-        fetchEvents();
+        fetchStudentInterviews();
         handleCloseDetails();
       })
       .catch((error) => {
