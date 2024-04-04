@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { boolean } = require("yup");
 const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
@@ -51,6 +52,10 @@ const Offer = new Schema({
     type: Number,
     default: 0
   }, 
+  quiz: {
+    type: Boolean,
+    default: false
+  },
   archived: {
     type: Boolean,
     default: false

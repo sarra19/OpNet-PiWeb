@@ -12,7 +12,7 @@ const multer = require("multer");
           cb(null, "uploads/"); // Spécifiez le répertoire de destination où les fichiers seront stockés
         },
         filename: function (req, file, cb) {
-          cb(null, file.fieldname + "-" + Date.now()) + path.extname(file.originalname); // Générez un nom de fichier unique
+          cb(null, file.fieldname + "-" + Date.now()); // Générez un nom de fichier unique
         },
       });
 
@@ -28,7 +28,7 @@ router.post("/add", upload.fields([
     { name: "file", maxCount: 1 }
 ]), validate, async (req, res) => {
     try {
-        const { title, description, skills, location, salary, experienceLevel, offerType, expirationDate, contractType, internshipDuration } = req.body;
+        const { title, description, skills, location, salary, experienceLevel, offerType, expirationDate, contractType, internshipDuration ,quiz} = req.body;
         
         // Vérifier si un fichier a été téléchargé
         let file = "";
@@ -40,7 +40,9 @@ router.post("/add", upload.fields([
         if (!title || !description) { 
             return res.status(400).send("Title and description are required.");
         }
-
+        if (quiz === "false") {
+          quiz = false;
+      }
         // Créer une nouvelle instance d'Offre
         const newOffer = new Offer({
             title,
@@ -54,6 +56,7 @@ router.post("/add", upload.fields([
             contractType,
             internshipDuration,
             file, // Inclure le nom de fichier uniquement s'il a été téléchargé
+            quiz,
         });
 
         // Sauvegarder l'Offre dans la base de données
@@ -69,9 +72,9 @@ router.post("/add", upload.fields([
   // Backend
 
 // Route pour télécharger et stocker un fichier associé à une offre
-router.put("/offer/uploadFile/:offerId", upload.single("file"), async (req, res) => {
+router.put("/uploadFile/:offerId", upload.single("file"), async (req, res) => {
     try {
-      const offerId = req.params.offerId;
+      const offerId = req.body.offerId;
       const filePath = req.file.path;
   
       await Offer.findByIdAndUpdate(offerId, { file: filePath });
@@ -91,13 +94,11 @@ const offer = require("../models/offer");
 router.put("/uploadFile", upload.single("file"), async (req, res) => {
   try {
       const offerId = req.body.id; // Récupérer l'ID de l'offre associée au fichier
-      const filePath = req.file.filename; // Récupérer le nom du fichier téléchargé
+      const filePath =  req.file.path; // Récupérer le nom du fichier téléchargé
 
-      // Construire l'URL complète du fichier téléchargé
-      const fileUrl = path.join("/uploads", filePath);
 
       // Enregistrer le chemin du fichier dans la base de données pour l'offre avec l'ID correspondant
-      await Offer.findByIdAndUpdate(offerId, { file: fileUrl });
+      await Offer.findByIdAndUpdate(offerId, { file: filePath });
 
       res.status(200).send("File uploaded successfully");
   } catch (error) {
@@ -136,6 +137,8 @@ router.put("/:offerId/comment/:commentId/update",  offerController.updateComment
 router.delete("/:offerId/comment/:commentId/delete", offerController.deleteComment);
 
 router.get('/:offerId/comments', offerController.getCommentsByOfferId);
+router.post('/:offerId/comment/:commentId/like', offerController.likeComment);
+
 // Routes pour les likes
 router.post('/:id/like', offerController.addLike);
 router.delete('/:id/like', offerController.removeLike);

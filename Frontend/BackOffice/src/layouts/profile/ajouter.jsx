@@ -1,8 +1,8 @@
-/*eslint-disable*/import React, { useState } from "react";
+/*eslint-disable*/import React, { useState , useRef  } from "react";
 import axios from "axios";
 import MDTypography from "components/MDTypography";
 import Card from "@mui/material/Card";
-import { Select, MenuItem, InputLabel ,TextField } from "@mui/material";
+import { Select, MenuItem, InputLabel ,TextField , Checkbox, FormControlLabel} from "@mui/material";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Footer from "examples/Footer";
 import MDInput from "components/MDInput";
@@ -19,6 +19,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 function Ajouter() {
   const [selectedOption, setSelectedOption] = useState("");
   const [SelectedCountries, setSelectedCountries] = useState([]);
+  const inputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -33,6 +34,7 @@ function Ajouter() {
     file: "",
     contractType: "",
     internshipDuration: "",
+    quiz: false, 
     errors: {},
   });
   const handleCountriesChange = (event, newCountries) => {
@@ -426,7 +428,6 @@ function Ajouter() {
         }));
         return;
       }
-
       const response = await axios.post("http://localhost:5000/offer/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
@@ -502,9 +503,7 @@ function Ajouter() {
         }));
       }
     }
-  
-
-    // Ajouter une validation spécifique pour le champ de salaire
+  // Ajouter une validation spécifique pour le champ de salaire
     if (name === "salary") {
       // Vérifier si la valeur est un nombre positif
       const isPositiveNumber = /^(\d+(\.\d*)?|\.\d+)?$/.test(value);
@@ -545,6 +544,17 @@ function Ajouter() {
       file: file,
     }));
   };
+  const [quiz, setQuiz] = useState(formData.quiz || false);
+  // Définissez une fonction pour gérer les changements de valeur du champ de quiz
+  const handleQuizChange = (event) => {
+    const { checked } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      quiz: checked,
+    }));
+  };
+
+  
 
   return (
     <DashboardLayout>
@@ -849,12 +859,39 @@ function Ajouter() {
                     {getErrorMessage("expirationDate")}
                   </MDTypography>
                 </MDBox>
+
+                <MDBox mb={2}>
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={formData.quiz}
+        onChange={handleQuizChange}
+        name="quiz"
+        color="primary"
+      />
+    }
+    label="Voulez-vous ajouter un test de quiz ?"
+  />
+</MDBox>
+<MDBox mb={2}>
+  {formData.quiz ? (
+    <MDTypography variant="body1" color="textPrimary">
+      Test de quiz sera ajouté.
+    </MDTypography>
+  ) : (
+    <MDTypography variant="body1" color="textPrimary">
+      Pas de test de quiz sera ajouté.
+    </MDTypography>
+  )}
+</MDBox>
+
                 <MDBox mb={2}>
                   <MDInput
                     type="file"
                     label="Logo de l'entreprise"
                     variant="standard"
                     fullWidth
+                    ref={inputRef}
                     name="file"
                     onChange={handleImageChange}
                     error={Boolean(formData.errors.file)}

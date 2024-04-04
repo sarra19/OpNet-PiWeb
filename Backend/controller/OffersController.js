@@ -167,13 +167,21 @@ async function updateComment(req, res) {
       return res.status(404).json({ error: "Comment not found" });
     }
 
+    // Mettre à jour le texte du commentaire
     comment.text = text;
+
+    // Enregistrer les modifications dans la base de données
     await offer.save();
-    res.status(200).json({ message: "Comment updated successfully" });
+
+    // Répondre avec un message de succès
+    return res.status(200).json({ message: "Comment updated successfully" });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // Gérer les erreurs
+    return res.status(400).json({ error: err.message });
   }
 }
+
+
 
 async function deleteComment(req, res) {
   try {
@@ -183,13 +191,24 @@ async function deleteComment(req, res) {
       return res.status(404).json({ error: "Offer not found" });
     }
 
-    offer.comments.id(req.params.commentId).remove();
+    // Trouver l'index du commentaire dans le tableau des commentaires
+    const commentIndex = offer.comments.findIndex(comment => comment._id.toString() === req.params.commentId);
+
+    // Vérifier si le commentaire existe
+    if (commentIndex === -1) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    // Supprimer le commentaire à l'index trouvé
+    offer.comments.splice(commentIndex, 1);
+
     await offer.save();
     res.status(200).json({ message: "Comment deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 }
+
 
 
 async function getCommentsByOfferId(req, res) {
@@ -201,14 +220,38 @@ async function getCommentsByOfferId(req, res) {
     }
 
     // Récupérer les commentaires de l'offre avec les informations sur l'utilisateur pour chaque commentaire
-    const populatedComments = await Offer.populate(offer, { path: 'comments.user', models: 'User' });
+    const comments = offer.comments;
 
-    res.status(200).json(populatedComments.comments);
+    res.status(200).json(comments);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 }
+// Fonction pour gérer les likes des commentaires
+async function likeComment(req, res) {
+  try {
+    const offer = await Offer.findById(req.params.offerId);
 
+    if (!offer) {
+      return res.status(404).json({ error: "Offer not found" });
+    }
+
+    const comment = offer.comments.id(req.params.commentId);
+
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    // Incrémenter le compteur de likes pour ce commentaire
+    comment.likes += 1;
+
+    await offer.save();
+
+    res.status(200).json({ message: "Comment liked successfully" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
 
 
 // CRUD pour les likes
@@ -272,6 +315,7 @@ module.exports = {
   addComment,
   updateComment,
   deleteComment,
+  likeComment,
   archiveOffer, 
   getArchivedOffers ,
   addLike,

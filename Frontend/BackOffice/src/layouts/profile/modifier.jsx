@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link,useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
-import { MenuItem } from "@mui/material";
+import { MenuItem , Checkbox, FormControlLabel } from "@mui/material";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -11,7 +11,6 @@ import Footer from "examples/Footer";
 import Header from "layouts/profile/components/Header";
 import MDTypography from "components/MDTypography";
 import MDBox from "components/MDBox";
-
 function Modifier() {
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -27,6 +26,7 @@ function Modifier() {
     contractType: "",
     internshipDuration: "",
     file: "",
+    quiz: "", // Ajout du champ "quiz"
     errors: {},
   });
 
@@ -35,6 +35,8 @@ function Modifier() {
       try {
         const response = await axios.get(`http://localhost:5000/offer/get/${id}`);
         const offerData = response.data;
+        setQuiz(offerData.quiz || false);
+
         // Formatter la date d'expiration pour correspondre au format 'YYYY-MM-DD'
       const formattedExpirationDate = offerData.expirationDate.split("T")[0];
       const fileField = offerData.filePath; // Remplacez "filePath" par le nom correct du champ de fichier dans la base de données
@@ -53,6 +55,7 @@ function Modifier() {
           contractType: offerData.contractType,
           internshipDuration: offerData.internshipDuration,
           file: fileField, // Utilisez le nom correct du champ de fichier dans la base de données
+          quiz: offerData.quiz || "", // Récupération du champ "quiz"
           errors: {},
         });
       } catch (error) {
@@ -216,6 +219,16 @@ function Modifier() {
   const isStageOffer = formData.offerType === "stage";
   const isEmploiOffer = formData.offerType === "emploi";
   const [selectedOption, setSelectedOption] = useState("");
+  const [quiz, setQuiz] = useState(formData.quiz || false);
+// Définissez une fonction pour gérer les changements de valeur du champ de quiz
+const handleQuizChange = (event) => {
+  const { checked } = event.target;
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    quiz: checked, // Mettre à jour l'état du champ quiz dans formData
+  }));
+  setQuiz(checked); // Mettre à jour l'état du champ quiz séparément
+};
 
   const handleOptionChange = (event) => {
     const { value } = event.target;
@@ -469,6 +482,28 @@ function Modifier() {
                   {formData.errors.file}
                 </MDTypography>
               </MDBox>
+              <MDBox component="form">
+              <FormControlLabel
+                control={
+                    <Checkbox
+                      checked={formData.quiz}
+                      onChange={handleQuizChange}
+                      name="quiz"
+                      color="primary"
+                    />
+                  }
+                  label="Voulez-vous ajouter un test de quiz ?"
+                />
+                 </MDBox>
+              {formData.quiz ? (
+                <MDTypography variant="body1" color="textPrimary">
+                  Test de quiz sera ajouté.
+                </MDTypography>
+              ) : (
+                <MDTypography variant="body1" color="textPrimary">
+                  Pas de test de quiz sera ajouté.
+                </MDTypography>
+              )}
               <MDBox mt={4} mb={1}>
                 <MDButton variant="gradient" color="info" fullWidth type="submit">
                   Modifier Offre
