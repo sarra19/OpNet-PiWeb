@@ -182,7 +182,7 @@ function AddQuestionForm() {
                 type="submit"
                 style={{ padding: '8px 16px' }}
               >
-                Add Question
+                Ajouter Question
               </MDButton>
               <MDButton
                 variant="gradient"
