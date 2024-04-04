@@ -242,8 +242,6 @@ router.get('/candidat', authMiddleware, async (req, res) => {
 
 
 
-
-
 // Configuration du client Twilio
 const client = twilio(TWILIO_SID, TWILIO_AUTH_TOKEN);
 
