@@ -2,13 +2,17 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import MDButton from "components/MDButton";
+import Button from '@material-ui/core/Button';
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Header from "layouts/profile/components/Header";
 import Footer from "examples/Footer";
 import MDInput from "components/MDInput";
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 // CSS Styles
 const tableStyles = {
   width: "100%",
@@ -77,8 +81,40 @@ function Archive() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+  const handleUnarchiveOffer = async (offerId) => {
+    try {
+      if (!offerId || typeof offerId !== "string") {
+        console.error("Invalid offer ID:", offerId);
+        return;
+      }
+
+      await axios.put(`http://localhost:5000/offer/${offerId}/unarchive`);
+      fetchArchivedOffers();
+      window.alert("Offre désarchivée avec succès!");
+    } catch (error) {
+      console.error(
+        "Error unarchiving offer:",
+        error.response ? error.response.data : error.message
+      );
+      setError(error);
+    }
+  };
   const handleChangeSearchTerm = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const [selectedDescription, setSelectedDescription] = useState(null);
+  const [expandedOfferId, setExpandedOfferId] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenDialog = (description) => {
+    setSelectedDescription(description);
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setSelectedDescription(null);
   };
   return (
     <DashboardLayout>
@@ -128,7 +164,17 @@ function Archive() {
 
 
         <MDBox mt={8}>
-        
+        <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogTitle>Description complète</DialogTitle>
+        <DialogContent>
+          {selectedDescription}
+        </DialogContent>
+        <DialogActions>
+          <MDButton onClick={handleCloseDialog} color="primary">
+            Fermer
+          </MDButton>
+        </DialogActions>
+      </Dialog>
         <table style={tableStyles}>
             <thead>
               <tr>
@@ -147,8 +193,38 @@ function Archive() {
             <tbody>
               {archivedOffers.length > 0 && archivedOffers.map((offer, index) => (
                 <tr key={offer._id} style={index % 2 === 0 ? evenRowStyles : {}}>
-                  <td style={cellStyles}>{offer.title}</td>
-                  <td style={cellStyles}>{offer.description}</td>
+                 <td style={cellStyles}>{offer.title.length > 15 && expandedOfferId !== offer._id ? (
+        <>
+          {offer.title.substring(0, 15)}
+          <Button
+            variant="gradient"
+            color="info"
+            style={buttonStyles}
+            onClick={() => handleOpenDialog(offer.title)}
+          >
+            ...
+          </Button>
+        </>
+      ) : (
+        offer.title
+      )}
+    </td>
+    <td style={cellStyles}>{offer.description.length > 15 && expandedOfferId !== offer._id ? (
+     <>
+     {offer.description.substring(0, 15)}
+     <Button
+       variant="gradient"
+       color="info"
+       style={buttonStyles}
+       onClick={() => handleOpenDialog(offer.description)}
+     >
+       ...
+     </Button>
+   </>
+ ) : (
+   offer.description
+ )}
+</td>
                   <td style={cellStyles}>{offer.location}</td>
                   <td style={cellStyles}>{offer.salary}</td>
                   <td style={cellStyles}>{offer.experienceLevel}</td>
@@ -158,6 +234,14 @@ function Archive() {
                   <td style={cellStyles}>{offer.contractType}</td>
                   <td style={cellStyles}>{offer.internshipDuration
                                     }</td>
+                                     <MDButton 
+                variant="gradient" 
+                color="info" 
+                style={buttonStyles} 
+                onClick={() => handleUnarchiveOffer(offer._id)}
+              >
+                Désarchiver
+              </MDButton>
                                     </tr>
                                   ))}
                                 </tbody>

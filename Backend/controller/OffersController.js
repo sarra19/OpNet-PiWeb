@@ -1,4 +1,6 @@
 const Offer = require("../models/offer");
+
+
 const  User = require('../models/user');
 
 
@@ -34,12 +36,14 @@ async function getAllOffers(req, res) {
     }
 
     const data = await Offer.find(query);
+
+
+
     res.status(200).json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 }
-
 
 async function getOfferById(req, res) {
   try {
@@ -77,8 +81,31 @@ async function deleteOffer(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
-
 async function archiveOffer(req, res) {
+  try {
+    const offer = await Offer.findById(req.params.id);
+
+    if (!offer) {
+      return res.status(404).json({ error: "Offer not found" });
+    }
+
+    // Always set the offer as archived
+    offer.archived = true;
+
+    // Save the changes
+    await offer.save();
+
+    return res.status(200).json({ message: "Offer archived successfully" });
+
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+
+
+
+async function archiveExpiredOffer(req, res) {
   try {
     const offer = await Offer.findById(req.params.id);
 
@@ -110,6 +137,30 @@ async function archiveOffer(req, res) {
     res.status(400).json({ error: err.message });
   }
 }
+async function unarchiveOffer(req, res) {
+  try {
+    const offer = await Offer.findById(req.params.id);
+
+    if (!offer) {
+      return res.status(404).json({ error: "Offer not found" });
+    }
+
+    if (!offer.archived) {
+      return res.status(400).json({ error: "Offer is not archived" });
+    }
+
+    // Set the offer as unarchived
+    offer.archived = false;
+
+    // Save the changes
+    await offer.save();
+
+    return res.status(200).json({ message: "Offer unarchived successfully" });
+
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
 
 
 
@@ -126,33 +177,24 @@ async function getArchivedOffers(req, res) {
 async function addComment(req, res) {
   try {
     const { text } = req.body;
-    const offer = await Offer.findById(req.params.offerId); // Utiliser req.params.offerId
-    //const user = await User.findById(req.userId); // Utilisez le modèle User pour récupérer l'utilisateur actuel
-
+    const offer = await Offer.findById(req.params.offerId);
+    const user = await User.findById(req.params.userId);
 
     if (!offer) {
       return res.status(404).json({ error: "Offer not found" });
     }
 
-    // Récupérer l'utilisateur à partir de la requête (ou utilisez un nom d'utilisateur par défaut)
-    let user;
-    if (req.user) {
-      // Si vous avez un système d'authentification en place et que l'utilisateur est authentifié
-      user = req.user; // Utilisez l'utilisateur authentifié pour le commentaire
-    } else {
-      // Utilisez un nom d'utilisateur par défaut (vous pouvez le personnaliser selon vos besoins)
-      user = "Anonymous";
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    offer.comments.push({ text: text, user: user }); // Ajoutez le nom de l'utilisateur au commentaire
+    offer.comments.push({ text: text, user: user._id }); // Ajout de l'ID de l'utilisateur au commentaire
     await offer.save();
     res.status(201).json({ message: "Comment added successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 }
-
-
 async function updateComment(req, res) {
   try {
     const { text } = req.body;
@@ -213,7 +255,7 @@ async function deleteComment(req, res) {
 
 async function getCommentsByOfferId(req, res) {
   try {
-    const offer = await Offer.findById(req.params.offerId);
+    const offer = await Offer.findById(req.params.offerId).populate('comments.user', 'firstname lastname');
     
     if (!offer) {
       return res.status(404).json({ error: "Offer not found" });
@@ -227,6 +269,7 @@ async function getCommentsByOfferId(req, res) {
     res.status(400).json({ error: err.message });
   }
 }
+
 // Fonction pour gérer les likes des commentaires
 async function likeComment(req, res) {
   try {
@@ -306,20 +349,28 @@ async function getLike(req, res) {
 
 
 
+
+
+
 module.exports = {
   getAllOffers,
   getOfferById,
   addOffer,
   updateOffer,
   deleteOffer,
+
   addComment,
   updateComment,
   deleteComment,
   likeComment,
-  archiveOffer, 
+  archiveOffer,
+  archiveExpiredOffer, 
+  unarchiveOffer,
   getArchivedOffers ,
   addLike,
   removeLike,
   getCommentsByOfferId,
   getLike,
+
+
 };

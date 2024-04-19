@@ -85,10 +85,18 @@ function Offers() {
   const itemsPerPage = 6;
 
   const classes = useStyles();
+  
+useEffect(() => {
+  const initialShowAllComments = {};
+  offers.forEach(offer => {
+    initialShowAllComments[offer._id] = false;
+  });
+  setShowAllComments(initialShowAllComments);
+}, [offers,currentPage]);
 
   useEffect(() => {
     fetchOffers();
-  }, [searchTerm, sortOrder, currentPage]);
+  }, [searchTerm, sortOrder, currentPage,offers]);
 
   const fetchOffers = async () => {
     try {
@@ -111,6 +119,7 @@ function Offers() {
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => prevPage - 1);
   };
+  const [showAllComments, setShowAllComments] = useState({}); // État pour suivre l'affichage des commentaires
 
   const handleExpandOffer = (offer) => {
     setSelectedOffer(offer);
@@ -207,6 +216,18 @@ function Offers() {
       console.error('Erreur lors de la suppression du commentaire:', error);
     }
   };
+  const [showComments, setShowComments] = useState({});
+
+const handleToggleComments = async (offerId) => {
+  setShowComments((prevComments) => ({
+    ...prevComments,
+    [offerId]: !prevComments[offerId],
+  }));
+
+  if (!showComments[offerId]) {
+    await handleGetAllComments(offerId);
+  }
+};
 
   return (
     <DashboardLayout>
@@ -272,17 +293,16 @@ function Offers() {
                       onChange={(e) => setComments({ ...comments, [offer._id]: e.target.value })}
                       onKeyPress={(e) => handleCommentKeyPress(e, offer._id)}
                     />
-                    <Grid container alignItems="center" spacing={2}>
-                    <Grid item>
-                        <Button
-                          onClick={() => handleGetAllComments(offer._id)}
-                          color="primary"
-                        >
-                          Tous les commentaires
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    {allComments[offer._id] && allComments[offer._id].map((comment, index) => (
+                   
+                    <Button
+                    onClick={() => handleToggleComments(offer._id)}
+                    color="primary"
+                  >
+                     {showComments[offer._id] ? 'Masquer les commentaires' : 'tous les commentaires'}
+</Button>
+{showComments[offer._id] &&
+  allComments[offer._id] &&
+  allComments[offer._id].map((comment, index) => (
                       <Box key={index} mt={2}>
                         <Box display="flex" alignItems="center">
                           <Avatar sx={{ bgcolor: '#2196F3', marginRight: 1 }}>{comment.user.charAt(0)}</Avatar>

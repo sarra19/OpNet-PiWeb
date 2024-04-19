@@ -5,6 +5,8 @@ const offerController = require("../controller/OffersController");
 const validate = require("../middl/validate");
 //const upload = require("../config/multer");
 const multer = require("multer");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 
 
     const storage = multer.diskStorage({
@@ -23,12 +25,92 @@ const upload = multer({ storage: storage });
 router.get('/', function(req, res) {
     res.send("Hello Offer");
 });
+router.get('/generate-pdf', async (req, res) => {
+  try {
+    const doc = new PDFDocument();
+    const filePath = 'offers.pdf';
+
+    // Ajouter du contenu au PDF
+    doc.fontSize(20).text('Liste des Offres', 100, 50);
+
+    const offers = await Offer.find();
+
+    // Tableau des en-têtes
+    const tableHeaders = [ 'Titre','Compétences', 'Lieu', 'Salaire', 'Niveau d\'expérience'];
+
+    // Définir la position du tableau
+    let tableY = 150;
+
+    // Dessiner les en-têtes du tableau
+    tableHeaders.forEach((header, index) => {
+      doc.fontSize(12).text(header, 100 + index * 100, tableY);
+    });
+
+    // Mettre à jour la position Y pour les données
+    tableY += 20;
+
+    offers.forEach((offer) => {
+      const offerData = [
+        offer.title ? offer.title : '',
+        offer.skills ? offer.skills : '',
+        offer.location ? offer.location : '',
+        offer.salary ? offer.salary.toString() : '',
+        offer.experienceLevel ? offer.experienceLevel : ''
+      ];
+      let dataX = 100;
+      // Dessiner les données de l'offre dans le tableau
+      offerData.forEach((data, index) => {
+        doc.fontSize(10).text(data.toString(), 100 + index * 100, tableY);
+      });
+
+      // Mettre à jour la position Y pour la prochaine ligne
+      tableY += 20;
+    });
+
+    // Enregistrer le PDF sur le disque
+    const stream = doc.pipe(fs.createWriteStream(filePath));
+    doc.end();
+
+    stream.on('finish', () => {
+      res.download(filePath, (err) => {
+        if (err) {
+          console.error('Erreur lors du téléchargement du fichier PDF:', err);
+          res.status(500).send('Erreur lors du téléchargement du fichier PDF');
+        } else {
+          console.log('Fichier PDF téléchargé avec succès');
+          fs.unlinkSync(filePath); // Supprimer le fichier PDF après le téléchargement
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    res.status(500).send("Error generating PDF. Please try again.");
+  }
+});
+
+// Dans routes/offer.js
+
+router.get('/statistics', async (req, res) => {
+  try {
+    const offersWithQuiz = await Offer.countDocuments({ quiz: true });
+    const offersWithoutQuiz = await Offer.countDocuments({ quiz: false });
+
+    res.status(200).json({
+      offersWithQuiz: offersWithQuiz,
+      offersWithoutQuiz: offersWithoutQuiz
+    });
+  } catch (error) {
+    console.error("Error getting statistics:", error);
+    res.status(500).send("Error getting statistics. Please try again.");
+  }
+});
+
 
 router.post("/add", upload.fields([
     { name: "file", maxCount: 1 }
 ]), validate, async (req, res) => {
     try {
-        const { title, description, skills, location, salary, experienceLevel, offerType, expirationDate, contractType, internshipDuration } = req.body;
+        const { title, description, skills, location, salary, experienceLevel, offerType, expirationDate, contractType, internshipDuration ,quiz} = req.body;
         
         // Vérifier si un fichier a été téléchargé
         let file = "";
@@ -40,7 +122,9 @@ router.post("/add", upload.fields([
         if (!title || !description) { 
             return res.status(400).send("Title and description are required.");
         }
-
+        if (quiz === "false") {
+          quiz = false;
+      }
         // Créer une nouvelle instance d'Offre
         const newOffer = new Offer({
             title,
@@ -53,6 +137,7 @@ router.post("/add", upload.fields([
             expirationDate,
             contractType,
             internshipDuration,
+            quiz,
             file, // Inclure le nom de fichier uniquement s'il a été téléchargé
         });
 
@@ -123,11 +208,13 @@ router.delete('/deleteOffer/:id', offerController.deleteOffer);
 
 // Nouvelles routes pour archiver les offres
 router.put('/:id/archive', offerController.archiveOffer);
+router.put('/:id/archiveExpired', offerController.archiveExpiredOffer);
+router.put('/:id/unarchive', offerController.unarchiveOffer);
 router.get('/archived', offerController.getArchivedOffers);
 
 
 // Route pour ajouter un commentaire à une offre spécifique
-router.post("/:offerId/comment/add", offerController.addComment);
+router.post("/:offerId/comment/add/:userId", offerController.addComment);
 
 // Route pour mettre à jour un commentaire spécifique associé à une offre
 router.put("/:offerId/comment/:commentId/update",  offerController.updateComment);
@@ -143,3 +230,5 @@ router.get('/:id/like', offerController.getLike);
 
 
 module.exports = router;
+
+
