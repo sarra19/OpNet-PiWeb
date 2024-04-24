@@ -41,6 +41,26 @@ app.use('/messages', messageRouter)
 app.use('/interviews', interviewRouter) 
 app.use('/feedbacks', feedbackRouter )
 
+const Interview = require("../Backend/models/interview.js");
+
+async function marquerEntrevuesTerminees() {
+  try {
+    const interviews = await Interview.find({ statusInterv: "A venir" });
+    for (const interview of interviews) {
+      if (new Date() > interview.dateInterv) {
+        if (interview.statusInterv !== "Décliné" && interview.statusInterv !== "Demande report") {
+          await Interview.findByIdAndUpdate(interview._id, { $set: { statusInterv: "Terminé" } });
+        }
+      }
+    }
+    console.log("Mise à jour des entrevues terminée.");
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour des entrevues :", error);
+  }
+}
+
+setInterval(marquerEntrevuesTerminees, 1 * 60 * 1000);
+
 // Server setup
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;

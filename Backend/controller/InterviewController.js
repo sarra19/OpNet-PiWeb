@@ -173,7 +173,26 @@ async function updateInterviewNotValidation(req, res) {
     }
 }
 
+async function marquerEntrevuesTerminees() {
+    try {
+        // Récupérer toutes les entrevues
+        const interviews = await Interview.find();
+
+        // Parcourir les entrevues
+        interviews.forEach(async (interview) => {
+            // Vérifier si l'heure actuelle est postérieure à l'heure de l'entrevue
+            if (new Date() > interview.dateInterv) {
+                // Mettre à jour le statut de l'entrevue à "Terminé"
+                await Interview.findByIdAndUpdate(interview._id, { $set: { statusInterv: "Terminé" } });
+            }
+        });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des entrevues :", error);
+    }
+}
 
 
-module.exports = { add, getall,getallAsso ,  getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate ,getInterviewsByStudentId , getInterviewsByStudentName , updateInterviewValidation ,updateInterviewNotValidation };
+
+
+module.exports = { add, getall,getallAsso ,  getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate ,getInterviewsByStudentId , getInterviewsByStudentName , updateInterviewValidation ,updateInterviewNotValidation , marquerEntrevuesTerminees };
   
