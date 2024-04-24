@@ -176,7 +176,7 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
           <Grid item xs={12} md={8}>
             <Typography mb={1} variant="h2" style={{ display: 'flex' , justifyContent: 'center' }}>
               Vos entretiens
-              <Button style={{marginTop:"10px", color: 'red', marginLeft: "220px", justifyContent: 'flex-end' }}>
+              <Button style={{marginTop:"10px", color: 'red', marginLeft: "190px", justifyContent: 'flex-end' }}>
                 <Icon style={{ marginRight: "8px" }} fontSize="small">event_note</Icon><Link  style={{ color: 'inherit' }} to={`/calendrier`}>Voir calendrier</Link>
               </Button>
               <Icon style={{marginRight: "8px", marginTop:"18px" , color: 'red'}}  fontSize="small">airplay</Icon>
@@ -206,10 +206,10 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
                               </div>
                           </Typography>
                           <div style={{ display: "flex", marginTop: "16px" }}>
-                              <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} >
+                              <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} disabled={ isInterviewExpired(interview.dateInterv)}>
                                   Décliner
                               </Button>
-                              <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"} >
+                              <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"|| isInterviewExpired(interview.dateInterv)} >
                                   Autre date ?
                               </Button>
                           </div>

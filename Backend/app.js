@@ -53,7 +53,6 @@ async function marquerEntrevuesTerminees() {
         }
       }
     }
-    console.log("Mise à jour des entrevues terminée.");
   } catch (error) {
     console.error("Erreur lors de la mise à jour des entrevues :", error);
   }
