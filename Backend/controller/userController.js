@@ -60,4 +60,17 @@ async function deleteUser (req, res) {
         res.status(500).json(err);
     }
 }
-module.exports={getall , getbyid, getbyname, add , UpdateUser ,deleteUser}
+
+
+async function getUsersByName(req, res) {
+    try {
+        const { q } = req.query;
+        const users = await User.find({ $or: [{ firstname: { $regex: `^${q}`, $options: 'i' } }, { lastname: { $regex: `^${q}`, $options: 'i' } }] });
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error fetching users by name:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+module.exports={getall , getbyid, getbyname, add , UpdateUser ,deleteUser, getUsersByName}

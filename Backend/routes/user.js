@@ -27,5 +27,6 @@ router.get('/getbyname/:name' ,userController.getbyname);
 router.put('/updateUser/:id', userController.UpdateUser);
 
 router.delete('/deleteUser/:id',userController.deleteUser);
+router.get('/search', userController.getUsersByName);
 
 module.exports = router ;

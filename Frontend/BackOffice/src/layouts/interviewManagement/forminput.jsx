@@ -1,19 +1,21 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import MDBox from "components/MDBox";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
 function Forminput({ interviewId }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [candidateName, setCandidateName] = useState("");
+    const [candidateList, setCandidateList] = useState([]);
     const [address, setAddress] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
     const [dateError, setDateError] = useState("");
     const [selectedTypeRencontre, setSelectedTypeRencontre] = useState("En ligne");
     const [selectedTypeIntrv, setSelectedTypeIntrv] = useState("Entretien avec le RH");
     const [formError, setFormError] = useState("");
+    const [isAddMode, setIsAddMode] = useState(true);
 
     const [touchedFields, setTouchedFields] = useState({
         title: false,
@@ -24,6 +26,7 @@ function Forminput({ interviewId }) {
     });
 
     useEffect(() => {
+        setIsAddMode(!interviewId);
         if (interviewId) {
             axios.get(`http://localhost:5000/interviews/get/${interviewId}`)
                 .then(response => {
@@ -124,6 +127,24 @@ function Forminput({ interviewId }) {
         return formattedDate;
     };
 
+    const searchCandidates = async (query) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/user/search?q=${query}`);
+            setCandidateList(response.data);
+        } catch (error) {
+            console.error("Error searching candidates:", error);
+        }
+    };
+
+    const handleCandidateSelection = (selectedCandidate) => {
+        if (selectedCandidate) {
+            setCandidateName(`${selectedCandidate.firstname} ${selectedCandidate.lastname}`);
+            setCandidateList([]); 
+        } else {
+            setCandidateName(''); 
+        }
+    };
+
     return (
             <MDBox >
                 <Box 
@@ -155,16 +176,44 @@ function Forminput({ interviewId }) {
                             helperText={!description && touchedFields.description ? "La description est obligatoire" : ""}
                             error={!description && touchedFields.description}
                         />
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Nom du candidat"
-                            value={candidateName}
-                            onChange={(e) => setCandidateName(e.target.value)}
-                            onBlur={() => handleInputBlur('candidateName')}
-                            helperText={!candidateName && touchedFields.candidateName ? "c'est obligatoire d'entrer le nom d'un candidat" : ""}
-                            error={!candidateName && touchedFields.candidateName}
-                        />
+                        {isAddMode ? (
+                            <Autocomplete
+                                id="candidate-list"
+                                options={candidateList}
+                                getOptionLabel={(candidate) => `${candidate.firstname} ${candidate.lastname}`}
+                                onChange={(event, newValue) => {
+                                    setCandidateName(newValue ? `${newValue.firstname} ${newValue.lastname}` : '');
+                                    handleCandidateSelection(newValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        required
+                                        id="outlined-required"
+                                        label="Nom du candidat"
+                                        value={candidateName}
+                                        onBlur={() => handleInputBlur('candidateName')}
+                                        helperText={!candidateName && touchedFields.candidateName ? "C'est obligatoire d'entrer le nom d'un candidat" : ""}
+                                        error={!candidateName && touchedFields.candidateName}
+                                        onChange={(e) => {
+                                            setCandidateName(e.target.value);
+                                            searchCandidates(e.target.value);
+                                        }}
+                                    />
+                                )}
+                            />
+                        ) : (
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Nom du candidat"
+                                value={candidateName}
+                                onChange={(e) => setCandidateName(e.target.value)}
+                                onBlur={() => handleInputBlur('candidateName')}
+                                helperText={!candidateName && touchedFields.candidateName ? "c'est obligatoire d'entrer le nom d'un candidat" : ""}
+                                error={!candidateName && touchedFields.candidateName}
+                            />
+                        )}
                         <TextField
                             required
                             type="datetime-local"
