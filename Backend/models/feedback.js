@@ -11,6 +11,14 @@ const FeedBack = new Schema({
         type: Date,
         default: Date.now
     },
+    sentimentAnalysisResults: [{
+        text: String,
+        sentiment: String,
+        start: Number,
+        end: Number,
+        confidence: Number
+        
+    }]
 })
 
 module.exports = mongo.model("feedBack", FeedBack) ;

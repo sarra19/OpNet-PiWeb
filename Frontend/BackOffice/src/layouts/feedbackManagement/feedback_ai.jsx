@@ -38,9 +38,9 @@ function FeedBack({ interviewId }) {
   const [transcription, setTranscription] = useState('');
 
 
-  const saveTranscriptionToDatabase = async (text) => {
+  const saveTranscriptionToDatabase = async (text , sentimentAnalysisResults) => {
     try {
-      await axios.post('http://localhost:5000/feedbacks/save', { text: text, interviewId: interviewId });
+      await axios.post('http://localhost:5000/feedbacks/save', { text: text, interviewId: interviewId , sentimentAnalysisResults: sentimentAnalysisResults});
       console.log('Transcription enregistrée dans la base de données avec succès.');
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement de la transcription dans la base de données :', error);
@@ -58,7 +58,7 @@ function FeedBack({ interviewId }) {
           setTranscript({ ...transcript, ...transcriptData });
 
           if (transcriptData.text) {
-            saveTranscriptionToDatabase(transcriptData.text);
+            saveTranscriptionToDatabase(transcriptData.text , transcriptData.sentiment_analysis_results);
           }
 
         }catch (err){

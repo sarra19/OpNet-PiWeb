@@ -13,16 +13,17 @@ const FeedBack = require('../models/feedback');
 
 async function save(req, res) {
     try {
-        const { text, interviewId } = req.body;
-        if (!text || !interviewId) {
-            return res.status(400).send("Text and interviewId are required");
+        const { text, interviewId, sentimentAnalysisResults } = req.body;
+        if (!text || !interviewId || !sentimentAnalysisResults) {
+            return res.status(400).send("Text, interviewId, and sentimentAnalysisResults are required");
         }
-        // Vérifiez si un feedback existe déjà pour cette interview
+
         const existingFeedback = await FeedBack.findOne({ interview: interviewId });
         if (existingFeedback) {
             return res.status(400).send("Feedback already exists for this interview");
         }
-        const feedBack = await FeedBack.create({ texte: text, interview: interviewId });
+
+        const feedBack = await FeedBack.create({ texte: text, interview: interviewId, sentimentAnalysisResults: sentimentAnalysisResults });
         const interview = await Interview.findById(interviewId);
         if (!interview) {
             return res.status(404).send("Interview not found");

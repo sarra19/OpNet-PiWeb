@@ -11,6 +11,15 @@ export default function Result ({transcript}){
                 <Highlighted text={result.text} sentiment={result.sentiment} entities={transcript.entities} />
             ))}
             </Typography>
+            <Typography>
+                {transcript.sentiment_analysis_results.map(result => (
+                    <div key={result.start}> 
+                    <p>Text: {result.text}</p>
+                    <p>Sentiment: {result.sentiment}</p>
+                    </div>
+                ))}
+            </Typography>
+
         </Grid>
     );
 }

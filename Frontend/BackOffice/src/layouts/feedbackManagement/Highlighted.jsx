@@ -1,11 +1,7 @@
 /* eslint-disable */
 import { Box , Tooltip, Typography } from '@mui/material' ;
 import "./index.css";
-const sentimentColor = {
-    POSITIVE: 'lightgreen',
-    NEGATIVE : 'pink' ,
-    NEUTRAL: 'lightgray',
-}
+
 
 export default function Highlighted ({text , sentiment , entities}){
 
