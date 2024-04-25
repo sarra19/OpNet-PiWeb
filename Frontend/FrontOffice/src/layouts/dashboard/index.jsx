@@ -8,15 +8,28 @@ import MDBox from "components/MDBox";
 
 function Homepage() {
   const location = useLocation();
-
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(API_URLS.getAllUsers);
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const userId = searchParams.get("userId");
+    const userRole = searchParams.get("userRole");
+
     if (userId) {
       sessionStorage.setItem("userId", userId);
-    }
-  }, [location]);
+      sessionStorage.setItem("userRole", userRole);
 
+    }
+    fetchUsers();
+
+  }, [location]);
+ 
   return (
     <DashboardLayout>
       <DashboardNavbar />

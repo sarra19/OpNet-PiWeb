@@ -1,5 +1,35 @@
 const Chat = require("../models/chat")
+const dotenv = require("dotenv");
+dotenv.config();
+const  OpenAIApi = require("openai");
 
+const openai = new OpenAIApi({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+async function chatbot (req, res) {
+  try {
+    const { text } = req.body;
+    const { data } = await openai.chat.completions.create({
+      model: "text-davinci-003",
+      prompt: `Answer question similar to how yoda from star war would.
+      Me: 'what is your name?'
+      yoda: 'yoda is my name'
+      Me: ${text}`,
+      max_tokens: 300,
+      temperature: 0.7,
+    });
+    if (data) {
+      if (data.choices[0].text) {
+        return res.status(200).json(data.choices[0].text);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({
+      message: err.message,
+    });
+  }
+};
 async function getall (req,res){
     try{
         const data = await Chat.find();
@@ -95,4 +125,6 @@ async function deleteChatRoom (req, res) {
       res.status(500).json(error)
     }
   };
-module.exports={getall , getid, getbynameChat,findChat,userChats,createChat, add , UpdateChatRoom ,deleteChatRoom}
+
+  
+module.exports={getall , getid,chatbot, getbynameChat,findChat,userChats,createChat, add , UpdateChatRoom ,deleteChatRoom}

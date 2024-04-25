@@ -19,7 +19,9 @@ const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const googleAuth = require("./routes/index");
 const path = require("path");
+const facebookRouter = require('./routes/indexf');
 
+const githubRouter = require('./routes/indexg');
 
 
 
@@ -54,12 +56,17 @@ app.use('/auth', authRouter);
 app.use('/chat', chatRoomRouter);
 app.use('/messages', messageRouter);
 app.use("/password-reset", passwordResetRoutes);
+app.use("/api/v1/openai", require("./routes/openaiRoutes"));
 
 app.use(
   session({
-    secret: "secret",
+    secret: "secret",// Chaîne aléatoire utilisée pour signer le cookie de session
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      sameSite: "none",//"none" pour les connexions cross-origin
+      secure: true //doit être envoyé uniquement sur HTTPS
+    }
   })
 );
 router.use(cors());
@@ -70,6 +77,12 @@ app.use(logger("dev"));
 // Middleware pour initialiser Passport
 app.use(passport.initialize());
 require("./auth/google-auth.js")(passport);
+require("./auth/facebook-auth.js")(passport);
+require("./auth/github-auth.js")(passport);
+
+app.use('/auth/github', githubRouter);
+
+app.use('/auth/facebook', facebookRouter);
 
 // Routes
 app.use("/", googleAuth);

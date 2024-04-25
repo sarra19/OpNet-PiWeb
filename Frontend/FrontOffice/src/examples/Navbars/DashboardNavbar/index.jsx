@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
+
+
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -26,10 +28,15 @@ import {
   navbarIconButton,
   navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
+import axios from "axios";
+import API_URLS from "apiUrls";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini , searchInput, onSearchInputChange}) {
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
+  const userId =localStorage.getItem("userId")
+  const userRole =localStorage.getItem("userRole")
+
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -39,7 +46,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const setUserRole = (role) => {
     sessionStorage.setItem("userRole", role);
   };
-
   useEffect(() => {
     const checkUserRole = () => {
       const storedUserRole = sessionStorage.getItem("userRole");
@@ -105,6 +111,29 @@ function DashboardNavbar({ absolute, light, isMini }) {
       return colorValue;
     },
   });
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+
+      // Retrieve the userId from session storage
+      const userId = sessionStorage.getItem("userId");
+
+      // Retrieve the userRole from session storage
+      const userRole = sessionStorage.getItem("userRole");
+
+     
+
+      // Store the userId and userRole in cookies
+      document.cookie = `userId=${userId}; path=/`;
+      document.cookie = `userRole=${userRole}; path=/`;
+            // Redirect the user to the dashboard page
+            window.location.href = "http://localhost:4000/dashboard";
+     
+    } catch (error) {
+        console.error("Erreur lors de la connexion:", error);
+    }
+};
 
   return (
     <AppBar
@@ -119,21 +148,19 @@ function DashboardNavbar({ absolute, light, isMini }) {
         {!isMini && (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
             <MDBox pr={1}>
-              <MDInput label="Rechercher" />
-            </MDBox>
+              <MDInput label="Cherchez " value={searchInput} onChange={onSearchInputChange} /> 
+              </MDBox>
             <MDBox>
-              {["Admin", "Subadmin", "Company", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
-                <Link 
-                  to={`http://localhost:4000/dashboard?userRole=${sessionStorage.getItem("userRole")}&userId=${sessionStorage.getItem("userId")}`} 
-                  style={{ textDecoration: 'none' }} // Remove default underline
-                >
+              {["Admin", "Subadmin", "Entreprise", "Alumni"].includes(sessionStorage.getItem("userRole")) && (
+                
                   <Button 
                     variant="outlined" 
                     style={{ backgroundColor: '#E82227', color: '#fff' }}
+                    onClick={handleSignIn}
                   >
                     Administration
                   </Button>
-                </Link>
+               
               )}
               <Button onClick={handleLogout} component={Link} to="/authentication/sign-in">Se déconnecter</Button>
             </MDBox>

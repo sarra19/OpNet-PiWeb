@@ -32,4 +32,6 @@ router.delete('/deleteChatRoom/:id',chatController.deleteChatRoom);
 router.post('/', chatController.createChat);
 router.get('/:userId', chatController.userChats);
 router.get('/find/:firstId/:secondId', chatController.findChat);
+
+
 module.exports = router ;

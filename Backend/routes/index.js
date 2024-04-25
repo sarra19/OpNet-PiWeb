@@ -22,7 +22,7 @@ Router.get(
       const userRole = user.role;
       const userId = user._id;
       // Redirect based on user role
-      res.redirect(`http://localhost:3000/dashboard/${userRole}?userId=${userId}`);
+      res.redirect(`http://localhost:3000/dashboard/?userId=${userId}&userRole=${userRole}`);
     } catch (error) {
       console.error("Error retrieving user:", error);
       // Handle error redirection or display error message

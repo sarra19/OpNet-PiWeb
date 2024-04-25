@@ -11,7 +11,19 @@ async function getall (req,res){
             res.status(400).send(err);
         }
 }
+async function getVerifiedUsers(req, res) {
+    try {
+        // Find all users where user.verified is true
+        const verifiedUsers = await User.find({ verified: true });
 
+        // Return the list of verified users in the response
+        res.status(200).send(verifiedUsers);
+    } catch (error) {
+        // Handle any errors that occur during the database query
+        console.error("Error fetching verified users:", error);
+        res.status(500).send({ message: "An error occurred while fetching verified users" });
+    }
+}
 
 async function googlelogin (req, res) {
     try {
@@ -67,7 +79,7 @@ async function googlelogin (req, res) {
 
         // Générer un jeton JWT et inclure le rôle de l'utilisateur dans la payload
         const token = jwt.sign({ userId: user._id, userRole: user.role }, "secretKey", { expiresIn: "1h" });
-        const redirectUrl = `/dashboard/${user.role}`;
+        const redirectUrl = `/dashboard`;
 
         res.status(200).json({ token, redirectUrl, userRole: user.role ,userId: user._id, }); // Inclure le rôle dans la réponse
     } catch (error) {
@@ -262,4 +274,4 @@ async function deleteUser (req, res) {
 }
 
 
-module.exports={getall ,googlelogin,storeUserRole,sortUsers, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}
+module.exports={getall ,getVerifiedUsers ,googlelogin,storeUserRole,sortUsers, getbyid, getbyname,profile, login , UpdateUser ,deleteUser}

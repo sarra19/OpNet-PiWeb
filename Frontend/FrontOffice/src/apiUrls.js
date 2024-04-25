@@ -10,11 +10,16 @@ const API_URLS = {
   google: `${BASE_URL}/auth/google`, 
   reset: `${BASE_URL}/password-reset`,
   checkEmail:`${BASE_URL}/user/checkEmail`, 
+  deleteUser: (userId) => `${BASE_URL}/user/deleteUser/${userId}`,
+  desactiverUser: (userId) => `${BASE_URL}/user/deactivateAccount/${userId}`,
+
   upload:`${BASE_URL}/messages/upload`,
 //  verifyUser: (param) => `${BASE_URL}/user/${param.id}/verify/${param.token}`,
 deleteChatRoom: (chatId) => `${BASE_URL}/chat/deleteChatRoom/${chatId}`,
 deleteMessage: (messageId) => `${BASE_URL}/messages/deleteMessage/${messageId}`,
 getAllUsers: `${BASE_URL}/user/getall`,
+getVerifiedUsers: `${BASE_URL}/user/getVerifiedUsers`,
+
 createChat: `${BASE_URL}/chat/`,
 sortUsers: `${BASE_URL}/user/sort`,
 searchUsers: `${BASE_URL}/user/search`,

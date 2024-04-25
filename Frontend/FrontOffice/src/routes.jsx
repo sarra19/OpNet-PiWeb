@@ -51,6 +51,7 @@ import PasswordReset from "layouts/authentication/PasswordReset";
 import Network from "layouts/network";
 import ProfileN from "layouts/network/profileN";
 import ChatManagement from "layouts/Chat/Chat";
+import ActivateProfile from "layouts/ActiverProfile";
 
 const routes = [
   {
@@ -61,6 +62,10 @@ const routes = [
   {
     route: "/password-reset/:id/:token",
     component: <PasswordReset />,
+  },
+  {
+    route: "/ActivateProfile",
+    component: <ActivateProfile />,
   },
   {
     type: "route",
@@ -74,7 +79,7 @@ const routes = [
     name: "Home",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: `/dashboard/:userRole`,
+    route: `/dashboard`,
     component: <Dashboard />,
   },
   

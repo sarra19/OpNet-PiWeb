@@ -12,6 +12,8 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+/* eslint-disable */
+import Button from "@mui/material/Button";
 
 import { useState, useEffect } from "react";
 
@@ -47,7 +49,13 @@ import {
   setSidenavColor,
   setDarkMode,
 } from "context";
-
+import axios from "axios";
+import API_URLS from "apiUrls";
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
 function Configurator() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -60,6 +68,7 @@ function Configurator() {
   } = controller;
   const [disabled, setDisabled] = useState(false);
   const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
+  const userId= getCookie("userId");
 
   // Use the useEffect hook to change the button state for the sidenav type based on window size.
   useEffect(() => {
@@ -93,6 +102,53 @@ function Configurator() {
   };
   const handleFixedNavbar = () => setFixedNavbar(dispatch, !fixedNavbar);
   const handleDarkMode = () => setDarkMode(dispatch, !darkMode);
+  const [users, setUsers] = useState([]);
+
+  const handleEditProfile = () => {
+    window.location.href = 'http://localhost:3000/profile';
+
+    // Logique pour l'édition du profil
+    console.log("Editer mon profil");
+  };
+  
+  const handleDeactivateProfile = async () => {
+    try {
+  
+      // Suppression de l'utilisateur en utilisant axios.delete
+      await axios.put(API_URLS.desactiverUser(userId));
+  
+      // Filtrer la liste des utilisateurs pour supprimer l'utilisateur supprimé
+      setUsers(users => users.filter(user => user._id !== userId));
+  
+      // Afficher une alerte de succès
+      window.alert('Utilisateur désactivé avec succès.');
+  
+      // Redirection vers une nouvelle URL
+      window.location.href = 'http://localhost:3000/authentication/sign-in';
+    } catch (error) {
+      console.error("erreur desactivation user:", error);
+    }
+  };
+  
+  const handleDeleteProfile = async () => {
+    try {
+  
+      // Suppression de l'utilisateur en utilisant axios.delete
+      await axios.delete(API_URLS.deleteUser(userId));
+  
+      // Filtrer la liste des utilisateurs pour supprimer l'utilisateur supprimé
+      setUsers(users => users.filter(user => user._id !== userId));
+  
+      // Afficher une alerte de succès
+      window.alert('Utilisateur supprimé avec succès.');
+  
+      // Redirection vers une nouvelle URL
+      window.location.href = 'http://localhost:3000/authentication/sign-in';
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  
 
   // sidenav type buttons styles
   const sidenavTypeButtonsStyles = ({
@@ -162,6 +218,66 @@ function Configurator() {
       <Divider />
 
       <MDBox pt={0.5} pb={3} px={3}>
+  
+  <MDBox
+            sx={{
+              display: "flex",
+    flexDirection: "column",
+              mt: 2,
+              mr: 1,
+            }}
+          >
+            <MDButton
+              color="dark"
+              variant="gradient"
+              onClick={handleEditProfile}
+              disabled={disabled}
+              fullWidth
+              sx={
+                !transparentSidenav && !whiteSidenav
+                  ? sidenavTypeActiveButtonStyles
+                  : sidenavTypeButtonsStyles
+              }
+              sx={{ mb: 1 }} // Add margin-bottom
+
+            >
+      Editer mon profil
+            </MDButton>
+              <MDButton
+                color="dark"
+                variant="gradient"
+                onClick={handleDeactivateProfile}
+                disabled={disabled}
+                fullWidth
+                sx={
+                  transparentSidenav && !whiteSidenav
+                    ? sidenavTypeActiveButtonStyles
+                    : sidenavTypeButtonsStyles
+                    
+                }
+                sx={{ mb: 1 }} // Add margin-bottom
+
+              >
+      Desactiver mon profil
+              </MDButton>
+            <MDButton
+              color="dark"
+              variant="gradient"
+              onClick={handleDeleteProfile}
+              disabled={disabled}
+              fullWidth
+              sx={
+                whiteSidenav && !transparentSidenav
+                  ? sidenavTypeActiveButtonStyles
+                  : sidenavTypeButtonsStyles
+              }
+              sx={{ mb: 1 }} // Add margin-bottom
+
+            >
+      Supprimer mon profil
+            </MDButton>
+          </MDBox>
+        </MDBox>
         <MDBox>
           <MDTypography variant="h6">Sidenav Colors</MDTypography>
 
@@ -206,7 +322,6 @@ function Configurator() {
               />
             ))}
           </MDBox>
-        </MDBox>
 
         <MDBox mt={3} lineHeight={1}>
           <MDTypography variant="h6">Sidenav Type</MDTypography>
@@ -285,6 +400,7 @@ function Configurator() {
           <Switch checked={darkMode} onChange={handleDarkMode} />
         </MDBox>
         <Divider />
+        
         <MDBox mt={3} mb={2}>
           <MDButton
             component={Link}

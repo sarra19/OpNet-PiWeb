@@ -110,6 +110,10 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
+  const RedirectToSignIn = () => {
+   
+      window.location.href = 'http://localhost:3000/authentication/sign-in';
+  };
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
@@ -168,7 +172,7 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="/" element={<Navigate to="http://localhost:3000/authentication/sign-in" />} />
+          <Route path="/" element={<RedirectToSignIn />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -192,7 +196,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="/" element={<Navigate to="http://localhost:3000/authentication/sign-in" />} />
+        <Route path="/" element={<RedirectToSignIn />} />
       </Routes>
     </ThemeProvider>
   );

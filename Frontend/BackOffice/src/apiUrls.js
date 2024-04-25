@@ -12,6 +12,8 @@ const API_URLS = {
   sortUsers: `${BASE_URL}/user/sort`,
   getAllUsers: `${BASE_URL}/user/getall`,
   deleteUser: (userId) => `${BASE_URL}/user/deleteUser/${userId}`,
+  desactiverUser: (userId) => `${BASE_URL}/user/deactivateAccount/${userId}`,
+
   searchUsers: `${BASE_URL}/user/search`,
   updateUser: (userId) => `${BASE_URL}/user/updateUser/${userId}`,
   getUserById: (userId) => `${BASE_URL}/user/get/${userId}`, 

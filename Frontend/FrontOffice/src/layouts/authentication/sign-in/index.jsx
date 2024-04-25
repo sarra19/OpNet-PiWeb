@@ -36,22 +36,22 @@ function Basic() {
     e.preventDefault();
     try {
       const formData = { email, password }; // Constructing the data object
-      const { data: res } = await axios.post(API_URLS.auth,  formData); // Sending the formData as the second argument
+      const { data: res } = await axios.post(API_URLS.auth, formData); // Sending the formData as the second argument
 
       localStorage.setItem("token", res.data);
-  
+
       const response = await axios.post(API_URLS.login, {
         email: email,
         password: password
       });
-  
+
       if (response.data.redirectUrl && response.data.userId && response.data.userRole) {
         const userId = response.data.userId;
         const userRole = response.data.userRole;
-  
+
         sessionStorage.setItem("userId", userId);
         sessionStorage.setItem("userRole", userRole);
-  
+
         navigate(response.data.redirectUrl);
       } else {
         console.error("La connexion a échoué.");
@@ -60,7 +60,7 @@ function Basic() {
       console.error("Erreur lors de la connexion:", error);
     }
   };
-  
+
 
   let [searchParams] = useSearchParams();
   const [user, setUser] = useState({});
@@ -100,29 +100,31 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-          Se connecter         
-           </MDTypography>
+            Se connecter
+          </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
+              <MDTypography component={MuiLink} href="http://localhost:5000/auth/facebook/callback" variant="body1" color="white">
                 <FacebookIcon color="inherit" />
               </MDTypography>
             </Grid>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
+              <MDTypography component={MuiLink} href="http://localhost:5000/auth/github/callback" variant="body1" color="white">
                 <GitHubIcon color="inherit" />
               </MDTypography>
             </Grid>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
+            
+                <MDTypography component={MuiLink} href="http://localhost:5000/auth/google" variant="body1" color="white" >
+                  <GoogleIcon color="inherit" />
+                </MDTypography>
             </Grid>
+
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-         {/* <MDBox component="form" role="form" action="http://localhost:5000/auth/google"> */}
-         <MDBox component="form" role="form" action="http://localhost:5000/auth/google">
+          {/* <MDBox component="form" role="form" action="http://localhost:5000/auth/google"> */}
+          <MDBox component="form" role="form" >
 
             <MDBox mb={2}>
               <MDTypography variant="body1" mb={1}>Email </MDTypography>
@@ -145,12 +147,12 @@ function Basic() {
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
-              Se connecter
+                Se connecter
               </MDButton>
             </MDBox>
             <MDBox mb={2} textAlign="center">
               <MDTypography variant="body2" color="text">
-              Vous n'avez pas de compte ?{" "}
+                Vous n'avez pas de compte ?{" "}
                 <MDTypography
                   component={Link}
                   to="/dashboard"
@@ -163,7 +165,21 @@ function Basic() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
-            
+            <MDBox mb={2} textAlign="center">
+              <MDTypography variant="body2" color="text">
+                <MDTypography
+                  component={Link}
+                  to="/ActivateProfile"
+                  variant="body2"
+                  color="info"
+                  fontWeight="medium"
+                  textGradient
+                >
+                  Activer Votre Compte
+                </MDTypography>
+              </MDTypography>
+            </MDBox>
+
             <MDBox mb={2} textAlign="center">
               <Link to="/forgot-password" style={{ alignSelf: "flex-start" }}>
                 <MDTypography variant="body2" color="#E82227">
@@ -171,17 +187,7 @@ function Basic() {
                 </MDTypography>
               </Link>
             </MDBox>
-            <MDBox textAlign="center">
-              <Button
-                leftIcon={<AiFillGoogleCircle />}
-                colorScheme="red"
-                variant="solid"
-                w={"100%"}
-                type="submit"
-              >
-                Connecter avec Google
-              </Button>
-            </MDBox>
+            
           </MDBox>
         </MDBox>
       </Card>

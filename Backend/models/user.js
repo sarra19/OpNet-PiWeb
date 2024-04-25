@@ -27,6 +27,11 @@ const User = new Schema(
         certificates : String,
         cV : String,
         googleId: String,
+        facebookId: String,
+        githubId:String,
+        provider: {
+            type: String,
+          },
         secret :String,
         verified: { type: Boolean, default: false },
 

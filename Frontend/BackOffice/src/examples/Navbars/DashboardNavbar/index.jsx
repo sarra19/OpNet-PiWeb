@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
+
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
+
 import PropTypes from "prop-types";
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
@@ -19,6 +21,7 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
+
 import {
   navbar,
   navbarContainer,
@@ -27,12 +30,14 @@ import {
   navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
 
+
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+
  // const { userId } = useParams();
 // // Analyser l'URL actuelle pour obtenir les paramètres de requête
 // const queryString = window.location.search;
@@ -46,25 +51,28 @@ function DashboardNavbar({ absolute, light, isMini }) {
 //console.log(userRole);
 
 
-const location = useLocation();
-  const queryParams = queryString.parse(location.search);
-  const { userRole, userId } = queryParams;
+// Fonction pour récupérer la valeur d'un cookie
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
 
-  // Utilisez userRole et userId comme nécessaire
-  console.log(userRole);
-  console.log(userId);
+const userRole = getCookie("userRole");
 
   useEffect(() => {
     // Clear userRole from sessionStorage when component mounts
     //sessionStorage.removeItem("userRole"); // Use sessionStorage instead of localStorage
-    sessionStorage.setItem("userId", userId);
-    sessionStorage.setItem("userRole", userRole);
+  
     // Handle navbar type and transparency
+// Récupérer userId et userRole depuis les cookies
+
     if (fixedNavbar) {
       setNavbarType("sticky");
     } else {
       setNavbarType("static");
     }
+
   
     function handleTransparentNavbar() {
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
@@ -77,15 +85,18 @@ const location = useLocation();
   }, [dispatch, fixedNavbar]);
   
 
+
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
   const handleLogout = () => {
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("userRole");
   };
   
+
   const renderMenu = () => (
     <Menu
       anchorEl={openMenu}
@@ -103,6 +114,8 @@ const location = useLocation();
       <NotificationItem icon={<Icon>shopping_cart</Icon>} title="Payment successfully completed" />
     </Menu>
   );
+
+
 
   const iconsStyle = ({ palette: { dark, white, text }, functions: { rgba } }) => ({
     color: () => {
@@ -132,12 +145,13 @@ const location = useLocation();
               <MDInput label="Chercher" />
             </MDBox>
             <MDBox>
-              <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard/${userRole}`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
+              <Button variant="outlined" component={Link} to={`http://localhost:3000/dashboard`} style={{ backgroundColor: '#E82227', color: '#fff' }}>
                 Utilsateur Interface
               </Button>
 
             </MDBox>
             <Button onClick={handleLogout} component={Link} to="http://localhost:3000/authentication/sign-in">Se déconnecter</Button>
+
 
             <MDBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">
@@ -185,6 +199,7 @@ const location = useLocation();
     </AppBar>
   );
 }
+
 
 DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,

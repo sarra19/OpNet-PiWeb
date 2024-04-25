@@ -151,13 +151,31 @@ router.post("/storeUserRole", userController.storeUserRole); // Add this line
 router.get("/profile/:id", userController.profile)
 
 router.get('/getall' ,userController.getall);
+router.get('/getVerifiedUsers' ,userController.getVerifiedUsers);
+
 router.get('/get/:id' ,userController.getbyid);
 
 router.get('/getbyname/:name' ,userController.getbyname);
 router.put('/updateUser/:id', userController.UpdateUser);
 
 router.delete('/deleteUser/:id',userController.deleteUser);
-
+router.put("/deactivateAccount/:id", async (req, res) => {
+	const userId = req.params.id;
+  
+	try {
+	  // Mettre à jour le champ 'verified' de l'utilisateur à false
+	  const updatedUser = await User.findByIdAndUpdate(userId, { verified: false });
+  
+	  if (!updatedUser) {
+		return res.status(404).send({ message: "User not found" });
+	  }
+  
+	  res.status(200).send({ message: "Account deactivated successfully" });
+	} catch (error) {
+	  console.error("Error deactivating account:", error);
+	  res.status(500).send({ message: "An error occurred while deactivating account" });
+	}
+  });
 // Ajoutez cette route pour trier les utilisateurs
 router.post("/sort", userController.sortUsers);
 // Assuming you have a route to fetch user role statistics
@@ -247,6 +265,46 @@ router.get("/:id/verify/:token/", async (req, res) => {
     }
 });
 
+
+router.post("/activateProfile", async (req, res) => {
+	try {
+	  // Vérifier si l'utilisateur existe avec l'e-mail spécifié
+	  const { email } = req.body;
+	  const user = await User.findOne({ email });
+  
+	  if (!user) {
+		return res.status(404).send({ message: "User not found" });
+	  }
+  
+	  // Générer un jeton unique pour l'activation du profil
+	  const tokenValue = crypto.randomBytes(32).toString("hex");
+	  let token = await Token.findOne({ userId: user._id });
+  
+	  if (!token) {
+		// Si aucun token existant pour cet utilisateur, créer un nouveau
+		token = new Token({
+		  userId: user._id,
+		  token: tokenValue,
+		});
+	  } else {
+		// Mettre à jour le token existant avec une nouvelle valeur
+		token.token = tokenValue;
+	  }
+  
+	  await token.save();
+  
+	  // Construire l'URL de vérification
+	  const verificationUrl = `${process.env.BASE_URL}user/${user._id}/verify/${token.token}`;
+  
+	  // Envoyer l'e-mail de vérification à l'utilisateur
+	  await sendEmail(user.email, "Verify Your Account", verificationUrl);
+  
+	  res.status(200).send({ message: "Verification email sent successfully" });
+	} catch (error) {
+	  console.error("Error sending verification email:", error);
+	  res.status(500).send({ message: "An error occurred while sending verification email" });
+	}
+  });
 
   
 module.exports = router ;
