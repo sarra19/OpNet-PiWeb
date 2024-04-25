@@ -85,11 +85,31 @@ async function getFeedbackForInterview(req, res) {
         if (!feedback) {
             return res.status(404).send('Feedback not found for this interview');
         }
-        res.status(200).json({ text: feedback.texte });
+        // Créer un tableau pour stocker chaque partie du texte avec son sentiment associé
+        const feedbackParts = feedback.sentimentAnalysisResults.map(result => {
+            let color;
+            switch (result.sentiment) {
+                case 'POSITIVE':
+                    color = 'green';
+                    break;
+                case 'NEGATIVE':
+                    color = 'red';
+                    break;
+                default:
+                    color = 'grey';
+            }
+            return {
+                text: result.text,
+                sentiment: result.sentiment,
+                color: color
+            };
+        });
+        res.status(200).json({ feedbackParts });
     } catch (error) {
         console.error('Error fetching feedback:', error);
         res.status(500).send('Internal Server Error');
     }
 }
+
 
   module.exports = {save , getall , deleteTranscription , update , getFeedbackForInterview }

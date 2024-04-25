@@ -30,12 +30,14 @@ export default function CaseFeedback({ interview, validated }) {
   const handleViewFeedback = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/feedbacks/getfeedback/${interview._id}`);
-      setFeedbackText(response.data.text);
+      const feedbackPartsArray = Object.values(response.data.feedbackParts);
+      setFeedbackText(feedbackPartsArray); // Mettez à jour pour utiliser feedbackPartsArray
       setOpenViewDialog(true);
     } catch (error) {
        alert('Aucun feedback disponible.');
     }
   };
+
 
   const handleCloseViewDialog = () => {
     setOpenViewDialog(false);
@@ -75,15 +77,17 @@ export default function CaseFeedback({ interview, validated }) {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openViewDialog} onClose={handleCloseViewDialog} >
-        <DialogTitle variant="h6" color="red" textAlign={'center'}>Feedback</DialogTitle>
+    <Dialog open={openViewDialog} onClose={handleCloseViewDialog}>
+      <DialogTitle variant="h6" color="Black" textAlign={'center'}>Feedback</DialogTitle>
         <DialogContent>
-          <Typography>{feedbackText}</Typography>
+          {Array.isArray(feedbackText) && feedbackText.map((part, index) => (
+              <span key={index} style={{ color: part.color }}>{part.text}</span>
+          ))}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseViewDialog} style={{  color:"Black" }}>Fermer</Button>
-        </DialogActions>
-      </Dialog>
+      <DialogActions>
+        <Button onClick={handleCloseViewDialog} style={{ color: "Black" }}>Fermer</Button>
+      </DialogActions>
+    </Dialog>
     </Grid>
   );
 }
