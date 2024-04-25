@@ -13,7 +13,14 @@ const MessageSchema = new Schema(
       type: String,
     },
     reactions: [{
-      type: String, // Assuming reactions are stored as strings (e.g., "👍", "❤️", "😂")
+      userName: {
+        type: String,
+        required: true,
+      },
+      reaction: {
+        type: String,
+        required: true,
+      },
     }],
   },
   {

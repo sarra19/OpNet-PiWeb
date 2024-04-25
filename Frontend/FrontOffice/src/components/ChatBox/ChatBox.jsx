@@ -89,6 +89,36 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
     }
   };
 
+  
+  const handleReact = async (messageId, emoji) => {
+    try {
+      // Send a POST request to your backend API to add the reaction
+      const response = await axios.post(`http://localhost:5000/messages/${messageId}/reactions`, {
+        userId: sessionStorage.getItem("userId"), // Assuming you store userId in sessionStorage
+        reaction: emoji
+      });
+  
+      // Check if the response was successful (status code 200)
+      if (response.status === 200) {
+        // Update reactions state locally to reflect the added reaction
+        setReactions(prevReactions => ({
+          ...prevReactions,
+          [messageId]: emoji
+        }));
+  
+        // Alert user upon successful reaction
+        alert("Reaction added successfully!");
+      } else {
+        // Handle other possible response statuses (e.g., error cases)
+        console.error("Error adding reaction: Unexpected response", response);
+        alert("Failed to add reaction. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error reacting to message:", error);
+      alert("An error occurred while adding reaction. Please try again.");
+    }
+  };
+  
 
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== currentUser);
@@ -109,12 +139,23 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
       try {
         const { data } = await getMessages(chat._id);
         setMessages(data);
+
+        // Fetch reactions for each message
+        const reactionsMap = {};
+        for (const message of data) {
+          const messageId = message._id;
+          const { data: messageReactions } = await axios.get(`http://localhost:5000/messages/${messageId}/reactions`);
+          reactionsMap[messageId] = messageReactions; // Assuming response contains reactions for each message
+        }
+        setReactions(reactionsMap);
       } catch (error) {
         console.log(error);
       }
     };
 
-    if (chat !== null) fetchMessages();
+    if (chat !== null) {
+      fetchMessages();
+    }
   }, [chat]);
 
   const scroll = useRef();
@@ -125,6 +166,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   useEffect(() => {
     if (receivedMessage !== null && receivedMessage.chatId === chat._id) {
       setMessages([...messages, receivedMessage]);
+     // getReactions(receivedMessage._id); // Fetch reactions for new message
     }
   }, [receivedMessage]);
 
@@ -138,23 +180,17 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
       console.log("Error:", error);
     }
   };
-
-  const handleReact = async (messageId, emoji) => {
-    setReactions({
-      ...reactions,
-      [messageId]: emoji
-    });
-  
+  const getReactions = async (messageId) => {
     try {
-      // Send both message ID and emoji type in the request body
-      await axios.post(`http://localhost:5000/messages/reactToMessage/${messageId}`, { 
-        reaction: emoji 
-      });
+      const response = await axios.get(`http://localhost:5000/messages/${messageId}/reactions`);
+      const { reactions } = response.data;
+      const updatedReactions = { ...reactions, [messageId]: reactions };
+      setReactions(updatedReactions);
     } catch (error) {
-      console.error("Error reacting to message:", error);
+      console.error('Error fetching reactions:', error);
     }
   };
-  
+
   return (
     <>
       <div className="ChatBox-container">
@@ -188,31 +224,41 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
               />
             </div>
             <div className="chat-body">
-              {messages.map((message) => (
-                <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
-                  {isImageUrl(message.text) ? (
-                    <img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} />
-                  ) : (
-                    <span>{message.text}</span>
-                  )}
-                  <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
-                  {/* Reaction section */}
-                  <div className="reactions" style={{ display: 'flex', alignItems: 'center' }}>
-  {reactions[message._id] && (
-    <span className="reaction">{reactions[message._id]}</span>
-  )}
-  {!reactions[message._id] && (
-    <>
-      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "👍")}>👍</span>
-      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "❤️")}>❤️</span>
-      <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "😂")}>😂</span>
-    </>
-  )}
-</div>
+            {messages.map((message) => (
+  <div key={message._id} className={message.senderId === currentUser ? "message own" : "message"} onClick={() => handleDeleteMessage(message._id)}>
+    {isImageUrl(message.text) ? (
+      <><img src={message.text} alt="Sent Image" style={{ maxWidth: "100%", maxHeight: "200px" }} /><span>
+                    {message.reactions.map((reaction) => (
+                      <span key={reaction.userName}>{reaction.userName} a réagi avec {reaction.reaction}</span>
+                    ))}
+                  </span></>   
+    ) : (
+      <><span>{message.text}</span>
+  <span>
+          {message.reactions.map((reaction) => (
+            <span key={reaction.userName}>{reaction.userName} a réagi avec {reaction.reaction}</span>
+          ))}
+        </span>   </>
+    )}
+     {reactions[message._id] && typeof reactions[message._id] === 'string' ? (
+                    <span className="reaction">{reactions[message._id]}</span>
+                  ) : null}
+    {/* // afficher ici  le reaction de message  avec get(`http://localhost:5000/messages/${messageId}/reactions`); */}
+    <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
+    
+    
+    <div className="reactions" style={{ display: 'flex', alignItems: 'center' }}>
+       
+        <>
+          <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "👍")}>👍</span>
+          <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "❤️")}>❤️</span>
+          <span className="react-emoji" style={{ cursor: 'pointer', fontSize: '20px', marginRight: '5px' }} onClick={() => handleReact(message._id, "😂")}>😂</span>
+        </>
+      
+    </div>
+  </div>
+))}
 
-
-                </div>
-              ))}
               <div ref={scroll}></div>
             </div>
             <div className="chat-sender">

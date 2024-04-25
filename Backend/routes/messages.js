@@ -4,6 +4,7 @@ const Messages = require("../models/messages");
 const messageController = require("../controller/MessageController");
 const multer = require("multer");
 const path = require("path");
+const User = require("../models/user");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -25,7 +26,51 @@ router.post("/upload", upload.single("file"), (req, res) => {
     res.send(req.file.filename); // Renvoyer le nom du fichier téléchargé
 });
 
+router.post('/:id/reactions', async (req, res) => {
+    const messageId = req.params.id;
+    const { userId, reaction } = req.body;
+  
+    try {
+      // Vérifier si le message existe
+      const message = await Messages.findById(messageId);
+      if (!message) {
+        return res.status(404).json({ error: 'Message not found' });
+      }
+  
+      const user = await User.findById(userId);
 
+
+      // Ajouter la réaction avec senderId
+      message.reactions.push({ userName: user.firstname, reaction });
+  
+      // Enregistrer le message mis à jour dans la base de données
+      const updatedMessage = await message.save();
+  
+      res.status(200).json(updatedMessage);
+    } catch (error) {
+      console.error('Error adding reaction to message:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+router.get('/:id/reactions', async (req, res) => {
+    const messageId = req.params.id;
+  
+    try {
+      // Rechercher le message par son ID
+      const message = await Messages.findById(messageId);
+      if (!message) {
+        return res.status(404).json({ error: 'Message not found' });
+      }
+  
+      // Renvoyer les réactions du message
+      res.status(200).json({ reactions: message.reactions });
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 // router.get('/', function(req,res){
 //     res.send("hello express");
 // });
