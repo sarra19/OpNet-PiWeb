@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import "./Chat.css";
 import { MenuItem } from "@mui/material";
 import API_URLS from "apiUrls";
+import MDBox from "components/MDBox";
 
 function ChatManagement() {
   const socket = useRef();
@@ -30,7 +31,20 @@ function ChatManagement() {
     receiverId: '', // Add receiverId field
   });
   const [allUsers, setAllUsers] = useState([]); // State to store all users
+  const [verifiedUsers, setVerifiedUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
+
+  const fetchVerifiedUsers = async () => {
+    try {
+      const response = await axios.get(API_URLS.getVerifiedUsers);
+      setVerifiedUsers(response.data);
+      setFilteredUsers(response.data); // Initialize filtered users with all verified users
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const userId = window.sessionStorage.getItem('userId');
     if (!userId) {
@@ -94,9 +108,10 @@ function ChatManagement() {
     }
   };
 
-  // Function to handle adding a new chat
+ 
+
   const handleNewConversation = () => {
-    fetchAllUsers(); // Fetch all users before opening the dialog
+    fetchVerifiedUsers(); // Fetch verified users before opening the dialog
     setAddChatDialogOpen(true);
   };
 
@@ -125,6 +140,20 @@ const handleAddNewChat = async () => {
     console.log(error);
   }
 };
+const handleUserSelect = (user) => {
+  setNewChatData({ ...newChatData, receiverId: user._id });
+};
+
+const handleSearchUsers = (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  setSearchTerm(searchTerm);
+  const filteredUsers = verifiedUsers.filter(
+    (user) =>
+      user.firstname.toLowerCase().includes(searchTerm) ||
+      user.lastname.toLowerCase().includes(searchTerm)
+  );
+  setFilteredUsers(filteredUsers);
+};
 
 const handleDelete = async (chatId) => {
   try {
@@ -137,7 +166,8 @@ const handleDelete = async (chatId) => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute isMini />
+      <DashboardNavbar />
+      <MDBox py={1}>
       <div className="Chat" style={{ marginTop: '20px' }}>
         {/* Left Side */}
         <div className="Left-side-chat">
@@ -186,32 +216,32 @@ const handleDelete = async (chatId) => {
         </div>
       </div>
 
-      {/* Dialog for adding a new chat */}
       <Dialog open={addChatDialogOpen} onClose={handleCloseAddChatDialog}>
-        <DialogTitle>ajouter nouvelle conversation</DialogTitle>
-        <DialogContent>
-          {/* Form fields for adding a new chat */}
-          {/* Select input for choosing receiver */}
-          <TextField
-            select
-            label="Sélectionnez le destinataire"
-            value={newChatData.receiverId}
-            onChange={(e) => setNewChatData({ ...newChatData, receiverId: e.target.value })}
-            fullWidth
-            required
-          >
-            {allUsers.map((user) => (
-              <MenuItem key={user._id} value={user._id}>
-                {user.firstname} {user.lastname}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Button variant="contained" color="primary" onClick={handleAddNewChat}>
-            Ajouter conversation
-          </Button>
-        </DialogContent>
-      </Dialog>
+  <DialogTitle>Ajouter une nouvelle conversation</DialogTitle>
+  <DialogContent>
+    <TextField
+      label="Rechercher un utilisateur"
+      fullWidth
+      value={searchTerm}
+      onChange={handleSearchUsers}
+    />
 
+    {/* Scrolling user list */}
+    <div style={{ maxHeight: 300, overflowY: 'auto' }}>
+      {filteredUsers.map((user) => (
+        <MenuItem key={user._id} onClick={() => handleUserSelect(user)}>
+          {`${user.firstname} ${user.lastname}`}
+        </MenuItem>
+      ))}
+    </div>
+
+    <Button variant="contained" color="primary" onClick={handleAddNewChat}>
+      Ajouter conversation
+    </Button>
+  </DialogContent>
+</Dialog>
+
+</MDBox>
       <Footer />
     </DashboardLayout>
   );
