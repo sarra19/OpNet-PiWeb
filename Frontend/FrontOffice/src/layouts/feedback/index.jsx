@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Grid, Typography } from '@mui/material';
 import CaseFeedback from './CaseFeedback';
-import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import MDBox from 'components/MDBox';
 
@@ -15,7 +14,13 @@ function Feedback() {
   useEffect(() => {
     const fetchStudentInterviews = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/interviews/getall");
+        const userId  = sessionStorage.getItem('userId');
+        console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
+        if (!userId ) {
+          console.error("ID de user non trouvé dans le sessionStorage");
+          return;
+        }
+        const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
         const interviewsByCompany = {};
         response.data.forEach(interview => {
           const companyId = interview.assignedCompanyId;
@@ -78,7 +83,7 @@ function Feedback() {
             ))}
             {searchPerformed && Object.keys(searchResult).length === 0 && (
               <Grid item xs={12}>
-                <Typography variant="body1">Aucun entretien trouvé pour ce candidat.</Typography>
+                <Typography variant="body1"> Vous n'avez pas encore de feedback !</Typography>
               </Grid>
             )}
           </Grid>
