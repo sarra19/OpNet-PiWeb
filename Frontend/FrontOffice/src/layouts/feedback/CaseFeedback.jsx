@@ -12,23 +12,12 @@ export default function CaseFeedback({ interview, validated }) {
     setHrFeedback(validated);
   }, [validated]);
 
-  const handleValidation = async () => {
-    try {
-      const response = await axios.put(`http://localhost:5000/interviews/updateInterviewValidation/${interview._id}`);
-      if (response.status === 200) {
-        setHrFeedback(true);
-      } else {
-        console.error('le M.A.J de la validation a retourné :', response);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la validation de l\'interview :', error);
-    }
-  };
 
   const handleViewFeedback = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/feedbacks/getfeedback/${interview._id}`);
-      setFeedbackText(response.data.text);
+      const feedbackPartsArray = Object.values(response.data.feedbackParts);
+      setFeedbackText(feedbackPartsArray); // Mettez à jour pour utiliser feedbackPartsArray
       setOpenViewDialog(true);
     } catch (error) {
        alert('Aucun feedback disponible.');
@@ -56,22 +45,23 @@ export default function CaseFeedback({ interview, validated }) {
           {hrFeedback ? (
               <Typography variant="body2" color="lightgreen" fontWeight={400} mb={0.6} mt={0.3}>Validée</Typography>
           ) : (
-            <Button style={{ color: 'green'}} onClick={handleValidation}> Valider <Icon style={{ marginLeft: "10px", marginBottom: "1px" }} fontSize="small">event_available</Icon></Button>
+            <Typography variant="body2" color="brown" fontWeight={400} mb={0.6} mt={0.3}>En attente</Typography>
           )}
           <Box display="flex" justifyContent="center" >
-            <Button style={{  color:"Black" }}onClick={() => setOpenFeedbackDialog(true)}> Enregistrer FeedBack <Icon style={{ marginLeft: "8px", marginBottom: "1px"}}fontSize="small">graphic_eq</Icon></Button> 
             <Button style={{  color:"Black" }} onClick={handleViewFeedback} >Voir Feedback <Icon style={{ marginLeft: "8px", marginBottom: "1px"}}fontSize="small">visibility</Icon></Button>
           </Box>
         </Stack>
       </Card>
 
-      <Dialog open={openViewDialog} onClose={handleCloseViewDialog} >
-        <DialogTitle variant="h6" color="red" textAlign={'center'}>Feedback</DialogTitle>
-        <DialogContent>
-          <Typography>{feedbackText}</Typography>
-        </DialogContent>
+      <Dialog open={openViewDialog} onClose={handleCloseViewDialog}>
+        <DialogTitle variant="h6" color="Black" textAlign={'center'}>Feedback</DialogTitle>
+          <DialogContent>
+            {Array.isArray(feedbackText) && feedbackText.map((part, index) => (
+                <span key={index} style={{ color: part.color }}>{part.text}</span>
+            ))}
+          </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseViewDialog} style={{  color:"Black" }}>Fermer</Button>
+          <Button onClick={handleCloseViewDialog} style={{ color: "Black" }}>Fermer</Button>
         </DialogActions>
       </Dialog>
     </Grid>
