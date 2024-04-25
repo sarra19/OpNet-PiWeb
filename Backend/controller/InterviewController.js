@@ -4,7 +4,7 @@ const User = require("../models/user");
 async function add(req, res) {
     try {
         const { assignedStudentId, assignedStudentName, ...otherFields } = req.body;
-        const assignedCompanyId = "65f21bb50d416e7f42cf7406";
+        const assignedCompanyId = req.params.userId;
         const studentFullName = assignedStudentName.trim();
         const [studentFirstName, studentLastName] = studentFullName.split(' ');
         const student = await User.findOne({ firstname: studentFirstName, lastname: studentLastName });
@@ -123,11 +123,27 @@ async function fixAnotherDate(req, res) {
     }
   }
 
+  async function getInterviewsByCompagnyId(req, res) {
+    try {
+      const studentId = req.params.userId;
+      const studentInterviews = await Interview.find({ assignedCompanyId: studentId }).exec();
+  
+      if (studentInterviews.length === 0) {
+        return res.status(404).send('Aucune entrevue trouvée pour cet ID d\'étudiant.');
+      }
+  
+      res.status(200).send(studentInterviews);
+    } catch (err) {
+      res.status(500).send('Une erreur est survenue lors de la récupération des entrevues.');
+    }
+  }
   async function getInterviewsByStudentName(req, res) {
     try {
       const studentName = req.params.name;
+      const compagnyId = req.params.userId;
+
       console.log('Nom d\'étudiant:', studentName); // Vérifiez le nom d'étudiant
-      const studentInterviews = await Interview.find({ assignedStudentName: studentName }).exec();
+      const studentInterviews = await Interview.find({ assignedStudentName: studentName ,assignedCompanyId: compagnyId}).exec();
       console.log('Entretiens trouvés:', studentInterviews); // Vérifiez les entretiens trouvés
       if (studentInterviews.length === 0) {
         return res.status(404).send('Aucune entrevue trouvée pour cet étudiant.');
@@ -175,14 +191,9 @@ async function updateInterviewNotValidation(req, res) {
 
 async function marquerEntrevuesTerminees() {
     try {
-        // Récupérer toutes les entrevues
         const interviews = await Interview.find();
-
-        // Parcourir les entrevues
         interviews.forEach(async (interview) => {
-            // Vérifier si l'heure actuelle est postérieure à l'heure de l'entrevue
             if (new Date() > interview.dateInterv) {
-                // Mettre à jour le statut de l'entrevue à "Terminé"
                 await Interview.findByIdAndUpdate(interview._id, { $set: { statusInterv: "Terminé" } });
             }
         });
@@ -194,5 +205,5 @@ async function marquerEntrevuesTerminees() {
 
 
 
-module.exports = { add, getall,getallAsso ,  getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate ,getInterviewsByStudentId , getInterviewsByStudentName , updateInterviewValidation ,updateInterviewNotValidation , marquerEntrevuesTerminees };
+module.exports = { add, getall,getallAsso ,  getbyid, getbytitle, update, deleteinterview , deleteinterviewB, fixAnotherDate ,getInterviewsByStudentId , getInterviewsByStudentName , updateInterviewValidation ,updateInterviewNotValidation , marquerEntrevuesTerminees , getInterviewsByCompagnyId };
   

@@ -1,73 +1,92 @@
 /* eslint-disable */
-import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, Grid, Card, CardContent, Icon } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
-import MDBox from 'components/MDBox';
+import { Box, Grid, Typography } from '@mui/material';
 import CaseFeedback from './CaseFeedback';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
+import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
+import MDBox from 'components/MDBox';
 
 function Feedback() {
-  const [StudentName, setStudentName] = useState('');
   const [searchResult, setSearchResult] = useState([]);
+  const [companyNames, setCompanyNames] = useState({});
   const [searchPerformed, setSearchPerformed] = useState(false);
 
+  useEffect(() => {
+    const fetchStudentInterviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/interviews/getall");
+        const interviewsByCompany = {};
+        response.data.forEach(interview => {
+          const companyId = interview.assignedCompanyId;
+          if (!interviewsByCompany[companyId]) {
+            interviewsByCompany[companyId] = [];
+          }
+          interviewsByCompany[companyId].push(interview);
+        });
+        setSearchResult(interviewsByCompany);
+        setSearchPerformed(true);
+      } catch (error) {
+        console.error('Error searching interviews:', error.message);
+        setSearchResult([]);
+        setSearchPerformed(true);
+      }
+    };
+    fetchStudentInterviews();
+  }, []);
 
-  const handleSearchClick = async () => {
-    try {
-      console.log('Nom de l\'étudiant:', StudentName);
-      const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentName/${StudentName}`);
-      setSearchResult(response.data);
-      setSearchPerformed(true); 
-    } catch (error) {
-      console.error('Error searching interviews:', error.message);
-      setSearchResult([]);
-      setSearchPerformed(true);
-    }
-  };
-
-  console.log('searchResult:', searchResult);
-  function InterviewList() {
-    return (
-      <Box  display="flex" justifyContent="center" mt={10}>
-        <Grid container >
-        {searchPerformed && searchResult.length === 0 ? (
-          <Typography variant="body1">Aucun entretien trouvé pour ce candidat.</Typography>
-        ) : (
-          searchResult.map((interview, index) => (
-            <Grid item key={index}>
-              <CaseFeedback interview={interview} validated={interview.validated} key={index} />
-            </Grid>
-          ))
-        )}
-        </Grid>
-      </Box>
-    );
-  }
+  useEffect(() => {
+    const fetchCompanyNames = async () => {
+      const companyNamesObj = {};
+      const companyIds = Object.keys(searchResult);
+      for (const companyId of companyIds) {
+        try {
+          const response = await axios.get(`http://localhost:5000/user/get/${companyId}`);
+          const { firstname, lastname } = response.data;
+          const companyName = `${firstname} ${lastname}`;
+          companyNamesObj[companyId] = companyName;
+        } catch (error) {
+          console.error(`Error fetching company name for company ID ${companyId}:`, error);
+          companyNamesObj[companyId] = 'Entreprise inconnue';
+        }
+      }
+      setCompanyNames(companyNamesObj);
+    };
+    fetchCompanyNames();
+  }, [searchResult]);
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-        <MDBox mt={10} mb={5} ml={4}>
-          <Typography variant='h1' justifyContent="center" alignItems="center" ml={10} >Trouvez le candidat auquel vous voulez <br /> donner un feedback !</Typography> 
-            <Grid container justifyContent="center" alignItems="center">
-              <Box display="flex" justifyContent="center" mt={-8} ml={35}>
-                <TextField
-                  label="Nom du candidat"
-                  variant="outlined"
-                  value={StudentName}
-                  onChange={(e) => setStudentName(e.target.value)}
-                  style={{ marginRight: '10px' }}
-                />
-                <Button variant="contained" style={{backgroundColor:"red" , color: 'white'}} onClick={handleSearchClick}>Cherchez<Icon style={{ marginLeft: "10px" }} fontSize="small">search</Icon></Button>
-              </Box>
-            </Grid>
-            <Grid container justifyContent="center" alignItems="center">
-              <InterviewList />
-            </Grid>
-        </MDBox>
+      <MDBox mt={15} mb={5} >
+        <Typography variant='h1' mt={-7} display="flex" justifyContent="center">FeedBack</Typography> 
+        <Box mt={3}>
+          <Grid >
+            {searchPerformed && Object.keys(searchResult).map(companyId => (
+              <Grid item xs={12} key={companyId}mt={5}>
+                <Box>
+                  <h3 style={{ color: 'red', display: 'inline-block' }} >Entreprise:</h3>
+                  <h3 style={{ display: 'inline-block' , marginLeft: "15px" }}>{companyNames[companyId]}</h3>
+                </Box>
+                <Box display="flex" flexWrap="wrap" justifyContent="center">
+                  {searchResult[companyId].map((interview, index) => (
+                    <Grid item xs={4} key={index}>
+                      <CaseFeedback interview={interview} validated={interview.validated} />
+                    </Grid>
+                  ))}
+                </Box>
+              </Grid>
+            ))}
+            {searchPerformed && Object.keys(searchResult).length === 0 && (
+              <Grid item xs={12}>
+                <Typography variant="body1">Aucun entretien trouvé pour ce candidat.</Typography>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      </MDBox>
     </DashboardLayout>
   );
 }
 
 export default Feedback;
+

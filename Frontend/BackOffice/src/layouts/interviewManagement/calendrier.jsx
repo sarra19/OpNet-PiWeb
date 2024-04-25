@@ -32,7 +32,12 @@ function Calendrier() {
   const [interviews, setInterviews] = useState([]);
   const [assignedStudent, setAssignedStudent] = useState(null);
   const [interviewId, setInterviewId] = useState(null);
-  
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+  const userId = getCookie("userId");  
   
   useEffect(() => {
     fetchEvents();
@@ -40,7 +45,7 @@ function Calendrier() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/interviews/getall");
+      const response = await axios.get(`http://localhost:5000/interviews/getCompagny/${userId}`);
       if (!response.data || !Array.isArray(response.data)) {
         throw new Error("Invalid response format");
       }

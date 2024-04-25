@@ -25,6 +25,13 @@ function Forminput({ interviewId }) {
         date: false
     });
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+      const userId = getCookie("userId");
+
     useEffect(() => {
         setIsAddMode(!interviewId);
         if (interviewId) {
@@ -83,7 +90,7 @@ function Forminput({ interviewId }) {
             typeIntrv: selectedTypeIntrv
         };
     
-        axios.post("http://localhost:5000/interviews/add", newInterview)
+        axios.post(`http://localhost:5000/interviews/add/${userId}`, newInterview)
             .then(response => {
                 console.log("Interview added successfully:", response.data);
                 window.location.reload();

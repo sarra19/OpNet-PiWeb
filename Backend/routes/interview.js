@@ -7,17 +7,19 @@ router.get('/', function(req,res){
     res.send("hello express");
 });
 
-router.post("/add" ,intervController.add);
+router.post("/add/:userId" ,intervController.add);
 router.get('/getall', intervController.getall);
 router.get('/getall/:id', intervController.getallAsso);
 router.get("/get/:id",intervController.getbyid);
 router.put('/update/:id', intervController.update);
+
 router.delete('/deleteintrv/:id',intervController.deleteinterview );
 router.get("/getitle/:title", intervController.getbytitle);
 router.put("/fixAnotherDate/:id", intervController.fixAnotherDate);
 router.delete("/deleteintrvB/:id" , intervController.deleteinterviewB);
 router.get("/getInterviewsByStudentId/:id", intervController.getInterviewsByStudentId);
-router.get("/getInterviewsByStudentName/:name", intervController.getInterviewsByStudentName);
+router.get("/getInterviewsByStudentName/:name/:userId", intervController.getInterviewsByStudentName);
 router.put("/updateInterviewValidation/:id", intervController.updateInterviewValidation);
 router.put("/updateInterviewNotValidation/:id", intervController.updateInterviewNotValidation);
+router.get("/getCompagny/:userId",intervController.getInterviewsByCompagnyId);
 module.exports = router ;
