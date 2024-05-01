@@ -7,6 +7,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import { Alert } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
 
 const FormContainer = styled.div`
   background-color: #f9f9f9;
@@ -73,10 +74,14 @@ const Button = styled.button`
 
 
 function ContactForm() {
-    const [recipient_email, setEmail] = useState("");
-    const [subject, setSubject] = useState("");
-    const [message, setMessage] = useState("");
+    //const [recipient_email, setEmail] = useState("");
+    //const [subject, setSubject] = useState("");
+    const [message, setMessage] = useState("Nous vous prions de bien vouloir nous rejoindre pour votre entretien. \n \nVoici le code pour notre réunion : ");
     const [isMailSent, setIsMailSent] = useState(false);
+    const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const recipient_email = searchParams.get("recipient_email") || "";
+  const subject = searchParams.get("subject") || "";
   
     function sendMail() {
       if (recipient_email && subject && message) {
@@ -125,29 +130,18 @@ function ContactForm() {
                   <form>
                     <div>
                       <label htmlFor="email">À</label>
-                      <Input
-                        type="email"
-                        id="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Utilisateur@exemple.com"
-                        required
-                      />
+                      <Input type="email" id="email" value={recipient_email} readOnly />
                     </div>
                     <div>
                       <label htmlFor="subject">Objet</label>
-                      <Input
-                        type="text"
-                        id="subject"
-                        onChange={(e) => setSubject(e.target.value)}
-                        placeholder="Ajouter un objet"
-                        required
-                      />
+                      <Input type="text" id="subject" value={subject} readOnly />
                     </div>
                     <div>
                       <label htmlFor="message">Votre message</label>
                       <TextArea
                         id="message"
                         rows="10"
+                        value={message}
                         onChange={(e) => setMessage(e.target.value)}
                       ></TextArea>
                     </div>
@@ -157,7 +151,7 @@ function ContactForm() {
                       <MDButton
                   variant="gradient"
                   color="secondary"
-                    onClick={() => window.history.back()}
+                  component={Link} to="/calendrier"
                     ml={100}
                 >
                     Retour

@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 const localizer = momentLocalizer(moment);
 moment.locale('fr');
 
-function Calendrier() {
+function Calendrier({ selectedEvent : props }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -111,43 +111,27 @@ function Calendrier() {
       setMessage(null);
     }, 10000); 
   };
-  const requestAnotherDate = (interviewId) => {
-    fetch(`http://localhost:5000/interviews/fixAnotherDate/${interviewId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error(`Erreur HTTP ${response.status}`);
-        }
-    })
-    .then(data => {
-        console.log('Réponse du serveur:', data);
-        if (data && data.success) {
-            setInterviews(prevInterviews => {
-                const updatedInterviews = prevInterviews.map(interview => {
-                    if (interview._id === interviewId) {
-                        return { ...interview, statusInterv: "Demande report" };
-                    }
-                    return interview;
-                });
-                return updatedInterviews;
-            });
-            showMessage("Votre demande a été envoyée avec succès!");
-        } else {
-            showMessage("Une erreur s'est produite ! Réessayez plus tard");
-        }
-    })
-    .catch(error => {
-        console.error('Erreur lors de la requête:', error);
-        showMessage(`Erreur lors de l'envoi de la demande: ${error.message}`);
-    })
-};
+  
+  const handleSendEmailClick = async () => {
+    if (selectedEvent && selectedEvent.assignedStudentId) {
+      try {
+        // Récupérer l'assignedStudentId de l'interview sélectionnée
+        const studentId = selectedEvent.assignedStudentId;
+  
+        // Faire une requête pour obtenir les informations de l'utilisateur avec l'assignedStudentId
+        const response = await axios.get(`http://localhost:5000/user/get/${studentId}`);
+        const userData = response.data;
+  
+        // Extraire l'adresse email de l'utilisateur
+        const { email } = userData;
+  
+        // Redirection vers la page d'email avec les données de l'interview
+        window.location.href = `/email_interview?recipient_email=${email}&subject=${selectedEvent.descrInter}`;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des détails de l'utilisateur :", error);
+      }
+    }
+  };
   
 
   const messages = {
@@ -308,6 +292,7 @@ function Calendrier() {
                     <div className="event-details">
                       <h3 className="red-text" style={{ marginBottom: "25px" }}>{selectedEvent.descrInter}</h3>
                       <p className="thin-text"><strong>Nom du candidat :</strong> {selectedEvent.assignedStudentName}</p>
+                     
                       <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(selectedEvent.dateInterv)}</p>
                       <p className="thin-text"><strong>Adresse :</strong>{selectedEvent.address}</p>
                       <p className="thin-text"><strong>Type de rencontre :</strong>{selectedEvent.typeRencontre}</p>
@@ -325,7 +310,7 @@ function Calendrier() {
                           }} >
                             Modifier
                           </Button>
-                          <Button variant="gradient" color="secondary" component={Link} to="/email_interview">
+                          <Button variant="gradient" color="secondary" onClick={handleSendEmailClick} component={Link} to="/email_interview">
                             Envoyer un mail 
                           </Button> 
                           
