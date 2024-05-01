@@ -21,6 +21,7 @@ function Feedback() {
           return;
         }
         const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
+        //const response = await axios.get("http://localhost:5000/interviews/getall");
         const interviewsByCompany = {};
         response.data.forEach(interview => {
           const companyId = interview.assignedCompanyId;

@@ -45,7 +45,8 @@ function Calendrier() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/interviews/getCompagny/${userId}`);
+      //const response = await axios.get(`http://localhost:5000/interviews/getCompagny/${userId}`);
+      const response = await axios.get("http://localhost:5000/interviews/getAll");
       if (!response.data || !Array.isArray(response.data)) {
         throw new Error("Invalid response format");
       }

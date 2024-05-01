@@ -26,26 +26,27 @@ function Interview() {
   const [currentPage, setCurrentPage] = useState(1);
   const interviewsPerPage = 3; // Nombre d'entretiens par page
 
-  
-  useEffect(() => {
-    const fetchStudentInterviews = async () => {
-        try {
-            const userId  = sessionStorage.getItem('userId');
-            console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
-            if (!userId ) {
-                console.error("ID de user non trouvé dans le sessionStorage");
-                return;
-            }
-        const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
-        const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
-        const sortedInterviews = filteredInterviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        const reversedInterviews = sortedInterviews.reverse();
-        setInterviews(reversedInterviews);
+  const fetchStudentInterviews = async () => {
+    try {
+        const userId  = sessionStorage.getItem('userId');
+        console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
+        if (!userId ) {
+            console.error("ID de user non trouvé dans le sessionStorage");
+            return;
+        }
+      const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
+      //const response = await axios.get("http://localhost:5000/interviews/getall");
+      const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
+      const sortedInterviews = filteredInterviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      const reversedInterviews = sortedInterviews.reverse();
+      setInterviews(reversedInterviews);
     } catch (error) {
-        console.error("Erreur lors de la récupération des entretiens:", error);
+      console.error("Erreur lors de la récupération des entretiens:", error);
     }
-  };
-  fetchStudentInterviews();
+};
+
+  useEffect(() => {
+    fetchStudentInterviews();
   }, []);
 
 
@@ -95,6 +96,7 @@ function Interview() {
       .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
         fetchStudentInterviews();
+        showMessage("Votre demande de suppression de l'interview a été effectuée avec succès!");
       })
       .catch((error) => {
         console.error("Erreur lors de la suppression de l'entretien:", error);
@@ -139,7 +141,7 @@ function Interview() {
                 });
                 return updatedInterviews;
             });
-            showMessage("Votre demande a été envoyée avec succès!");
+            showMessage("Votre demande de report a été envoyée avec succès!");
         } else {
             showMessage("Une erreur s'est produite ! Réessayez plus tard");
         }
@@ -154,7 +156,14 @@ const isInterviewExpired = (dateString) => {
   const interviewDate = new Date(dateString);
   const currentDate = new Date();
   return interviewDate < currentDate;
-}; 
+};
+
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  };
   
 // Calcul du nombre total de pages
 const pageCount = Math.ceil(filteredInterviews.length / interviewsPerPage);
@@ -167,6 +176,8 @@ const handlePageChange = (event, value) => {
 const indexOfLastInterview = currentPage * interviewsPerPage;
 const indexOfFirstInterview = indexOfLastInterview - interviewsPerPage;
 const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexOfLastInterview);
+
+
 
   return (
     <DashboardLayout>
@@ -195,10 +206,10 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
               <Grid item key={interview.id || index } xs={12} sm={6} md={4} mt={5}>
                   <Card className={clsx({expiredInterview: isInterviewExpired(interview.dateInterv)})} style={{ height: '360px', width: '100%' }}>
                       <CardContent>
-                          <Typography variant="h5">{interview.title}</Typography>
+                          <Typography variant="h5">{truncateText(interview.title, 35)}</Typography>
                           <Typography variant="h6" mt={2}>
                               <div className="interview-details">
-                                  <h4 className="red-text" style={{ textAlign: "center", marginBottom: "25px" }}>{interview.descrInter}</h4>
+                                  <h4 className="red-text" style={{ textAlign: "center", marginBottom: "25px" }}>{truncateText(interview.descrInter, 23)}</h4>
                                   <p className="thin-text"><strong>Date :</strong>{formatInterviewDate(interview.dateInterv)}</p>
                                   <p className="thin-text"><strong>Adresse :</strong>{interview.address}</p>
                                   <p className="thin-text"><strong>Type d'entretien :</strong>{interview.typeIntrv}</p>
@@ -206,7 +217,7 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
                               </div>
                           </Typography>
                           <div style={{ display: "flex", marginTop: "16px" }}>
-                              <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} disabled={ isInterviewExpired(interview.dateInterv)}>
+                              <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(interview._id)} disabled={ isInterviewExpired(interview.dateInterv)} >
                                   Décliner
                               </Button>
                               <Button style={{ color: 'red' }} onClick={() =>  requestAnotherDate(interview._id)} disabled={interview.statusInterv === "Demande report"|| isInterviewExpired(interview.dateInterv)} >
@@ -245,19 +256,23 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
         </DialogActions>
       </Dialog>  
       {/* Pagination */}
-      <div style={{ display: 'flex', justifyContent: 'center' , marginTop: "50px" , marginBottom: "20px"}}>
-      <Pagination
-        count={pageCount}
-        page={currentPage}
-        onChange={handlePageChange}
-        siblingCount={0}
-        defaultPage={1}
-        showFirstButton
-        showLastButton
-
-      />
-    </div>     
+      {interviews.length > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px', marginBottom: '20px' }}>
+          <Pagination
+            count={pageCount}
+            page={currentPage}
+            onChange={handlePageChange}
+            siblingCount={0}
+            defaultPage={1}
+            showFirstButton
+            showLastButton
+          />
+        </div>
+      )} 
+      {interviews.length > 0 && (  
+      <Typography>Vous n'avez pas encore d'interview !</Typography> )&&(
       <Footer />
+      )}
     </DashboardLayout>
   );
 }

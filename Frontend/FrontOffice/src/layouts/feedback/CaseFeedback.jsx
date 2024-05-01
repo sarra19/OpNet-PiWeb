@@ -32,13 +32,20 @@ export default function CaseFeedback({ interview, validated }) {
     setOpenFeedbackDialog(false);
   };
 
-  
+  const isFeedbackEmpty = interview.feedbacks.length === 0;
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   return (
     <Grid item xs={12} md={4} ml={1} mt={4} textAlign="center">
       <Card variant="outlined" sx={{ maxWidth: 360 }} style={{ height: '200px', width: '300px' }}>
         <Stack  justifyContent="space-between" alignItems="center">
-          <Typography gutterBottom variant="h5" color="Black" component="div" ml={2} mt={1}>{interview.title}</Typography>
-          <Typography variant="h6" color="red" mr={2}>{interview.typeIntrv}</Typography>
+          <Typography gutterBottom variant="h5" color="Black" component="div" mt={1}>{truncateText(interview.title, 28)}</Typography>
+          <Typography variant="h6" color="red" >{interview.typeIntrv}</Typography>
         </Stack>
         <Divider />
         <Stack direction="column" alignItems="center" p={2} mt={-2}>
@@ -47,9 +54,11 @@ export default function CaseFeedback({ interview, validated }) {
           ) : (
             <Typography variant="body2" color="brown" fontWeight={400} mb={0.6} mt={0.3}>En attente</Typography>
           )}
-          <Box display="flex" justifyContent="center" >
-            <Button style={{  color:"Black" }} onClick={handleViewFeedback} >Voir Feedback <Icon style={{ marginLeft: "8px", marginBottom: "1px"}}fontSize="small">visibility</Icon></Button>
-          </Box>
+          {!isFeedbackEmpty && ( // Affiche le bouton uniquement si des feedbacks sont disponibles
+            <Box display="flex" justifyContent="center">
+              <Button style={{ color: "Black" }} onClick={handleViewFeedback}> Voir Feedback <Icon style={{ marginLeft: "8px", marginBottom: "1px"}} fontSize="small">visibility</Icon></Button>
+            </Box>
+          )}
         </Stack>
       </Card>
 

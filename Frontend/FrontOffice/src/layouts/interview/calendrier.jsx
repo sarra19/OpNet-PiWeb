@@ -28,32 +28,32 @@ function Calendrier() {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [interviews, setInterviews] = useState([]);
 
+  const fetchStudentInterviews = async () => {
+    try {
+        const userId  = sessionStorage.getItem('userId');
+        console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
+        if (!userId ) {
+            console.error("ID de user non trouvé dans le sessionStorage");
+            return;
+        }
+        const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
+        //const response = await axios.get("http://localhost:5000/interviews/getall");
+        const studentInterviews = response.data;
+        const filteredInterviews = studentInterviews.filter(interview => interview.statusInterv !== "Décliné");
+
+        const formattedEvents = filteredInterviews.map(event => ({
+            ...event,
+            start: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
+            end: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
+        }));
+
+        setEvents(formattedEvents);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des entretiens:", error);
+    }
+};
 
   useEffect(() => {
-    const fetchStudentInterviews = async () => {
-        try {
-            const userId  = sessionStorage.getItem('userId');
-            console.log('ID du user récupéré utilisant sessionStorage :', userId ); 
-            if (!userId ) {
-                console.error("ID de user non trouvé dans le sessionStorage");
-                return;
-            }
-            const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
-            const studentInterviews = response.data;
-            const filteredInterviews = studentInterviews.filter(interview => interview.statusInterv !== "Décliné");
-    
-            const formattedEvents = filteredInterviews.map(event => ({
-                ...event,
-                start: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
-                end: moment(event.dateInterv, 'YYYY-MM-DDTHH:mm:ss').toDate(),
-            }));
-    
-            setEvents(formattedEvents);
-        } catch (error) {
-            console.error("Erreur lors de la récupération des entretiens:", error);
-        }
-    };
-
     fetchStudentInterviews();
 }, []);
 
@@ -75,6 +75,7 @@ function Calendrier() {
       .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
         fetchStudentInterviews();
+        showMessage("Votre demande de suppression de l'interview a été effectuée avec succès!");
         handleCloseDetails();
       })
       .catch((error) => {
@@ -132,7 +133,7 @@ function Calendrier() {
                 });
                 return updatedInterviews;
             });
-            showMessage("Votre demande a été envoyée avec succès!");
+            showMessage("Votre demande de report a été envoyée avec succès!");
         } else {
             showMessage("Une erreur s'est produite ! Réessayez plus tard");
         }
@@ -178,6 +179,12 @@ function Calendrier() {
     return `${day}/${month}/${year}   ${hours}:${minutes}`;
   };
 
+  const isInterviewExpired = (dateString) => {
+    const interviewDate = new Date(dateString);
+    const currentDate = new Date();
+    return interviewDate < currentDate;
+  }; 
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -217,10 +224,10 @@ function Calendrier() {
                     </div>
                   )}
                     <div style={{ display: "flex", marginTop: "16px" }}>
-                          <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(selectedEvent._id)} >
+                          <Button style={{ marginRight: "8px", color: 'red' }} onClick={() => handleDeclineClick(selectedEvent._id)} disabled={ isInterviewExpired(selectedEvent?.dateInterv)} >
                             Décliner
                           </Button>
-                          <Button style={{ color: 'red' }} onClick={() => requestAnotherDate(selectedEvent?._id)} disabled={selectedEvent?.statusInterv === "Demande report"} >
+                          <Button style={{ color: 'red' }} onClick={() => requestAnotherDate(selectedEvent?._id)} disabled={selectedEvent?.statusInterv === "Demande report" || isInterviewExpired(selectedEvent?.dateInterv)} >
                             Autre date ?
                           </Button>
                         </div>
