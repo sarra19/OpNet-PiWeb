@@ -65,8 +65,8 @@ function envoyMail(recipient_email, subject, message) {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "chahd.zhaira@esprit.tn",
-        pass: "ehgm rjtc kemo ocyh",
+        user: "farahtelly@gmail.com",
+        pass: "qayv oufk bfup ywhc",
       },
       tls: {
         rejectUnauthorized: false, // Désactiver la vérification du certificat SSL/TLS
@@ -74,7 +74,7 @@ function envoyMail(recipient_email, subject, message) {
     });
 
     const mail_configs = {
-      from: "chahd.zhaira@esprit.tn",
+      from: "farahtelly@gmail.com",
       to: recipient_email,
       subject: subject,
       text: message
@@ -83,25 +83,25 @@ function envoyMail(recipient_email, subject, message) {
     transporter.sendMail(mail_configs, function (error, info) {
       if (error) {
         console.log(error);
-        return reject({ message: `An error has occurred` });
+        return reject({ message: "An error has occurred" });
       }
-      return resolve({ message: `Email sent successfully` });
+      return resolve({ message: "Email sent successfully" });
     });
   });
 }
 
 
-// app.get("/mails", (req, res) => {
-//   const recipient_email = "chahd.zhaira@esprit.tn";
-//   const subject = "Test Email";
-//   const message = "This is a test email.";
+app.get("/mails", (req, res) => {
+  const recipient_email = "farahtelly@gmail.com";
+  const subject = "Test Email";
+  const message = "This is a test email.";
 
-//   envoyMail(recipient_email, subject, message)
-//     .then((response) => res.send(response.message))
-//     .catch((error) => res.status(500).send(error.message));
-// });
+  envoyMail(recipient_email, subject, message)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+});
 
-app.post("/envoyemail", (req, res) => {
+app.post("/send_email", (req, res) => {
   const { recipient_email, subject, message } = req.body;
 
   envoyMail(recipient_email, subject, message)
