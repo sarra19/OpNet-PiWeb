@@ -54,6 +54,7 @@ import Calendrier from "layouts/interviewManagement/calendrier";
 import FeedBackManagement from "layouts/feedbackManagement";
 import FeedBack from "layouts/feedbackManagement/feedback_ai";
 import Meet from "layouts/interviewManagement/meet";
+import FormEmail from "layouts/interviewManagement/mail";
 
 const routes = [
   {
@@ -153,6 +154,14 @@ const routes = [
     key: "calendrier", 
     route: "/calendrier", 
     component: <Calendrier />, 
+  },
+  {
+    type: "route",
+    name: "email",
+    key: "",
+    icon: <Icon fontSize="small">work</Icon>,
+    route: "/email_interview",
+    component: <FormEmail />,
   },
   {
     type: "collapse",

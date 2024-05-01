@@ -5,7 +5,7 @@ const config=require ("./config/dbconnection.json");
 const mongoose = require ("mongoose");
 const bodyParser =require('body-parser')
 const dotenv = require("dotenv");
-
+const nodemailer = require("nodemailer");
 dotenv.config();
 const { Connect } = require("./config/connect.js");
 const userRouter=require("./routes/user") 
@@ -13,6 +13,7 @@ const chatRoomRouter = require("./routes/chat");
 const messageRouter = require("./routes/messages");
 const interviewRouter = require("./routes/interview")
 const feedbackRouter = require("./routes/feedback")
+
 const app=express();
 
 // Connect to MongoDB
@@ -40,7 +41,6 @@ app.use('/chat', chatRoomRouter)
 app.use('/messages', messageRouter) 
 app.use('/interviews', interviewRouter) 
 app.use('/feedbacks', feedbackRouter )
-
 const Interview = require("../Backend/models/interview.js");
 
 async function marquerEntrevuesTerminees() {
@@ -59,6 +59,55 @@ async function marquerEntrevuesTerminees() {
 }
 
 setInterval(marquerEntrevuesTerminees, 1 * 60 * 1000);
+
+function envoyMail(recipient_email, subject, message) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "chahd.zhaira@esprit.tn",
+        pass: "ehgm rjtc kemo ocyh",
+      },
+      tls: {
+        rejectUnauthorized: false, // Désactiver la vérification du certificat SSL/TLS
+      },
+    });
+
+    const mail_configs = {
+      from: "chahd.zhaira@esprit.tn",
+      to: recipient_email,
+      subject: subject,
+      text: message
+    };
+    
+    transporter.sendMail(mail_configs, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occurred` });
+      }
+      return resolve({ message: `Email sent successfully` });
+    });
+  });
+}
+
+
+// app.get("/mails", (req, res) => {
+//   const recipient_email = "chahd.zhaira@esprit.tn";
+//   const subject = "Test Email";
+//   const message = "This is a test email.";
+
+//   envoyMail(recipient_email, subject, message)
+//     .then((response) => res.send(response.message))
+//     .catch((error) => res.status(500).send(error.message));
+// });
+
+app.post("/envoyemail", (req, res) => {
+  const { recipient_email, subject, message } = req.body;
+
+  envoyMail(recipient_email, subject, message)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+});
 
 // Server setup
 const server = http.createServer(app);

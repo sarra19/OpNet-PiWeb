@@ -325,6 +325,9 @@ function Calendrier() {
                           }} >
                             Modifier
                           </Button>
+                          <Button variant="gradient" color="secondary" component={Link} to="/email_interview">
+                            Envoyer un mail 
+                          </Button> 
                           
                     </div>
                 </DialogContent>
