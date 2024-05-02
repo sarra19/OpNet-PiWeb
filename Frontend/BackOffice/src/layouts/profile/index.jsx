@@ -245,15 +245,7 @@ useEffect(() => {
 
     </td>
     <td colSpan="3" style={cellStyles}>
-  <MDButton
-    variant="gradient"
-    color="info"
-    fullWidth
-    component={Link}
-        to="/offers/send-email"
-  >
-    envoyer un email
-  </MDButton>
+
 
     </td>
           </tr>

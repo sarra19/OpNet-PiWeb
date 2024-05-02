@@ -50,10 +50,10 @@ function Footer({ light }) {
             color={light ? "white" : "text"}
             fontSize={size.sm}
           >
-            &copy; {new Date().getFullYear()}, made with
+            &copy; {new Date().getFullYear()}, dévelopé par
             <MDBox fontSize={size.md} color={light ? "white" : "dark"} mb={-0.5} mx={0.25}>
               <Icon color="inherit" fontSize="inherit">
-                favorite
+                favories
               </Icon>
             </MDBox>
             by
@@ -62,7 +62,7 @@ function Footer({ light }) {
                 &nbsp;StackGenius&nbsp;
               </MDTypography>
             </Link>
-            for a better web.
+            pour un mielleur navigation.
           </MDBox>
           <MDBox
             component="ul"
@@ -99,7 +99,7 @@ function Footer({ light }) {
                   fontWeight="regular"
                   color={light ? "white" : "dark"}
                 >
-                  About Us
+                  A propos
                 </MDTypography>
               </Link>
             </MDBox>

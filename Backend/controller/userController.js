@@ -140,7 +140,7 @@ async function profile(req, res) {
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "Utilisateur non existant " });
         }
 
         // Return user profile data

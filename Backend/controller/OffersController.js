@@ -174,11 +174,11 @@ async function addComment(req, res) {
     console.log("comment", offer, user);
 
     if (!offer) {
-      return res.status(404).json({ error: "Offer not found" });
+      return res.status(404).json({ error: "Offer non existant" });
     }
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non existant" });
     }
     offer.comments.push({ text: text, user: user._id });
     await offer.save();
@@ -235,13 +235,13 @@ async function deleteComment(req, res) {
 
     // Vérifier si l'utilisateur courant est défini
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non existant" });
     }
 
     const offer = await Offer.findById(req.params.offerId);
 
     if (!offer) {
-      return res.status(404).json({ error: "Offer not found" });
+      return res.status(404).json({ error: "Offer non existant" });
     }
 
     const commentIndex = offer.comments.findIndex(
@@ -249,7 +249,7 @@ async function deleteComment(req, res) {
     );
 
     if (commentIndex === -1) {
-      return res.status(404).json({ error: "Comment not found" });
+      return res.status(404).json({ error: "Commentaire non existant" });
     }
 
     const comment = offer.comments[commentIndex];
@@ -333,7 +333,7 @@ async function addLike(req, res) {
     }
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non existant" });
     }
     const notifications = await Notification.find({
       userId: req.params.userId,
@@ -385,10 +385,10 @@ async function removeLike(req, res) {
     console.log(offer);
 
     if (!offer) {
-      return res.status(404).json({ error: "Offer not found" });
+      return res.status(404).json({ error: "Offer non existant" });
     }
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non existant" });
     }
     const notifications = await Notification.find({
       userId: req.params.userId,

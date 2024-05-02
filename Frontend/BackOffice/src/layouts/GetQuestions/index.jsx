@@ -10,6 +10,7 @@ import MDTypography from "components/MDTypography";
 import Header from "layouts/profile/components/Header";
 import Card from "@mui/material/Card";
 import Modal from "@mui/material/Modal";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 const containerStyles = {
   display: "flex",
@@ -117,6 +118,8 @@ function GetQuestion() {
 
   return (
     <DashboardLayout>
+            <DashboardNavbar />
+
       <MDBox
         variant="gradient"
         bgColor="info"

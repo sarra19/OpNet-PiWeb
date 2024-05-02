@@ -67,10 +67,10 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h3" fontWeight="medium" color="white" mt={1}>
-            Forgot Password
+            Oublier Password
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Please Enter Your Email
+            Entrer Votre Email
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -90,7 +90,7 @@ function Cover() {
               {msg && <div className={styles.success_msg}>{msg}</div>}
 
               <MDButton variant="gradient" color="info" fullWidth type="submit">
-                Submit
+                Envoyer
               </MDButton>
             </MDBox>
           </form>

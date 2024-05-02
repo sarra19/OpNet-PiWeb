@@ -443,7 +443,7 @@ page.drawText(formData.lastname, {
       </Card>
 
       <Dialog open={openEditDialog} onClose={handleEditDialogClose}>
-        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogTitle>Modifier Mon Profile</DialogTitle>
         <DialogContent>
           <TextField
             label="Prénom"

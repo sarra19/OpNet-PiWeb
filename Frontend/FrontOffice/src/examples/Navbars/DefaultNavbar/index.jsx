@@ -116,13 +116,13 @@ function DefaultNavbar({ transparent, light, action }) {
         <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
           <DefaultNavbarLink
             icon="account_circle"
-            name="sign up"
+            name="s'inscrire"
             route="/authentication/sign-up"
             light={light}
           />
           <DefaultNavbarLink
             icon="key"
-            name="sign in"
+            name="connexion"
             route="/authentication/sign-in"
             light={light}
           />

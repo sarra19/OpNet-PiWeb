@@ -6,6 +6,7 @@ import { FaRobot } from 'react-icons/fa';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import MDTypography from "components/MDTypography";
 import MDBox from "components/MDBox";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 
 const ChatBot = () => {
@@ -113,6 +114,8 @@ const ChatBot = () => {
 
   return (
     <DashboardLayout>
+              <DashboardNavbar />
+
       <card>
        <MDBox
           variant="gradient"

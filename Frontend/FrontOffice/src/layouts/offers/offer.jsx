@@ -377,7 +377,7 @@ function Offers() {
     } else {
       window.location.href = `http://localhost:3000/candidature/ajouter/${
         selectedOffer && selectedOffer._id
-      };`;
+      }`;
     }
   };
 

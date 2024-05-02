@@ -167,13 +167,13 @@ router.put("/deactivateAccount/:id", async (req, res) => {
 	  const updatedUser = await User.findByIdAndUpdate(userId, { verified: false });
   
 	  if (!updatedUser) {
-		return res.status(404).send({ message: "User not found" });
+		return res.status(404).send({ message: "Utilisateur non existant" });
 	  }
   
-	  res.status(200).send({ message: "Account deactivated successfully" });
+	  res.status(200).send({ message: "compte deactivaté avec succés " });
 	} catch (error) {
-	  console.error("Error deactivating account:", error);
-	  res.status(500).send({ message: "An error occurred while deactivating account" });
+	  console.error("Erreur deactivation du compte:", error);
+	  res.status(500).send({ message: "Erreur deactivation du compte" });
 	}
   });
 // Ajoutez cette route pour trier les utilisateurs
@@ -238,7 +238,7 @@ router.get("/:id/verify/:token/", async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id });
         if (!user) {
-            return res.status(400).send({ message: "User not found" });
+            return res.status(400).send({ message: "Utilisateur non existant" });
         }
 
         const token = await Token.findOne({
@@ -246,7 +246,7 @@ router.get("/:id/verify/:token/", async (req, res) => {
             token: req.params.token,
         });
         if (!token) {
-            return res.status(400).send({ message: "Invalid or expired token" });
+            return res.status(400).send({ message: "token invalid ou expiré" });
         }
 
         if (user.verified) {
@@ -273,7 +273,7 @@ router.post("/activateProfile", async (req, res) => {
 	  const user = await User.findOne({ email });
   
 	  if (!user) {
-		return res.status(404).send({ message: "User not found" });
+		return res.status(404).send({ message: "Utilisateur non existant" });
 	  }
   
 	  // Générer un jeton unique pour l'activation du profil
@@ -299,10 +299,10 @@ router.post("/activateProfile", async (req, res) => {
 	  // Envoyer l'e-mail de vérification à l'utilisateur
 	  await sendEmail(user.email, "Verify Your Account", verificationUrl);
   
-	  res.status(200).send({ message: "Verification email sent successfully" });
+	  res.status(200).send({ message: "email envoyé" });
 	} catch (error) {
-	  console.error("Error sending verification email:", error);
-	  res.status(500).send({ message: "An error occurred while sending verification email" });
+	  console.error("Erreur envoi email:", error);
+	  res.status(500).send({ message: "Erreur envoi email" });
 	}
   });
   router.get('/search', userController.getUsersByName);

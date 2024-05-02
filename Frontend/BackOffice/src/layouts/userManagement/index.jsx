@@ -203,7 +203,7 @@ function UserManagement() {
                 <th style={headerStyles}>Email</th>
                 <th style={headerStyles}>Role</th>
                 <th style={headerStyles}>Pays</th>
-                <th style={headerStyles}>Téléfone</th>
+                <th style={headerStyles}>Téléphone</th>
                 <th style={headerStyles}>Specialité</th>
                 <th style={headerStyles}>Actions</th>
               </tr>

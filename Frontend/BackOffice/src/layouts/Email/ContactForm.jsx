@@ -6,6 +6,7 @@ import styled from "styled-components";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
+import { Alert } from "@mui/material";
 
 const FormContainer = styled.div`
   background-color: #f9f9f9;
@@ -97,6 +98,11 @@ function ContactForm() {
     return (
       <DashboardLayout>
         <FormContainer>
+        {isMailSent && (
+                      <Alert style={{ textAlign: "center" }}>
+                      <strong>Mail sent successfully!</strong>
+                      </Alert>
+                    )}
           <FormSection>
             <div>
               <section className="bg-white dark:bg-gray-900">
@@ -107,9 +113,8 @@ function ContactForm() {
           borderRadius="lg"
           coloredShadow="success"
           mx={-2}
-          mt={1}
           p={2}
-          mb={1}
+          mb={3}
           textAlign="center"
         >
           <MDTypography variant="h6" fontWeight="medium" color="white" mt={1}>
@@ -119,43 +124,41 @@ function ContactForm() {
   
                   <form>
                     <div>
-                      <label htmlFor="email">Your Email</label>
+                      <label htmlFor="email">À</label>
                       <Input
                         type="email"
                         id="email"
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="username@gmail.com"
+                        placeholder="Utilisateur@exemple.com"
                         required
                       />
                     </div>
                     <div>
-                      <label htmlFor="subject">Subject</label>
+                      <label htmlFor="subject">Objet</label>
                       <Input
                         type="text"
                         id="subject"
                         onChange={(e) => setSubject(e.target.value)}
-                        placeholder="Let us know how we can help you"
+                        placeholder="Ajouter un objet"
                         required
                       />
                     </div>
                     <div>
-                      <label htmlFor="message">Your message</label>
+                      <label htmlFor="message">Votre message</label>
                       <TextArea
                         id="message"
-                        rows="6"
+                        rows="10"
                         onChange={(e) => setMessage(e.target.value)}
                       ></TextArea>
                     </div>
                     <MDButton    variant="gradient"
                     color="secondary" 
-                    onClick={() => sendMail()}>Envoyer </MDButton>
-                    {isMailSent && (
-                      <p className="text-green-500">Mail sent successfully!</p>
-                    )}
+                    onClick={() => sendMail()} style={{marginRight:"25px"}}>Envoyer </MDButton>
                       <MDButton
                   variant="gradient"
                   color="secondary"
                     onClick={() => window.history.back()}
+                    ml={100}
                 >
                     Retour
                 </MDButton>

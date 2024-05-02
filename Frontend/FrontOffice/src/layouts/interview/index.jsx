@@ -15,7 +15,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { Alert, Icon, Pagination, PaginationItem } from "@mui/material";
+import './styles.css';
+import { Alert, Icon, } from "@mui/material";
 import clsx from "clsx"; //pour le blur
 function Interview() {
   const [searchInput, setSearchInput] = useState("");
@@ -257,18 +258,21 @@ const currentInterviews = filteredInterviews.slice(indexOfFirstInterview, indexO
       </Dialog>  
       {/* Pagination */}
       {interviews.length > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px', marginBottom: '20px' }}>
-          <Pagination
-            count={pageCount}
-            page={currentPage}
-            onChange={handlePageChange}
-            siblingCount={0}
-            defaultPage={1}
-            showFirstButton
-            showLastButton
-          />
-        </div>
-      )} 
+            <div style={{ marginTop: "20px", textAlign: "center" }}>
+
+  <div className="pagination">
+    <ul className="pagination">
+      {Array.from({ length: pageCount }).map((_, index) => (
+        <li key={index} className={currentPage === index + 1 ? 'active' : ''}>
+          <button onClick={(event) => handlePageChange(event, index + 1)}>
+            {index + 1}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+  </div>
+)}
       {interviews.length > 0 && (  
       <Typography>Vous n'avez pas encore d'interview !</Typography> )&&(
       <Footer />

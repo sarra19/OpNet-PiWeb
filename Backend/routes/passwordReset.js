@@ -23,8 +23,8 @@ router.post("/", async (req, res) => {
 
 		let user = await User.findOne({ email: req.body.email });
 		if (!user) {
-			console.log("User not found with email:", req.body.email);
-			return res.status(409).send({ message: "User with given email does not exist!" });
+			console.log("Utilisateur avec ce email :", req.body.email);
+			return res.status(409).send({ message: "Utilisateur avec ce email non existant!" });
 		}
 
 		let token = await Token.findOne({ userId: user._id });
@@ -41,10 +41,10 @@ router.post("/", async (req, res) => {
 		await sendEmail(user.email, "Password Reset", url);
 
 		console.log("Password reset link sent successfully!");
-		res.status(200).send({ message: "Password reset link sent to your email account" });
+		res.status(200).send({ message: "Lien envoyé à votre email" });
 	} catch (error) {
 		console.error("Error occurred:", error);
-		res.status(500).send({ message: "Internal Server Error" });
+		res.status(500).send({ message: "erreur de serveur" });
 	}
 });
 

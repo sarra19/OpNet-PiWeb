@@ -136,7 +136,7 @@ console.log(userId);
                 />
               </Grid>
               <Grid item xs={12}>
-                <label htmlFor="cv" style={{ display: "block", fontWeight: "bold", marginBottom: "5px" }}>Upload Curriculum Vitae</label>
+                <label htmlFor="cv" style={{ display: "block", fontWeight: "bold", marginBottom: "5px" }}>Insérer votre CV</label>
                 <input
                   id="cv"
                   type="file"
@@ -147,7 +147,7 @@ console.log(userId);
                 />
               </Grid>
               <Grid item xs={12}>
-                <label htmlFor="lettreMotivation" style={{ display: "block", fontWeight: "bold", marginBottom: "5px" }}>Upload Lettre de Motivation</label>
+                <label htmlFor="lettreMotivation" style={{ display: "block", fontWeight: "bold", marginBottom: "5px" }}>Insérer votre lettre de motivation</label>
                 <input
                   id="lettreMotivation"
                   type="file"

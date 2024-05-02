@@ -69,11 +69,11 @@ import Ajouter from "layouts/profile/ajouter";
 import Archive from "layouts/profile/archiver";
 import OfferManagement from "layouts/profile";
 import AcceptedCandidatures from "layouts/accept";
-import OfferStatistics from "layouts/profile/statistic";
 
 
 import Meet from "layouts/interviewManagement/meet";
 import ContactForm from "layouts/Email/ContactForm";
+import StatisticsComponent from "layouts/statistics";
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -129,14 +129,7 @@ const routes = [
     component: <Dashboard />,
 
   },
-  {
-    type: "collapse",
-    name: "statictic",
-    key: "",
-    icon: <Icon fontSize="small">work</Icon>,
-    route: "/offerStatictic",
-    component: <OfferStatistics />,
-  },
+ 
   {
     type: "collapse",
 
@@ -144,7 +137,7 @@ const routes = [
     key: "statistiques",
     icon: <Icon fontSize="small">bar_chart</Icon>,
     route: "/statistics",
-    component: userRole === "Admin" || userRole === "subadmin" ? <Statistics /> : null,
+    component: userRole === "Admin" || userRole === "subadmin" ? <StatisticsComponent /> : null,
 
   },
   {
@@ -159,7 +152,7 @@ const routes = [
 
  
   {
-    type: "collapse",
+    type: "route",
     name: "Gestion des entretiens",
   key: "gestion-entretiens",
   icon: <Icon fontSize="small">calendar_today</Icon>,

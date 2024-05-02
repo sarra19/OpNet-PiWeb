@@ -5,6 +5,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import CaseFeedback from './CaseFeedback';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import MDBox from 'components/MDBox';
+import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 
 function Feedback() {
   const [searchResult, setSearchResult] = useState([]);
@@ -63,6 +64,8 @@ function Feedback() {
 
   return (
     <DashboardLayout>
+            <DashboardNavbar />
+
       <MDBox mt={15} mb={5} >
         <Typography variant='h1' mt={-7} display="flex" justifyContent="center">FeedBack</Typography> 
         <Box mt={3}>

@@ -67,7 +67,7 @@ function ActivateProfile() {
               {msg && <div className={styles.success_msg}>{msg}</div>}
 
               <MDButton variant="gradient" color="info" fullWidth type="submit">
-                Submit
+                Envoyer
               </MDButton>
             </MDBox>
           </form>

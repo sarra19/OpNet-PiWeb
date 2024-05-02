@@ -14,7 +14,7 @@ Router.get(
     try {
       const user = await User.findOne({ email: req.user.email });
       if (!user) {
-        throw new Error("User not found");
+        throw new Error("Utilisateur non existant");
       }
       const userRole = user.role;
       const userId = user._id;
