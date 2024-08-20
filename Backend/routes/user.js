@@ -258,7 +258,7 @@ router.get("/:id/verify/:token/", async (req, res) => {
         // await token.remove();
 
         // Redirect to the specified URL after successful verification
-        res.redirect("http://localhost:3000/authentication/sign-in");
+        res.redirect("https://opnet-piweb.onrender.com/authentication/sign-in");
     } catch (error) {
         console.error("Error verifying email:", error);
         res.status(500).send({ message: "Internal Server Error" });
