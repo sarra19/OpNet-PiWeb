@@ -40,7 +40,7 @@ function FeedBack({ interviewId }) {
 
   const saveTranscriptionToDatabase = async (text , sentimentAnalysisResults) => {
     try {
-      await axios.post('http://localhost:5000/feedbacks/save', { text: text, interviewId: interviewId , sentimentAnalysisResults: sentimentAnalysisResults});
+      await axios.post('https://opnet-piweb.onrender.com/feedbacks/save', { text: text, interviewId: interviewId , sentimentAnalysisResults: sentimentAnalysisResults});
       console.log('Transcription enregistrée dans la base de données avec succès.');
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement de la transcription dans la base de données :', error);

@@ -35,7 +35,7 @@ function Forminput({ interviewId }) {
     useEffect(() => {
         setIsAddMode(!interviewId);
         if (interviewId) {
-            axios.get(`http://localhost:5000/interviews/get/${interviewId}`)
+            axios.get(`https://opnet-piweb.onrender.com/interviews/get/${interviewId}`)
                 .then(response => {
                     const { title, descrInter, assignedStudentName, address, dateInterv, typeRencontre, typeIntrv } = response.data;
                     setTitle(title);
@@ -90,7 +90,7 @@ function Forminput({ interviewId }) {
             typeIntrv: selectedTypeIntrv
         };
     
-        axios.post(`http://localhost:5000/interviews/add/${userId}`, newInterview)
+        axios.post(`https://opnet-piweb.onrender.com/interviews/add/${userId}`, newInterview)
             .then(response => {
                 console.log("Interview added successfully:", response.data);
                 window.location.reload();
@@ -118,7 +118,7 @@ function Forminput({ interviewId }) {
             typeIntrv: selectedTypeIntrv
         };
 
-        axios.put(`http://localhost:5000/interviews/update/${interviewId}`, updatedInterview)
+        axios.put(`https://opnet-piweb.onrender.com/interviews/update/${interviewId}`, updatedInterview)
             .then(response => {
                 console.log("Interview updated successfully:", response.data);
                 window.location.reload();
@@ -136,7 +136,7 @@ function Forminput({ interviewId }) {
 
     const searchCandidates = async (query) => {
         try {
-            const response = await axios.get(`http://localhost:5000/user/search?q=${query}`);
+            const response = await axios.get(`https://opnet-piweb.onrender.com/user/search?q=${query}`);
             setCandidateList(response.data);
         } catch (error) {
             console.error("Error searching candidates:", error);

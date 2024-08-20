@@ -39,7 +39,7 @@ const {Server} = require('socket.io');
 
 const io = new  Server(server, {
   cors:{
-    origin:"https://opnet-piweb.onrender.com",
+    origin:"http://localhost:3000",
     methods:["GET","POST"]
   }
 });
@@ -72,7 +72,7 @@ Connect()
 
 
 app.use(cors({
-  origin: ['https://opnet-piweb.onrender.com', 'http://localhost:4000']  }));
+  origin: ['http://localhost:3000', 'http://localhost:4000']  }));
 
 
 // Configuration du chatbot OpenAI

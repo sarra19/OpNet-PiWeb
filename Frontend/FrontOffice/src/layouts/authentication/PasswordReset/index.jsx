@@ -35,7 +35,7 @@ function PasswordReset() {
   const [error, setError] = useState("");
   
   const param = useParams();
-  const url = `http://localhost:5000/password-reset/${param.id}/${param.token}`;
+  const url = `https://opnet-piweb.onrender.com/password-reset/${param.id}/${param.token}`;
 
   useEffect(() => {
     const verifyUrl = async () => {

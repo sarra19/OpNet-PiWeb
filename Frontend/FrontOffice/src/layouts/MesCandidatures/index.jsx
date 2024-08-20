@@ -13,7 +13,7 @@ function MyCandidatures({ userId }) {
   useEffect(() => {
     const fetchCandidatures = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/candidature/user/${userId}`);
+        const response = await axios.get(`https://opnet-piweb.onrender.com/candidature/user/${userId}`);
         setCandidatures(response.data);
         setLoading(false);
       } catch (error) {

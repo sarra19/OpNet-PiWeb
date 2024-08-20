@@ -71,7 +71,7 @@ router.post('/send-email', async (req, res) => {
   const { quiz, email } = req.body;
 
   // Composition de l'URL du quiz
-  const quizUrl = 'https://opnet-piweb.onrender.com/quiz'; // Remplacez 'votre_domaine.com' par votre domaine réel
+  const quizUrl = 'http://localhost:3000/quiz'; // Remplacez 'votre_domaine.com' par votre domaine réel
 
   // Composition du contenu de l'e-mail avec le quiz et l'URL
   const emailContent = `

@@ -45,8 +45,8 @@ function Calendrier({ selectedEvent : props }) {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/interviews/getCompagny/${userId}`);
-      // const response = await axios.get("http://localhost:5000/interviews/getAll");
+      const response = await axios.get(`https://opnet-piweb.onrender.com/interviews/getCompagny/${userId}`);
+      // const response = await axios.get("https://opnet-piweb.onrender.com/interviews/getAll");
       if (!response.data || !Array.isArray(response.data)) {
         throw new Error("Invalid response format");
       }
@@ -78,7 +78,7 @@ function Calendrier({ selectedEvent : props }) {
 
   const deleteInterview = () => {
     axios
-      .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
+      .delete(`https://opnet-piweb.onrender.com/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
         fetchEvents();
         handleCloseDetails();
@@ -119,7 +119,7 @@ function Calendrier({ selectedEvent : props }) {
         const studentId = selectedEvent.assignedStudentId;
   
         // Faire une requête pour obtenir les informations de l'utilisateur avec l'assignedStudentId
-        const response = await axios.get(`http://localhost:5000/user/get/${studentId}`);
+        const response = await axios.get(`https://opnet-piweb.onrender.com/user/get/${studentId}`);
         const userData = response.data;
   
         // Extraire l'adresse email de l'utilisateur
@@ -161,7 +161,7 @@ function Calendrier({ selectedEvent : props }) {
 
   const fetchAssignedStudent = async (studentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/user/get/${studentId}`); 
+      const response = await axios.get(`https://opnet-piweb.onrender.com/user/get/${studentId}`); 
       setAssignedStudent(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des détails de l\'utilisateur :', error);

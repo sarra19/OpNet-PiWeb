@@ -93,7 +93,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   const handleReact = async (messageId, emoji) => {
     try {
       // Send a POST request to your backend API to add the reaction
-      const response = await axios.post(`http://localhost:5000/messages/${messageId}/reactions`, {
+      const response = await axios.post(`https://opnet-piweb.onrender.com/messages/${messageId}/reactions`, {
         userId: sessionStorage.getItem("userId"), // Assuming you store userId in sessionStorage
         reaction: emoji
       });
@@ -144,7 +144,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
         const reactionsMap = {};
         for (const message of data) {
           const messageId = message._id;
-          const { data: messageReactions } = await axios.get(`http://localhost:5000/messages/${messageId}/reactions`);
+          const { data: messageReactions } = await axios.get(`https://opnet-piweb.onrender.com/messages/${messageId}/reactions`);
           reactionsMap[messageId] = messageReactions; // Assuming response contains reactions for each message
         }
         setReactions(reactionsMap);
@@ -182,7 +182,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
   };
   const getReactions = async (messageId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/messages/${messageId}/reactions`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/messages/${messageId}/reactions`);
       const { reactions } = response.data;
       const updatedReactions = { ...reactions, [messageId]: reactions };
       setReactions(updatedReactions);
@@ -243,7 +243,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, onDelete 
      {reactions[message._id] && typeof reactions[message._id] === 'string' ? (
                     <span className="reaction">{reactions[message._id]}</span>
                   ) : null}
-    {/* // afficher ici  le reaction de message  avec get(`http://localhost:5000/messages/${messageId}/reactions`); */}
+    {/* // afficher ici  le reaction de message  avec get(`https://opnet-piweb.onrender.com/messages/${messageId}/reactions`); */}
     <span>{message.createdAt && formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: fr })}</span>
     
     

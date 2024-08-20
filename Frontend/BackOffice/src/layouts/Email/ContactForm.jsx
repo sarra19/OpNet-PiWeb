@@ -81,7 +81,7 @@ function ContactForm() {
     function sendMail() {
       if (recipient_email && subject && message) {
         axios
-          .post("http://localhost:5000/send_email", {
+          .post("https://opnet-piweb.onrender.com/send_email", {
             recipient_email,
             subject,
             message,

@@ -32,7 +32,7 @@ import API_URLS from "apiUrls";
 import io from "socket.io-client";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://opnet-piweb.onrender.com");
 
 socket.on("connect", () => {
   console.log("Successfully connected!");
@@ -74,7 +74,7 @@ function DashboardNavbar({ absolute, light, isMini, searchInput, onSearchInputCh
     try {
       console.log(storedUserId);
       const res = await axios
-        .get(`http://localhost:5000/offer/notification/${storedUserId}`)
+        .get(`https://opnet-piweb.onrender.com/offer/notification/${storedUserId}`)
         .then((response) => {
           console.log("notifications", response.data);
           notifications = response.data.notifForDisplay;
@@ -88,7 +88,7 @@ function DashboardNavbar({ absolute, light, isMini, searchInput, onSearchInputCh
   };
   const getOfferbyId = async (offerId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/offer/get/${offerId}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/offer/get/${offerId}`);
       
       const offre = response.data; 
       
@@ -187,8 +187,8 @@ function DashboardNavbar({ absolute, light, isMini, searchInput, onSearchInputCh
   const handleNotificationItemClick =async (clickedNotification) => {
     console.log("clicked notif",clickedNotification);
     try {
-      //const response = await axios.delete(`http://localhost:5000/offer/deleteNotification/${clickedNotification._id}`);
-      const response = await axios.put(`http://localhost:5000/offer/updateNotification/${clickedNotification._id}`);
+      //const response = await axios.delete(`https://opnet-piweb.onrender.com/offer/deleteNotification/${clickedNotification._id}`);
+      const response = await axios.put(`https://opnet-piweb.onrender.com/offer/updateNotification/${clickedNotification._id}`);
        console.log("got here",response);
        setNotifications((prevNotifications) =>
        prevNotifications.filter((notification) => notification._id !== clickedNotification._id)

@@ -13,7 +13,7 @@ const EmailVerify = () => {
     useEffect(() => {
         const verifyEmailUrl = async () => {
             try {
-                const url = `http://localhost:5000/user/${param.id}/verify/${param.token}`;
+                const url = `https://opnet-piweb.onrender.com/user/${param.id}/verify/${param.token}`;
                 
                 const { data } = await axios.get(url);
                 console.log("Verification Response:", data); // Add console log here

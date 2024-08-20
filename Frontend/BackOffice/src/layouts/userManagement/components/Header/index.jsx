@@ -209,7 +209,7 @@ function Header({ children }) {
       const redColor = rgb(232 / 255, 34 / 255, 39 / 255);
 
       // Récupérer et dessiner l'image de profil
-      const profileImageUrl = `http://localhost:5000/user/${formData.profileImage}`;
+      const profileImageUrl = `https://opnet-piweb.onrender.com/user/${formData.profileImage}`;
       const profileImageResponse = await fetch(profileImageUrl);
 
       if (!profileImageResponse.ok) {
@@ -239,7 +239,7 @@ function Header({ children }) {
       });
 
       // Récupérer et dessiner l'image du CV
-      const cvImageUrl = `http://localhost:5000/user/${formData.cV}`;
+      const cvImageUrl = `https://opnet-piweb.onrender.com/user/${formData.cV}`;
       const cvImageResponse = await fetch(cvImageUrl);
 
       if (!cvImageResponse.ok) {

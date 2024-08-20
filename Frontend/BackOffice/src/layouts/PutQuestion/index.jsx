@@ -46,7 +46,7 @@ function ModifyQuestion() {
 
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/question/get/${id}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/question/get/${id}`);
       const { text, options, correctOption, thematique, niveau } = response.data;
       setText(text);
       setOptions(options);
@@ -67,7 +67,7 @@ function ModifyQuestion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/question/update/${id}`, {
+      const response = await axios.put(`https://opnet-piweb.onrender.com/question/update/${id}`, {
         text,
         options,
         correctOption,

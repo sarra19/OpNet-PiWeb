@@ -48,7 +48,7 @@ async function googlelogin (req, res) {
       const token = jwt.sign({ userId: user._id }, "secretKey", { expiresIn: "1h" });
   
       // Rediriger l'utilisateur vers l'URI de redirection
-      res.status(200).json({ token, redirectUrl: "https://opnet-piweb.onrender.com" });
+      res.status(200).json({ token, redirectUrl: "http://localhost:3000" });
     } catch (error) {
       console.error("Erreur lors de la connexion avec Google:", error);
       res.status(500).json({ message: "Une erreur s'est produite lors de l'authentification avec Google." });

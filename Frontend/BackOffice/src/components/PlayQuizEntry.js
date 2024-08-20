@@ -28,7 +28,7 @@ const PlayQuizEntry = () => {
   };
 
   const fetchallquiz = async() => {
-    const response = await fetch(`http://localhost:5000/quiz/fetchallquiznoauthentication/${message}`, {
+    const response = await fetch(`https://opnet-piweb.onrender.com/quiz/fetchallquiznoauthentication/${message}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

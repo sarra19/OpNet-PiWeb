@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://opnet-piweb.onrender.com";
 
 const API_URLS = {
   addUser: `${BASE_URL}/user/add`,   // Ajoutez d'autres URL ici

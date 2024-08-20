@@ -35,7 +35,7 @@ function Cover() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //const url = `http://localhost:5000/password-reset`;
+      //const url = `https://opnet-piweb.onrender.com/password-reset`;
 
       const { data } = await axios.post(API_URLS.reset, { email });
       setMsg(data.message);

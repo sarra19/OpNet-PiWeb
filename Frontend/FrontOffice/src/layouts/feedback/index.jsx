@@ -21,8 +21,8 @@ function Feedback() {
           console.error("ID de user non trouvé dans le sessionStorage");
           return;
         }
-        const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
-        //const response = await axios.get("http://localhost:5000/interviews/getall");
+        const response = await axios.get(`https://opnet-piweb.onrender.com/interviews/getInterviewsByStudentId/${userId}`);
+        //const response = await axios.get("https://opnet-piweb.onrender.com/interviews/getall");
         const interviewsByCompany = {};
         response.data.forEach(interview => {
           const companyId = interview.assignedCompanyId;
@@ -48,7 +48,7 @@ function Feedback() {
       const companyIds = Object.keys(searchResult);
       for (const companyId of companyIds) {
         try {
-          const response = await axios.get(`http://localhost:5000/user/get/${companyId}`);
+          const response = await axios.get(`https://opnet-piweb.onrender.com/user/get/${companyId}`);
           const { firstname, lastname } = response.data;
           const companyName = `${firstname} ${lastname}`;
           companyNamesObj[companyId] = companyName;

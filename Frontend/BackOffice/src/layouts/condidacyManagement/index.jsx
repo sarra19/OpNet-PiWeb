@@ -64,7 +64,7 @@ function CandidatureList({ candidature = {} }) {
           setLoading(true);
           try {
             // Envoyer une requête POST pour accepter la candidature
-            const response = await axios.post(`http://localhost:5000/candidature/offer/${offerId}/candidature/${candidatureId}/accept`, {
+            const response = await axios.post(`https://opnet-piweb.onrender.com/candidature/offer/${offerId}/candidature/${candidatureId}/accept`, {
               candidatureId: candidatureId,
               offerId: offerId
             });
@@ -87,7 +87,7 @@ function CandidatureList({ candidature = {} }) {
         const sendSMS = async (candidatureId) => {
           try {
             // Envoyer une requête POST pour envoyer un SMS
-            await axios.post(`http://localhost:5000/candidature/send-sms`, {
+            await axios.post(`https://opnet-piweb.onrender.com/candidature/send-sms`, {
               recipientNumber: '+21623099545', // Remplacez par le numéro de téléphone du candidat
               message: `Votre candidature avec l'ID ${candidatureId} a été acceptée.`
             });
@@ -104,7 +104,7 @@ function CandidatureList({ candidature = {} }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/candidature/offer/${offerId}/candidature/${candidatureId}/reject`
+        `https://opnet-piweb.onrender.com/candidature/offer/${offerId}/candidature/${candidatureId}/reject`
       );
       console.log(response.data);
       alert("Candidature refusée avec succès");
@@ -120,7 +120,7 @@ function CandidatureList({ candidature = {} }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:5000/offer/getall");
+        const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall");
         setOffres(response.data);
       } catch (error) {
         console.error("Error fetching offers:", error);
@@ -135,7 +135,7 @@ function CandidatureList({ candidature = {} }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/candidature/offer/${offerId}/candidature/${candidatureId}/archive`
+        `https://opnet-piweb.onrender.com/candidature/offer/${offerId}/candidature/${candidatureId}/archive`
       );
       console.log(response.data);
       alert("Candidature archivée avec succès");
@@ -161,7 +161,7 @@ function CandidatureList({ candidature = {} }) {
         const candidaturesMap = {};
         for (const offre of offres) {
           const response = await axios.get(
-            `http://localhost:5000/candidature/candidatures/${offre._id}`
+            `https://opnet-piweb.onrender.com/candidature/candidatures/${offre._id}`
           );
           // Filtrer les candidatures archivées
           candidaturesMap[offre._id] = response.data.filter(
@@ -178,7 +178,7 @@ function CandidatureList({ candidature = {} }) {
 
   const handleViewArchivedCandidatures = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/candidature/archived");
+      const response = await axios.get("https://opnet-piweb.onrender.com/candidature/archived");
       setArchivedCandidatures(response.data);
     } catch (error) {
       console.error("Error fetching archived candidatures:", error);
@@ -191,7 +191,7 @@ function CandidatureList({ candidature = {} }) {
   
     try {
       const response = await axios.post(
-        `http://localhost:5000/candidature/${candidatureId}/unarchive`
+        `https://opnet-piweb.onrender.com/candidature/${candidatureId}/unarchive`
       );
       console.log(response.data);
       alert("Candidature désarchivée avec succès");
@@ -366,12 +366,12 @@ function CandidatureList({ candidature = {} }) {
                       <TableCell style={cellStyles}>{candidature.email}</TableCell>
                       <TableCell style={cellStyles}>{candidature.specialite}</TableCell>
                       <TableCell style={cellStyles}>
-                        <a href={`http://localhost:5000/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://opnet-piweb.onrender.com/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
                           Voir CV
                         </a>
                       </TableCell>
                       <TableCell style={cellStyles}>
-                        <a href={`http://localhost:5000/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://opnet-piweb.onrender.com/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
                           Voir Lettre de Motivation
                         </a>
                       </TableCell>

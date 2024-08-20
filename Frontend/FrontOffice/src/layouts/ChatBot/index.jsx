@@ -28,7 +28,7 @@ const ChatBot = () => {
     ]);
     setIsTyping(true);
     try {
-      const response = await axios.post('http://localhost:5000/ask', { message: userMessage });
+      const response = await axios.post('https://opnet-piweb.onrender.com/ask', { message: userMessage });
       const botMessage = response.data.message;
       setConversations(prevConversations => [
         ...prevConversations,

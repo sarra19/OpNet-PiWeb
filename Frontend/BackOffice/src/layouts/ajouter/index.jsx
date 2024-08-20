@@ -38,7 +38,7 @@ const ArchivedCandidatures = () => {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get("http://localhost:5000/candidature/archived");
+        const response = await axios.get("https://opnet-piweb.onrender.com/candidature/archived");
         setArchivedCandidatures(response.data);
       } catch (error) {
         console.error("Error fetching archived candidatures:", error);
@@ -57,7 +57,7 @@ const ArchivedCandidatures = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/candidature/${candidatureId}/unarchive`
+        `https://opnet-piweb.onrender.com/candidature/${candidatureId}/unarchive`
       );
       console.log(response.data);
       alert("Candidature désarchivée avec succès");
@@ -111,12 +111,12 @@ const ArchivedCandidatures = () => {
               <TableCell>{candidature.email}</TableCell>
               <TableCell>{candidature.specialite}</TableCell>
               <TableCell>
-                <a href={`http://localhost:5000/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://opnet-piweb.onrender.com/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
                   Voir CV
                 </a>
               </TableCell>
               <TableCell>
-                <a href={`http://localhost:5000/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://opnet-piweb.onrender.com/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
                   Voir Lettre de Motivation
                 </a>
               </TableCell>

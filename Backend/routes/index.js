@@ -10,7 +10,7 @@ Router.get(
 Router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://opnet-piweb.onrender.com/authentication/sign-in",
+    failureRedirect: "http://localhost:3000/authentication/sign-in",
   }),
   async function (req, res) {
     // Successful authentication, retrieve user by email
@@ -22,7 +22,7 @@ Router.get(
       const userRole = user.role;
       const userId = user._id;
       // Redirect based on user role
-      res.redirect(`https://opnet-piweb.onrender.com/dashboard/?userId=${userId}&userRole=${userRole}`);
+      res.redirect(`http://localhost:3000/dashboard/?userId=${userId}&userRole=${userRole}`);
     } catch (error) {
       console.error("Error retrieving user:", error);
       // Handle error redirection or display error message

@@ -57,7 +57,7 @@ function Archive() {
   }, [searchTerm,sortOrder]);
     const fetchArchivedOffers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/offer/archived", {
+        const response = await axios.get("https://opnet-piweb.onrender.com/offer/archived", {
           params: {
             searchTerm: searchTerm,
             sortOrder: sortOrder,
@@ -88,7 +88,7 @@ function Archive() {
         return;
       }
 
-      await axios.put(`http://localhost:5000/offer/${offerId}/unarchive`);
+      await axios.put(`https://opnet-piweb.onrender.com/offer/${offerId}/unarchive`);
       fetchArchivedOffers();
       window.alert("Offre désarchivée avec succès!");
     } catch (error) {

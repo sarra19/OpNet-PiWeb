@@ -35,8 +35,8 @@ function Interview() {
             console.error("ID de user non trouvé dans le sessionStorage");
             return;
         }
-      const response = await axios.get(`http://localhost:5000/interviews/getInterviewsByStudentId/${userId}`);
-      //const response = await axios.get("http://localhost:5000/interviews/getall");
+      const response = await axios.get(`https://opnet-piweb.onrender.com/interviews/getInterviewsByStudentId/${userId}`);
+      //const response = await axios.get("https://opnet-piweb.onrender.com/interviews/getall");
       const filteredInterviews = response.data.filter(interview => interview.statusInterv !== "Décliné");
       const sortedInterviews = filteredInterviews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       const reversedInterviews = sortedInterviews.reverse();
@@ -94,7 +94,7 @@ function Interview() {
 
   const deleteInterview = () => {
     axios
-      .delete(`http://localhost:5000/interviews/deleteintrv/${interviewToDelete}`)
+      .delete(`https://opnet-piweb.onrender.com/interviews/deleteintrv/${interviewToDelete}`)
       .then(() => {
         fetchStudentInterviews();
         showMessage("Votre demande de suppression de l'interview a été effectuée avec succès!");
@@ -116,7 +116,7 @@ function Interview() {
   };
 
   const requestAnotherDate = (interviewId) => {
-    fetch(`http://localhost:5000/interviews/fixAnotherDate/${interviewId}`, {
+    fetch(`https://opnet-piweb.onrender.com/interviews/fixAnotherDate/${interviewId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

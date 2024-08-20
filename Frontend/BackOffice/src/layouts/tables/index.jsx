@@ -75,7 +75,7 @@ function CandidatureList() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:5000/offer/getall");
+        const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall");
         setOffres(response.data);
       } catch (error) {
         console.error("Error fetching offers:", error);
@@ -90,7 +90,7 @@ function CandidatureList() {
         const candidaturesMap = {};
         for (const offre of offres) {
           const response = await axios.get(
-            `http://localhost:5000/candidature/candidatures/${offre._id}`
+            `https://opnet-piweb.onrender.com/candidature/candidatures/${offre._id}`
           );
           candidaturesMap[offre._id] = response.data;
         }
@@ -171,12 +171,12 @@ function CandidatureList() {
                       <TableCell style={cellStyles}>{candidature.email}</TableCell>
                       <TableCell style={cellStyles}>{candidature.specialite}</TableCell>
                       <TableCell style={cellStyles}>
-                        <a href={`http://localhost:5000/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://opnet-piweb.onrender.com/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
                           Voir CV
                         </a>
                       </TableCell>
                       <TableCell style={cellStyles}>
-                        <a href={`http://localhost:5000/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`https://opnet-piweb.onrender.com/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
                           Voir Lettre de Motivation
                         </a>
                       </TableCell>

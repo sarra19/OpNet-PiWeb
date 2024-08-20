@@ -37,7 +37,7 @@ console.log(userId);
 
   const fetchOffres = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/getall");
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall");
       setOffres(response.data);
     } catch (error) {
       console.error("Error fetching offers:", error);
@@ -65,7 +65,7 @@ console.log(userId);
       formData.append("lettreMotivation", lettreMotivation);
       formData.append("cv", cv);
 
-      const response = await axios.post(`http://localhost:5000/candidature/add/${selectedOffer}/${userId}`, formData, {
+      const response = await axios.post(`https://opnet-piweb.onrender.com/candidature/add/${selectedOffer}/${userId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

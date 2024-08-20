@@ -29,7 +29,7 @@ const Quiz = () => {
     try {
       const offerId = sessionStorage.getItem('offerId'); // Retrieve offerId from sessionStorage
       console.log(offerId);
-      const response = await axios.get(`http://localhost:5000/quiz/generate/${niveau}/${thematique}/${offerId}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/quiz/generate/${niveau}/${thematique}/${offerId}`);
       setQuiz(response.data);
       setLoading(false);
       // Afficher une alerte lorsque le quiz est généré avec succès
@@ -47,7 +47,7 @@ const Quiz = () => {
     try {
       const quizUrl = 'http://localhost:3000/quiz';
       // Envoyer l'e-mail avec le quiz
-      await axios.post('http://localhost:5000/quiz/send-email', { quiz, email });
+      await axios.post('https://opnet-piweb.onrender.com/quiz/send-email', { quiz, email });
       window.open(quizUrl, '_blank');
       alert('Quiz sent successfully to ' + email);
     } catch (error) {

@@ -27,7 +27,7 @@ function Candidacy() {
 
   const fetchOffres = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/getall");
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall");
       setOffres(response.data);
     } catch (error) {
       console.error("Error fetching offers:", error);
@@ -56,7 +56,7 @@ function Candidacy() {
       formData.append("cv", cv);
       formData.append("offreId", offreSelectionnee); // Ajouter l'ID de l'offre sélectionnée
 
-      const response = await axios.post("http://localhost:5000/candidature/add", formData, {
+      const response = await axios.post("https://opnet-piweb.onrender.com/candidature/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

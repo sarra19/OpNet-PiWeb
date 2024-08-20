@@ -57,7 +57,7 @@ function Offers() {
 
   const fetchOffers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/getall", {
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall", {
         params: {
           searchTerm: searchTerm,
           sortOrder: sortOrder,

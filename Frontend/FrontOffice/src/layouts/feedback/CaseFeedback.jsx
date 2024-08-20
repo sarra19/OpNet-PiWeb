@@ -15,7 +15,7 @@ export default function CaseFeedback({ interview, validated }) {
 
   const handleViewFeedback = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/feedbacks/getfeedback/${interview._id}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/feedbacks/getfeedback/${interview._id}`);
       const feedbackPartsArray = Object.values(response.data.feedbackParts);
       setFeedbackText(feedbackPartsArray); // Mettez à jour pour utiliser feedbackPartsArray
       setOpenViewDialog(true);

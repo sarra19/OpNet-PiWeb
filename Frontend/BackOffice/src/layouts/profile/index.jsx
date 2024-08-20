@@ -68,7 +68,7 @@ function OfferManagment() {
 };
   const fetchOffers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/getall", {
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall", {
         params: {
           searchTerm: searchTerm,
           sortOrder: sortOrder,
@@ -83,7 +83,7 @@ function OfferManagment() {
 // Fonction pour archiver automatiquement les offres expirées
 const archiveExpiredOffers = async () => {
   try {
-    const response = await axios.get("http://localhost:5000/offer/getall");
+    const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall");
     const allOffers = response.data;
     const currentDate = new Date();
 
@@ -92,7 +92,7 @@ const archiveExpiredOffers = async () => {
       const expirationDate = new Date(offer.expirationDate);
       if (currentDate >= expirationDate && !offer.archived) {
         // Si l'offre est expirée et non archivée, l'archiver
-        await axios.put(`http://localhost:5000/offer/${offer._id}/archiveExpired`);
+        await axios.put(`https://opnet-piweb.onrender.com/offer/${offer._id}/archiveExpired`);
       }
     });
   } catch (error) {
@@ -112,7 +112,7 @@ useEffect(() => {
         return;
       }
   
-      await axios.put(`http://localhost:5000/offer/${offerId}/archive`);
+      await axios.put(`https://opnet-piweb.onrender.com/offer/${offerId}/archive`);
   
       setOffers((prevOffers) =>
         prevOffers.map((prevOffer) =>
@@ -153,7 +153,7 @@ useEffect(() => {
   };
   const handleGeneratePDF = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/generate-pdf", {
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/generate-pdf", {
         responseType: 'blob',
       });
       

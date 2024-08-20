@@ -35,7 +35,7 @@ function Modifier() {
   useEffect(() => {
     const fetchOffer = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/offer/get/${id}`);
+        const response = await axios.get(`https://opnet-piweb.onrender.com/offer/get/${id}`);
         const offerData = response.data;
         setQuiz(offerData.quiz || false);
 
@@ -74,7 +74,7 @@ function Modifier() {
       const formData = new FormData();
       formData.append("file", file); // Utiliser "file" comme clé
       formData.append("id", id);
-      axios.put("http://localhost:5000/offer/uploadFile/${offerId}", formData)
+      axios.put("https://opnet-piweb.onrender.com/offer/uploadFile/${offerId}", formData)
         .then(response => {
           console.log(response.data);
           // Mettre à jour le state ou effectuer d'autres actions si nécessaire
@@ -203,7 +203,7 @@ function Modifier() {
       }
 
 
-      const response = await axios.put(`http://localhost:5000/offer/updateOffer/${id}`, formData);
+      const response = await axios.put(`https://opnet-piweb.onrender.com/offer/updateOffer/${id}`, formData);
       console.log(response.data);
       window.alert("Offre modifiée avec succès!");
     } catch (error) {

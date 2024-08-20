@@ -104,18 +104,18 @@ function Basic() {
           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="http://localhost:5000/auth/facebook/callback" variant="body1" color="white">
+              <MDTypography component={MuiLink} href="https://opnet-piweb.onrender.com/auth/facebook/callback" variant="body1" color="white">
                 <FacebookIcon color="inherit" />
               </MDTypography>
             </Grid>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="http://localhost:5000/auth/github/callback" variant="body1" color="white">
+              <MDTypography component={MuiLink} href="https://opnet-piweb.onrender.com/auth/github/callback" variant="body1" color="white">
                 <GitHubIcon color="inherit" />
               </MDTypography>
             </Grid>
             <Grid item xs={2}>
             
-                <MDTypography component={MuiLink} href="http://localhost:5000/auth/google" variant="body1" color="white" >
+                <MDTypography component={MuiLink} href="https://opnet-piweb.onrender.com/auth/google" variant="body1" color="white" >
                   <GoogleIcon color="inherit" />
                 </MDTypography>
             </Grid>
@@ -123,7 +123,7 @@ function Basic() {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          {/* <MDBox component="form" role="form" action="http://localhost:5000/auth/google"> */}
+          {/* <MDBox component="form" role="form" action="https://opnet-piweb.onrender.com/auth/google"> */}
           <MDBox component="form" role="form" >
 
             <MDBox mb={2}>

@@ -38,7 +38,7 @@ import io from "socket.io-client";
 import CommentIcon from "@mui/icons-material/Comment";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://opnet-piweb.onrender.com");
 
 socket.on("connect", () => {
   console.log("Successfully connected!");
@@ -124,7 +124,7 @@ function Offers() {
   //let uiAddLike = addlikes > 0 ? addlikes : removelikes.length > 0 ? removelikes: offer;
   const fetchOffers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/offer/getall", {
+      const response = await axios.get("https://opnet-piweb.onrender.com/offer/getall", {
         params: {
           searchTerm: searchTerm,
           sortOrder: sortOrder,
@@ -176,7 +176,7 @@ function Offers() {
   
   const fetchInitialLikeCount = async (offerId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/offer/${offerId}/like/${userId}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/offer/${offerId}/like/${userId}`);
       console.log("rezs", response.data.currentLikes);
       setLike(response.data.currentLikes);
     } catch (error) {
@@ -189,7 +189,7 @@ function Offers() {
     
     try {
       const res = await axios
-        .post(`http://localhost:5000/offer/${offerId}/like/${userId}`)
+        .post(`https://opnet-piweb.onrender.com/offer/${offerId}/like/${userId}`)
         .then((response) => {
           console.log(response.data.message, response);
           if (response.data.message == "Like added successfully") {
@@ -226,7 +226,7 @@ function Offers() {
    
     try {
       const response = await axios
-        .delete(`http://localhost:5000/offer/${offerId}/unlike/${userId}`)
+        .delete(`https://opnet-piweb.onrender.com/offer/${offerId}/unlike/${userId}`)
         .then((response) => {
           console.log(response.data.message, response);
           if (response.data.message=="Like removed successfully") {
@@ -265,7 +265,7 @@ function Offers() {
   const handleComment = async (offerId, comment) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/offer/${offerId}/comment/add/${userId}`,
+        `https://opnet-piweb.onrender.com/offer/${offerId}/comment/add/${userId}`,
         { text: comment }
       );
       setComments({ ...comments, [offerId]: "" });
@@ -283,7 +283,7 @@ function Offers() {
   const handleDeleteComment = async (offerId, comment) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/offer/${offerId}/comment/${comment._id}/delete/${userId}`
+        `https://opnet-piweb.onrender.com/offer/${offerId}/comment/${comment._id}/delete/${userId}`
       );
       console.log(response.data.message);
       // Affichez un message de succès ici
@@ -302,7 +302,7 @@ function Offers() {
  
   const handleGetAllComments = async (offerId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/offer/${offerId}/comments`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/offer/${offerId}/comments`);
       console.log("handleGetAllComments", response.data); // Affichez les commentaires reçus du backend
       // Mettez à jour l'état local des commentaires
       setAllComments({ ...allComments, [offerId]: response.data });
@@ -327,10 +327,10 @@ function Offers() {
     setLoading(true);
     try {
       const offerId = sessionStorage.getItem("offerId"); // Retrieve offerId from sessionStorage
-      const offer = await axios.get(`http://localhost:5000/offer/get/${selectedOffer._id}`);
+      const offer = await axios.get(`https://opnet-piweb.onrender.com/offer/get/${selectedOffer._id}`);
       console.log(selectedOffer._id);
       const response = await axios.get(
-        `http://localhost:5000/quiz/generate/${offer.quiz.niveau}/${offer.quiz.thematique}/${selectedOffer._id}`
+        `https://opnet-piweb.onrender.com/quiz/generate/${offer.quiz.niveau}/${offer.quiz.thematique}/${selectedOffer._id}`
       );
       setQuiz(response.data);
       setLoading(false);
@@ -348,11 +348,11 @@ function Offers() {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:5000/user/get/${userId}`);
+        const response = await axios.get(`https://opnet-piweb.onrender.com/user/get/${userId}`);
         const email = response.data.email;
         const phone = response.data.phone; // Récupérer le numéro de téléphone de l'utilisateur
         await handleGenerateQuiz(selectedOffer.niveau, selectedOffer.thematique);
-        const emailResponse = await axios.post("http://localhost:5000/quiz/send-email", {
+        const emailResponse = await axios.post("https://opnet-piweb.onrender.com/quiz/send-email", {
           quiz,
           email,
         });
@@ -360,7 +360,7 @@ function Offers() {
         console.log("Email response:", emailResponse.data);
 
         // Envoyer un SMS
-        const smsResponse = await axios.post(`http://localhost:5000/offer/send-sms`, {
+        const smsResponse = await axios.post(`https://opnet-piweb.onrender.com/offer/send-sms`, {
           recipientNumber: phone,
           message: `Cette offre "${selectedOffer.title}" pour laquelle tu as postulé nécessite de passer un quiz de test.Fais attention!! de ne pas rater ce test de quiz.`,
         });
@@ -432,7 +432,7 @@ function Offers() {
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.media}
-                    image={`http://localhost:5000/offer/uploads/${offer.file.split('\\').pop()}`}                    
+                    image={`https://opnet-piweb.onrender.com/offer/uploads/${offer.file.split('\\').pop()}`}                    
                                         title="Your Image Title"
                   />
                   <CardContent>

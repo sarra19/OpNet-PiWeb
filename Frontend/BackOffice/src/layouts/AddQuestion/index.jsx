@@ -58,7 +58,7 @@ function AddQuestionForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/question/add', {
+      const response = await axios.post('https://opnet-piweb.onrender.com/question/add', {
         text,
         options,
         correctOption,

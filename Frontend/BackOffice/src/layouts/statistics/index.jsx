@@ -25,7 +25,7 @@ const StatisticsComponent = () => {
       const roleStatsResponse = await axios.get(API_URLS.userRoleStatistics);
       setRoleStatistics(roleStatsResponse.data);
 
-      const candidatureResponse = await axios.get('http://localhost:5000/candidature/statistics');
+      const candidatureResponse = await axios.get('https://opnet-piweb.onrender.com/candidature/statistics');
       setCandidatureStatistics(candidatureResponse.data);
 
       const totalUsersResponse = await axios.get(API_URLS.totalUsers);
@@ -175,7 +175,7 @@ console.log(userId);
   useEffect(() => {
       async function fetchStatistics() {
           try {
-              const response = await axios.get('http://localhost:5000/offer/statistics-by-type');
+              const response = await axios.get('https://opnet-piweb.onrender.com/offer/statistics-by-type');
 
               if (response.status !== 200) {
                   throw new Error('Erreur lors de la récupération des statistiques');

@@ -444,7 +444,7 @@ function Ajouter() {
         }));
         return;
       }
-      const response = await axios.post("http://localhost:5000/offer/add", formData, {
+      const response = await axios.post("https://opnet-piweb.onrender.com/offer/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
         },

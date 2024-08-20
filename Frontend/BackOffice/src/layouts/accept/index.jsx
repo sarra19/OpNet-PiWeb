@@ -38,7 +38,7 @@ const AcceptedCandidatures = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await axios.get("http://localhost:5000/candidature/accepted");
+                const response = await axios.get("https://opnet-piweb.onrender.com/candidature/accepted");
                 setAcceptedCandidatures(response.data);
             } catch (error) {
                 console.error("Error fetching accepted candidatures:", error);
@@ -88,12 +88,12 @@ const AcceptedCandidatures = () => {
                                     <TableCell>{candidature.email}</TableCell>
                                     <TableCell>{candidature.specialite}</TableCell>
                                     <TableCell>
-                                        <a href={`http://localhost:5000/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={`https://opnet-piweb.onrender.com/${candidature.cv}`} target="_blank" rel="noopener noreferrer">
                                             Voir CV
                                         </a>
                                     </TableCell>
                                     <TableCell>
-                                        <a href={`http://localhost:5000/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={`https://opnet-piweb.onrender.com/${candidature.lettreMotivation}`} target="_blank" rel="noopener noreferrer">
                                             Voir Lettre de Motivation
                                         </a>
                                     </TableCell>

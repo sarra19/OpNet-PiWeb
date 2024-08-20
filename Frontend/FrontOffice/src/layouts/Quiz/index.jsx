@@ -32,7 +32,7 @@ const QuizUser = () => {
     setLoading(true);
     try {
       // Utilisation de l'ID de l'offre dans la requête
-      const response = await axios.get(`http://localhost:5000/quiz/${offerId}`);
+      const response = await axios.get(`https://opnet-piweb.onrender.com/quiz/${offerId}`);
       setQuestions(response.data);
       setLoading(false);
     } catch (error) {

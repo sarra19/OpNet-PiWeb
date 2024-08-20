@@ -15,7 +15,7 @@ function CandidatureCandidat() {
       setLoading(true);
       try {
         // Récupérer les candidatures associées au candidat authentifié
-        const response = await axios.get("http://localhost:5000/candidature/candidat");
+        const response = await axios.get("https://opnet-piweb.onrender.com/candidature/candidat");
         setCandidatures(response.data);
       } catch (error) {
         setError("Erreur lors de la récupération des candidatures.");
