@@ -250,9 +250,9 @@ router.get('/candidat', authMiddleware, async (req, res) => {
 
 
 
-// const TWILIO_SID = 'AC904083d7f5d44d1c6092cbaa73c672d0';
-// const TWILIO_AUTH_TOKEN = '57c0ddfe6ae889453db20adc83bff1c3';
-// const PHONE_NUMBER = '+12055284013' ; // Votre numéro Twilio
+const TWILIO_SID = 'AC904083d7f5d44d1c6092cbaa73c672d0';
+const TWILIO_AUTH_TOKEN = '57c0ddfe6ae889453db20adc83bff1c3';
+const PHONE_NUMBER = '+12055284013' ; // Votre numéro Twilio
 
 // Configuration du client Twilio
 const client = twilio(TWILIO_SID, TWILIO_AUTH_TOKEN);

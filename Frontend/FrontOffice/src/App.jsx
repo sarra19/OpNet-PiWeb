@@ -205,7 +205,11 @@ export default function App() {
         {/* <Route path="/auth/google" element={<Navigate to={`/dashboard/${userRole}`} />} /> */}
         
         <Route path="/user/:id/verify/:token/" element={<Navigate to={`/authentication/sign-in`} />} />
-
+       
+                  <Route exact path="/" element={<Home/>}></Route>
+                  <Route path="/detailsfillingpage/*" element ={<DetailsFillingPage />}></Route> 
+                  {/* <Route path="/myresume" element={<MyResume/>}></Route> */}
+      
       </Routes>
     </ThemeProvider>
   );

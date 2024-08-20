@@ -13,9 +13,9 @@ const multer = require("multer");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 // Remplacez ces valeurs par vos identifiants Twilio
-// const TWILIO_SID = 'AC0ebba4da9a551141e04dc3d66ab2a8a5';
-// const TWILIO_AUTH_TOKEN = 'cf5edb09eb7bb7e3da63bb244b3c0a51';
-// const PHONE_NUMBER = '+18456227254' ; // Votre numéro Twilio
+const TWILIO_SID = 'AC0ebba4da9a551141e04dc3d66ab2a8a5';
+const TWILIO_AUTH_TOKEN = 'cf5edb09eb7bb7e3da63bb244b3c0a51';
+const PHONE_NUMBER = '+18456227254' ; // Votre numéro Twilio
 // Configuration du client Twilio
 const client = twilio(TWILIO_SID, TWILIO_AUTH_TOKEN);
 const PhoneNumber = require('libphonenumber-js');

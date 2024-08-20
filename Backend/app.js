@@ -77,7 +77,7 @@ app.use(cors({
 
 // Configuration du chatbot OpenAI
 const openai = new OpenAI({
-
+  apiKey: process.env.OPENAI_API_KEY ,
 });
 // Global variable to hold the conversation history
 let conversationHistory = [

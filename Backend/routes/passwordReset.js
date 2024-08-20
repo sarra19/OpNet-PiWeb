@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Token = require("../models/token");
 
 router.post("/", async (req, res) => {

@@ -6,7 +6,7 @@ const validate = require("../middl/validate");
 const Token = require("../models/token");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const path = require("path"); // Importer le module path
 
