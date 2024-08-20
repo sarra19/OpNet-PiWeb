@@ -19,12 +19,12 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 //import store from "./store/ReduxStore";
-import store from './ReduxManager/Store'
 
 import App from "App";
 
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
+import store from "store/ReduxStore";
 
 const container = document.getElementById("app");
 const root = createRoot(container);
