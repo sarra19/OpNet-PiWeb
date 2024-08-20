@@ -255,7 +255,7 @@ function DashboardNavbar({ absolute, light, isMini, searchInput, onSearchInputCh
       document.cookie = `userId=${userId}; path=/`;
       document.cookie = `userRole=${userRole}; path=/`;
       // Redirect the user to the dashboard page
-      window.location.href = "http://localhost:4000/dashboard";
+      window.location.href = "https://opnet-piweb-2.onrender.com/dashboard";
       const user = sessionStorage.getItem("userId");
       console.log("user:", user);
     } catch (error) {

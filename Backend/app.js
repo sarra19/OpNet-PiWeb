@@ -72,7 +72,7 @@ Connect()
 
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:4000']  }));
+  origin: ['http://localhost:3000', 'https://opnet-piweb-2.onrender.com']  }));
 
 
 // Configuration du chatbot OpenAI
